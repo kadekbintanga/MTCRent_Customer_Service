@@ -1,0 +1,17 @@
+package Controllers
+
+import (
+	Service "Service/App/Services/Validation"
+	"github.com/globalxtreme/gobaseconf/response"
+	"net/http"
+)
+
+type Controller struct{}
+
+func (ctr Controller) Testing(w http.ResponseWriter, r *http.Request) {
+	validate := Service.TestingRule{}
+	validate.Validate(r)
+
+	res := response.Response{}
+	res.Success(w)
+}

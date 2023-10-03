@@ -1,0 +1,5 @@
+.idea
+.env
+main-go
+scheduler-go
+storages/*
