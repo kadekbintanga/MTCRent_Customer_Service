@@ -9,6 +9,8 @@ github.com/globalxtreme/gobaseconf v1.1.17 h1:Ykb1JWazDJB8hamRZR39yU4xQQwMwHhaTK
 github.com/globalxtreme/gobaseconf v1.1.17/go.mod h1:ar1m4595W71tSuoenhv4HRqFNOfuTKXegwpmjLY7tv8=
 github.com/globalxtreme/gobaseconf v1.1.18 h1:wCBwGsNpwh79iAZ6TgOASKbWp3yolK4Rd17Lf8j4/eM=
 github.com/globalxtreme/gobaseconf v1.1.18/go.mod h1:ar1m4595W71tSuoenhv4HRqFNOfuTKXegwpmjLY7tv8=
+github.com/globalxtreme/gobaseconf v1.1.19 h1:GRgKzoH+zhupIEzX1hmV9+BfwFOgtNOZRILZNmX6ams=
+github.com/globalxtreme/gobaseconf v1.1.19/go.mod h1:ar1m4595W71tSuoenhv4HRqFNOfuTKXegwpmjLY7tv8=
 github.com/go-playground/assert/v2 v2.2.0 h1:JvknZsQTYeFEAhQwI4qEt9cyV5ONwRHC+lYKSsYSR8s=
 github.com/go-playground/locales v0.14.1 h1:EWaQ/wswjilfKLTECiXz7Rh+3BjFhfDFKv/oXslEjJA=
 github.com/go-playground/locales v0.14.1/go.mod h1:hxrqLVvrK65+Rwrd5Fc6F2O76J/NuW9t0sjnWqG1slY=
@@ -34,6 +36,8 @@ github.com/joho/godotenv v1.5.1 h1:7eLL/+HRGLY0ldzfGMeQkb7vMd0as4CfYvUVzLqw0N0=
 github.com/joho/godotenv v1.5.1/go.mod h1:f4LDr5Voq0i2e/R5DDNOoa2zzDfwtkZa6DnEwAbqwq4=
 github.com/leodido/go-urn v1.2.4 h1:XlAE/cm/ms7TE/VMVoduSpNBoyc2dOxHs5MZSwAN63Q=
 github.com/leodido/go-urn v1.2.4/go.mod h1:7ZrI8mTSeBSHl/UaRyKQW1qZeMgak41ANeCNaVckg+4=
+github.com/mitchellh/mapstructure v1.5.0 h1:jeMsZIYE/09sWLaz43PL7Gy6RuMjD2eJVyuac5Z2hdY=
+github.com/mitchellh/mapstructure v1.5.0/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=

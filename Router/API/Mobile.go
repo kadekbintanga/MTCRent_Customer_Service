@@ -2,6 +2,7 @@ package API
 
 import (
 	"Service/App/Controllers"
+	"Service/App/Controllers/Mobile/v1/Testing"
 	"github.com/gorilla/mux"
 )
 
@@ -12,5 +13,9 @@ func (api Mobile) Routers(router *mux.Router) {
 
 	// Default testing router
 	router.HandleFunc("/dev-test", base.Testing).Methods("GET")
+
+	// Testing
+	var testingController Testing.TestingController
+	router.HandleFunc("/testings", testingController.Get).Methods("GET")
 
 }

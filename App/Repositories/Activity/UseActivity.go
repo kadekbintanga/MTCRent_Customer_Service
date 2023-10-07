@@ -1,4 +1,4 @@
-package Support
+package Activity
 
 import (
 	"Service/App/Models/Activity"
@@ -88,7 +88,7 @@ func (aa UseActivity) setPropertyWithParser(action string, subs ...string) inter
 		subAction = subs[0]
 	}
 
-	var parser HasActivityProperty
+	var parser ModelActivityProperty
 	parser.SetParser(aa.Model)
 
 	switch action {

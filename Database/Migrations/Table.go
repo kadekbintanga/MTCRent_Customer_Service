@@ -17,5 +17,9 @@ func Tables() []migration.Table {
 			Connection:  Config.PgSQL,
 			CreateTable: Testing.Testing{},
 		},
+		{
+			Connection:  Config.PgSQL,
+			CreateTable: Testing.TestingSub{},
+		},
 	}
 }

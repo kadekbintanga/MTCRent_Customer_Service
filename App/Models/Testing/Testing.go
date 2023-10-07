@@ -6,17 +6,12 @@ import (
 
 type Testing struct {
 	Models.BaseModel
-	Name string `gorm:"column:name;type:varchar(250);default:null"`
+	Name string       `gorm:"column:name;type:varchar(250);default:null"`
+	Subs []TestingSub `gorm:"foreignKey:testingId"`
 }
 
 func (Testing) TableName() string {
 	return "testing"
-}
-
-func (model Testing) SetProperty() map[string]interface{} {
-	return map[string]interface{}{
-		"name": model.Name,
-	}
 }
 
 func (model Testing) SetReference() uint {
