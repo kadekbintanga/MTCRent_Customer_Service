@@ -1,8 +1,8 @@
 package Migrations
 
 import (
-	"Service/App/Models/Activity"
-	"Service/App/Models/Testing"
+	"Service/App/Model/Activity"
+	"Service/App/Model/Testing"
 	"Service/Config"
 	"github.com/globalxtreme/gobaseconf/database/migration"
 )

@@ -1,7 +1,7 @@
 package Activity
 
 import (
-	"Service/App/Models/Activity"
+	"Service/App/Model/Activity"
 	"github.com/globalxtreme/gobaseconf/helpers"
 	"strings"
 )

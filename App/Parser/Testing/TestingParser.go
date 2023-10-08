@@ -1,7 +1,7 @@
 package Testing
 
 import (
-	"Service/App/Models/Testing"
+	"Service/App/Model/Testing"
 	"github.com/globalxtreme/gobaseconf/helpers"
 )
 
