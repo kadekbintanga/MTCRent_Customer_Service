@@ -4,12 +4,11 @@ import (
 	"Service/Config"
 	"Service/Router"
 	"fmt"
+	"github.com/globalxtreme/gobaseconf/config"
 	"github.com/globalxtreme/gobaseconf/router"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 	"net/http"
-	"os"
-	"strconv"
 )
 
 func main() {
@@ -18,23 +17,16 @@ func main() {
 		panic(err.Error())
 	}
 
-	Config.Init()
+	Config.InitDB()
 
 	newRoute := mux.NewRouter()
 	router.RegisterRouter(newRoute, Router.Register)
 
-	domain := os.Getenv("DOMAIN")
-	port := os.Getenv("PORT")
+	config.SetHost()
 
-	protocol := "http"
-	SSL, _ := strconv.ParseBool(os.Getenv("USE_SSL"))
-	if SSL == true {
-		protocol = "https"
-	}
+	fmt.Println(fmt.Sprintf("Server started on %s", config.HostFull))
 
-	fmt.Println(fmt.Sprintf("Server started on %s://%s:%s", protocol, domain, port))
-
-	err = http.ListenAndServe(domain+":"+port, newRoute)
+	err = http.ListenAndServe(config.Host+":"+config.Port, newRoute)
 	if err != nil {
 		panic(err)
 	}

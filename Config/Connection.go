@@ -10,7 +10,7 @@ var (
 	PgSQL *gorm.DB
 )
 
-func Init() {
+func InitDB() {
 	PgSQL = config.Connect(config.DBConf{
 		Driver:    config.POSTGRESQL_DRIVER,
 		Host:      os.Getenv("DB_HOST"),

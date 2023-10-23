@@ -1,10 +1,8 @@
 package main
 
 import (
-	"Service/Config"
-	"fmt"
+	"Service/App/Console/Command"
 	"github.com/joho/godotenv"
-	"net/url"
 )
 
 func main() {
@@ -13,10 +11,11 @@ func main() {
 		panic(err.Error())
 	}
 
-	Config.Init()
+	//Config.InitDB()
+	//
+	//parameters := url.Values{}
+	//parameters.Set("testing", "Test value test")
 
-	parameters := url.Values{}
-	parameters.Set("testing", "Test value test")
-
-	fmt.Println(parameters)
+	cmd := Command.TestCommand{}
+	cmd.Handle()
 }

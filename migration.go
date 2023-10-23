@@ -13,6 +13,6 @@ func main() {
 		panic(err.Error())
 	}
 
-	Config.Init()
+	Config.InitDB()
 	migration.Migrate(Migrations.Tables(), Migrations.Columns())
 }

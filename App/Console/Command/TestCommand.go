@@ -8,6 +8,10 @@ import (
 type TestCommand struct{}
 
 func (class TestCommand) Handle() {
-	storageDir := os.Getenv("STORAGE_DIR") + "/logs/"
-	fmt.Println(storageDir)
+	dir, err := os.Getwd()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println("Working Directory:", dir)
 }

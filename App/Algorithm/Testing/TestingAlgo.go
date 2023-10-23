@@ -10,6 +10,7 @@ import (
 	"Service/Config"
 	"fmt"
 	"github.com/globalxtreme/gobaseconf/config"
+	"github.com/globalxtreme/gobaseconf/filesystem"
 	"github.com/globalxtreme/gobaseconf/response"
 	"gorm.io/gorm"
 	"net/http"
@@ -55,5 +56,40 @@ func (algo TestingAlgo) Create(w http.ResponseWriter, r *http.Request) {
 	parser := TestingParser.TestingParser{Object: testing}
 
 	res := response.Response{Object: parser.First()}
+	res.Success(w)
+}
+
+func (algo TestingAlgo) UploadByFile(w http.ResponseWriter, r *http.Request) {
+	uploader := filesystem.Uploader{Path: "tmp", IsPublic: true}
+	filePath, err := uploader.MoveFile(r, "testFile[testing][0]")
+	if err != nil {
+		Error.ErrXtremeTestingSave("Unable to upload file: " + err.Error())
+	}
+
+	storage := filesystem.Storage{IsPublic: uploader.IsPublic}
+
+	res := response.Response{Object: map[string]interface{}{
+		"url":      storage.GetFullPathURL(filePath.(string)),
+		"fullPath": storage.GetFullPath(filePath.(string)),
+		"path":     filePath.(string),
+	}}
+	res.Success(w)
+}
+
+func (algo TestingAlgo) UploadByContent(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(config.RequestBody)
+	uploader := filesystem.Uploader{}
+	filePath, err := uploader.MoveContent(config.RequestBody["content"].(string))
+	if err != nil {
+		Error.ErrXtremeTestingSave("Unable to upload file: " + err.Error())
+	}
+
+	storage := filesystem.Storage{IsPublic: uploader.IsPublic}
+
+	res := response.Response{Object: map[string]interface{}{
+		"url":      storage.GetFullPathURL(filePath.(string)),
+		"fullPath": storage.GetFullPath(filePath.(string)),
+		"path":     filePath.(string),
+	}}
 	res.Success(w)
 }

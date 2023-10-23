@@ -13,7 +13,7 @@ func main() {
 		panic(err.Error())
 	}
 
-	Config.Init()
+	Config.InitDB()
 
 	console.Schedules(Console.Schedules)
 }

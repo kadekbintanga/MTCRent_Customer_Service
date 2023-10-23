@@ -7,16 +7,14 @@ import (
 
 func FullPathURL(path string) any {
 	baseURL := os.Getenv("STORAGE_GATEWAY_BASE")
-	basePath := os.Getenv("STORAGE_PATH")
 
-	return baseURL + basePath + "/" + path
+	return baseURL + "/" + path
 }
 
 func GetRealStoragePath(url string) string {
 	baseURL := os.Getenv("STORAGE_GATEWAY_BASE")
-	basePath := os.Getenv("STORAGE_PATH")
 
-	return strings.Replace(url, baseURL+basePath+"/", "", -1)
+	return strings.Replace(url, baseURL+"/", "", -1)
 }
 
 func CheckAndCreateDirectory(path string) {

@@ -24,3 +24,13 @@ func (ctr TestingController) Create(w http.ResponseWriter, r *http.Request) {
 	algo := Testing2.TestingAlgo{}
 	algo.Create(w, r)
 }
+
+func (ctr TestingController) UploadByFile(w http.ResponseWriter, r *http.Request) {
+	algo := Testing2.TestingAlgo{}
+	algo.UploadByFile(w, r)
+}
+
+func (ctr TestingController) UploadByContent(w http.ResponseWriter, r *http.Request) {
+	algo := Testing2.TestingAlgo{}
+	algo.UploadByContent(w, r)
+}

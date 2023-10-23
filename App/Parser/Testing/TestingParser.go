@@ -2,6 +2,7 @@ package Testing
 
 import (
 	"Service/App/Model/Testing"
+	"github.com/globalxtreme/gobaseconf/filesystem"
 	"github.com/globalxtreme/gobaseconf/helpers"
 )
 
@@ -37,6 +38,7 @@ func (parser TestingParser) First() interface{} {
 		"id":        activity.ID.ID,
 		"name":      activity.Name,
 		"createdAt": activity.CreatedAt.Format(helpers.FullDateTimeLayout()),
+		"file":      filesystem.Storage{}.GetFullPathURL("ckH2cahaAaDMNVgS2xdM1697957810885349000.png"),
 		"subs":      resSubs,
 	}
 }

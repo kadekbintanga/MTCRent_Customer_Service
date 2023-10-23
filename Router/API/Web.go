@@ -22,5 +22,7 @@ func (api Web) Routers(router *mux.Router) {
 	var testingController Testing.TestingController
 	router.HandleFunc("/testings", testingController.Get).Methods("GET")
 	router.HandleFunc("/testings", testingController.Create).Methods("POST")
+	router.HandleFunc("/testings/upload/file", testingController.UploadByFile).Methods("POST")
+	router.HandleFunc("/testings/upload/content", testingController.UploadByContent).Methods("POST")
 
 }
