@@ -6,7 +6,7 @@ import (
 	"Service/App/Service/Error"
 	"Service/App/Service/General"
 	"Service/Config"
-	"github.com/globalxtreme/gobaseconf/data"
+	"github.com/globalxtreme/go-identifier/data"
 	"github.com/globalxtreme/gobaseconf/helpers/xtremelog"
 )
 
