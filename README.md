@@ -1,6 +1,6 @@
 ## CREATE NEW PROJECT
 
-If you haven't downloaded ["go-create-project.sh"](https://storage.globalxtreme-gateway.net/link/installations/go-create-project.sh) yet, please download it from the following link ["go-create-project.sh"](https://storage.globalxtreme-gateway.net/link/installations/go-create-project.sh) and place it in the directory where you want to install your project.
+If you haven't downloaded ["go-create-project"](https://storage.globalxtreme-gateway.net/link/installations/go-create-project) yet, please download it from the following link ["go-create-project"](https://storage.globalxtreme-gateway.net/link/installations/go-create-project) and place it in the directory where you want to install your project.
 
 Navigate to the file where you saved **go-create-project.sh** earlier, and execute the following command.
 ```shell
