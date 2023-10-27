@@ -11,7 +11,33 @@ chmod +x go-create-project.sh
 
 After that, you can create a new project using **go-create-project.sh** by running the following command.
 ```shell
-./go-create-project.sh your-project-name
+./go-create-project.sh your-project-path-and-name
+```
+
+####
+## Setup Executable
+If you want to use go-create-project like commands such as php, composer, redis-server, and others in a generic way, you can follow the steps below:
+
+### Install shc
+This tool will allow you to convert shell scripts into binary executable files.
+```shell
+brew install shc
+```
+
+### Convert the shell script "go-create-project.sh" to a binary file
+```shell
+shc -f go-create-project.sh
+```
+
+### Rename and move
+Rename the resulting binary file (if necessary) and move it to a location in your system's PATH, so it can be executed from anywhere.
+```shell
+mv go-create-project.sh.x /usr/local/bin/go-create-project
+```
+
+By following these steps, you can execute go-create-project from any location in the terminal, just like other commands.
+```shell
+go-create-project your-project-path-and-name
 ```
 
 For documentation, you can read it on [notion](https://notion.so), which we will create later!

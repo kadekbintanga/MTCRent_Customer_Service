@@ -8,6 +8,7 @@ import (
 	"github.com/globalxtreme/gobaseconf/router"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	"github.com/rs/cors"
 	"net/http"
 )
 
@@ -17,16 +18,20 @@ func main() {
 		panic(err.Error())
 	}
 
+	config.SetHost()
+
 	Config.InitDB()
+	Config.InitCors()
+	Config.InitRabbitMQ()
+
+	newCors := cors.New(Config.CorsOptions)
 
 	newRoute := mux.NewRouter()
 	router.RegisterRouter(newRoute, Router.Register)
 
-	config.SetHost()
-
 	fmt.Println(fmt.Sprintf("Server started on %s", config.HostFull))
 
-	err = http.ListenAndServe(config.Host+":"+config.Port, newRoute)
+	err = http.ListenAndServe(config.Host+":"+config.Port, newCors.Handler(newRoute))
 	if err != nil {
 		panic(err)
 	}

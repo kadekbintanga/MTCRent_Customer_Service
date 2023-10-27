@@ -20,4 +20,14 @@ func InitDB() {
 		Database:  os.Getenv("DB_DATABASE"),
 		ParseTime: true,
 	})
+
+	config.RabbitMQSQL = config.Connect(config.DBConf{
+		Driver:    config.MYSQL_DRIVER,
+		Host:      os.Getenv("DB_RABBITMQ_HOST"),
+		Port:      os.Getenv("DB_RABBITMQ_PORT"),
+		Username:  os.Getenv("DB_RABBITMQ_USERNAME"),
+		Password:  os.Getenv("DB_RABBITMQ_PASSWORD"),
+		Database:  os.Getenv("DB_RABBITMQ_DATABASE"),
+		ParseTime: true,
+	})
 }

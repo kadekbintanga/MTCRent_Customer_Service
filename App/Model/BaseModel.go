@@ -39,9 +39,9 @@ func (m *BaseModel) BeforeUpdate(tx *gorm.DB) error {
 
 /* --- COLUMN TYPE CONFIGURATION: OBJECT / MAP IN ARRAY --- */
 
-type ArrayMapColumn []map[string]interface{}
+type ArrayMapInterfaceColumn []map[string]interface{}
 
-func (j *ArrayMapColumn) Scan(value interface{}) error {
+func (j *ArrayMapInterfaceColumn) Scan(value interface{}) error {
 	bytes, ok := value.([]byte)
 	if !ok {
 		return errors.New(fmt.Sprint("Failed to unmarshal JSON value:", value))
@@ -53,7 +53,7 @@ func (j *ArrayMapColumn) Scan(value interface{}) error {
 	return err
 }
 
-func (j ArrayMapColumn) Value() (driver.Value, error) {
+func (j ArrayMapInterfaceColumn) Value() (driver.Value, error) {
 	if len(j) == 0 {
 		return nil, nil
 	}
@@ -61,9 +61,9 @@ func (j ArrayMapColumn) Value() (driver.Value, error) {
 	return json.Marshal(j)
 }
 
-type MapColumn map[string]interface{}
+type MapInterfaceColumn map[string]interface{}
 
-func (j *MapColumn) Scan(value interface{}) error {
+func (j *MapInterfaceColumn) Scan(value interface{}) error {
 	bytes, ok := value.([]byte)
 	if !ok {
 		return errors.New(fmt.Sprint("Failed to unmarshal JSON value:", value))
@@ -75,7 +75,51 @@ func (j *MapColumn) Scan(value interface{}) error {
 	return err
 }
 
-func (j MapColumn) Value() (driver.Value, error) {
+func (j MapInterfaceColumn) Value() (driver.Value, error) {
+	if len(j) == 0 {
+		return nil, nil
+	}
+
+	return json.Marshal(j)
+}
+
+type MapBoolColumn map[string]bool
+
+func (j *MapBoolColumn) Scan(value interface{}) error {
+	bytes, ok := value.([]byte)
+	if !ok {
+		return errors.New(fmt.Sprint("Failed to unmarshal JSON value:", value))
+	}
+
+	var result map[string]bool
+	err := json.Unmarshal(bytes, &result)
+	*j = result
+	return err
+}
+
+func (j MapBoolColumn) Value() (driver.Value, error) {
+	if len(j) == 0 {
+		return nil, nil
+	}
+
+	return json.Marshal(j)
+}
+
+type ArrayStringColumn []string
+
+func (j *ArrayStringColumn) Scan(value interface{}) error {
+	bytes, ok := value.([]byte)
+	if !ok {
+		return errors.New(fmt.Sprint("Failed to unmarshal JSON value:", value))
+	}
+
+	var result []string
+	err := json.Unmarshal(bytes, &result)
+	*j = result
+	return err
+}
+
+func (j ArrayStringColumn) Value() (driver.Value, error) {
 	if len(j) == 0 {
 		return nil, nil
 	}
