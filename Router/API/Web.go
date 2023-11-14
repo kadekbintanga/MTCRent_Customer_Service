@@ -12,7 +12,7 @@ type Web struct{}
 func (api Web) Routers(router *mux.Router) {
 	var base Controller.Controller
 
-	// Default testing router
+	// Default testing Router
 	router.HandleFunc("/dev-test", base.Testing).Methods("GET")
 
 	// Activity

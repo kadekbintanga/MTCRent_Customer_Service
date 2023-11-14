@@ -6,7 +6,7 @@ require (
 	github.com/chai2010/webp v1.1.1
 	github.com/disintegration/imaging v1.6.2
 	github.com/globalxtreme/go-identifier v1.1.2
-	github.com/globalxtreme/gobaseconf v1.2.3
+	github.com/globalxtreme/gobaseconf v1.2.4
 	github.com/go-co-op/gocron v1.30.1
 	github.com/gocraft/work v0.5.1
 	github.com/gorilla/mux v1.8.0
@@ -38,6 +38,8 @@ require (
 	golang.org/x/net v0.9.0 // indirect
 	golang.org/x/sys v0.7.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
+	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
+	gopkg.in/mail.v2 v2.3.1 // indirect
 	gorm.io/driver/mysql v1.5.1 // indirect
 	gorm.io/driver/postgres v1.5.2 // indirect
 )

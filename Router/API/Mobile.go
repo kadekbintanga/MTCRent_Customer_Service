@@ -11,7 +11,7 @@ type Mobile struct{}
 func (api Mobile) Routers(router *mux.Router) {
 	var base Controller.Controller
 
-	// Default testing router
+	// Default testing Router
 	router.HandleFunc("/dev-test", base.Testing).Methods("GET")
 
 	// Testing

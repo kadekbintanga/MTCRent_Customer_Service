@@ -1,12 +1,9 @@
 package main
 
 import (
-	"Service/App/Model/Testing"
-	TestingParser "Service/App/Parser/Testing"
-	"Service/App/Service/Constant/MessageBroker"
+	"Service/App/Mail"
 	"Service/Config"
-	"github.com/globalxtreme/gobaseconf/config"
-	"github.com/globalxtreme/gobaseconf/rabbitmq"
+	mail2 "github.com/globalxtreme/gobaseconf/mail"
 	"github.com/joho/godotenv"
 )
 
@@ -16,16 +13,10 @@ func main() {
 		panic(err.Error())
 	}
 
-	Config.InitDB()
-	Config.InitRabbitMQ()
+	Config.InitMail()
 
-	testing := Testing.Testing{}
-	Config.PgSQL.First(&testing)
-
-	parser := TestingParser.TestingParser{Object: testing}
-
-	amqp := rabbitmq.RabbitMQ{Data: parser.First(), Key: MessageBroker.RABBITMQ_KEY_TESTING_MESSAGE}
-	amqp.OnSender(testing.ID.ID, testing.TableName()).
-		OnQueue(config.RabbitMQConf.Queue).
-		Push()
+	mail := mail2.Mail{}
+	mail.Dial(Config.SMTPMail).
+		Send(Mail.TestingMail{Name: "Yuswa", Email: "testing1@gmail.com"}).
+		Send(Mail.TestingMail{Name: "John", Email: "testing2@gmail.com"})
 }
