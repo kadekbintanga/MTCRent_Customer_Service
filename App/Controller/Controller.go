@@ -1,7 +1,7 @@
 package Controller
 
 import (
-	Service "Service/App/Service/Validation/Testing"
+	Service "Service/App/Validation/Testing"
 	"github.com/globalxtreme/gobaseconf/response"
 	"net/http"
 )

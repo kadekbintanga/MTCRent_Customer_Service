@@ -1,3 +1,5 @@
+github.com/SebastiaanKlippert/go-wkhtmltopdf v1.9.2 h1:enQwehstpeaAnsyse1Aqb6r0sU5UJbiNvIqVmPo+KWI=
+github.com/SebastiaanKlippert/go-wkhtmltopdf v1.9.2/go.mod h1:SQq4xfIdvf6WYKSDxAJc+xOJdolt+/bc1jnQKMtPMvQ=
 github.com/chai2010/webp v1.1.1 h1:jTRmEccAJ4MGrhFOrPMpNGIJ/eybIgwKpcACsrTEapk=
 github.com/chai2010/webp v1.1.1/go.mod h1:0XVwvZWdjjdxpUEIf7b9g9VkHFnInUSYujwqTLEuldU=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
@@ -14,6 +16,8 @@ github.com/globalxtreme/gobaseconf v1.2.3 h1:Y2NrAWLjPpTk54ihZzPACAH2hK/rUGWCSfU
 github.com/globalxtreme/gobaseconf v1.2.3/go.mod h1:jHrFBoxIRlTBcNSGNF81Xf/TGbBfCY8NETdjxwzF64s=
 github.com/globalxtreme/gobaseconf v1.2.4 h1:y60tlYoLTbFxqPU8SqQk+/p8pCdhbbecCVN2en3lgXQ=
 github.com/globalxtreme/gobaseconf v1.2.4/go.mod h1:LV7lT7Egf0EqAKVzqImEiisoWsrLWs7zLRNp4N0KrZI=
+github.com/globalxtreme/gobaseconf v1.2.5 h1:E+3eWIJ/f2iO66ysz5ZB8UzGxGPgeDvaQoDF+wIJBUQ=
+github.com/globalxtreme/gobaseconf v1.2.5/go.mod h1:LV7lT7Egf0EqAKVzqImEiisoWsrLWs7zLRNp4N0KrZI=
 github.com/go-co-op/gocron v1.30.1 h1:tjWUvJl5KrcwpkEkSXFSQFr4F9h5SfV/m4+RX0cV2fs=
 github.com/go-co-op/gocron v1.30.1/go.mod h1:39f6KNSGVOU1LO/ZOoZfcSxwlsJDQOKSu8erN0SH48Y=
 github.com/go-playground/assert/v2 v2.2.0 h1:JvknZsQTYeFEAhQwI4qEt9cyV5ONwRHC+lYKSsYSR8s=

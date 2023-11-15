@@ -6,7 +6,7 @@ require (
 	github.com/chai2010/webp v1.1.1
 	github.com/disintegration/imaging v1.6.2
 	github.com/globalxtreme/go-identifier v1.1.2
-	github.com/globalxtreme/gobaseconf v1.2.4
+	github.com/globalxtreme/gobaseconf v1.2.5
 	github.com/go-co-op/gocron v1.30.1
 	github.com/gocraft/work v0.5.1
 	github.com/gorilla/mux v1.8.0
@@ -17,6 +17,7 @@ require (
 )
 
 require (
+	github.com/SebastiaanKlippert/go-wkhtmltopdf v1.9.2 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect

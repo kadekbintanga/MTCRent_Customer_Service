@@ -1,8 +1,8 @@
 package main
 
 import (
+	"Service/App/MessageBorker/Testing"
 	"Service/App/Service/Constant/MessageBroker"
-	"Service/App/Service/MessageBorker/Testing"
 	"Service/Config"
 	"github.com/globalxtreme/gobaseconf/rabbitmq"
 	"github.com/globalxtreme/gobaseconf/rabbitmq/command"

@@ -1,4 +1,4 @@
-package Mail
+package Testing
 
 import (
 	"github.com/globalxtreme/gobaseconf/helpers"
@@ -14,7 +14,7 @@ func (m TestingMail) Message() *mail.Message {
 	msg := mail.NewMessage()
 	msg.SetHeader("To", m.Email)
 	msg.SetHeader("Subject", "Hello First!")
-	msg.SetBody("text/html", helpers.MailHTMLTemplate("email_template.html", m))
+	msg.SetBody("text/html", helpers.MailHTMLTemplate("EmailTemplate.html", m))
 
 	return msg
 }

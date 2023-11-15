@@ -6,7 +6,7 @@ import (
 	"Service/App/Repository/Activity"
 	Server "Service/App/Service/Constant/Activity"
 	"Service/App/Service/Error"
-	TestingRule "Service/App/Service/Validation/Testing"
+	TestingRule "Service/App/Validation/Testing"
 	"Service/Config"
 	"fmt"
 	"github.com/globalxtreme/gobaseconf/config"
