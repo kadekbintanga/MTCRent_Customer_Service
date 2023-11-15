@@ -5,6 +5,7 @@ import (
 	TestingParser "Service/App/Parser/Testing"
 	"Service/App/Repository/Activity"
 	Server "Service/App/Service/Constant/Activity"
+	"Service/App/Service/Constant/Path"
 	"Service/App/Service/Error"
 	TestingRule "Service/App/Validation/Testing"
 	"Service/Config"
@@ -60,7 +61,7 @@ func (algo TestingAlgo) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (algo TestingAlgo) UploadByFile(w http.ResponseWriter, r *http.Request) {
-	uploader := filesystem.Uploader{Path: "tmp", IsPublic: true}
+	uploader := filesystem.Uploader{Path: Path.PathImageTesting(), IsPublic: true}
 	filePath, err := uploader.MoveFile(r, "testFile[testing][0]")
 	if err != nil {
 		Error.ErrXtremeTestingSave("Unable to upload file: " + err.Error())
@@ -77,8 +78,7 @@ func (algo TestingAlgo) UploadByFile(w http.ResponseWriter, r *http.Request) {
 }
 
 func (algo TestingAlgo) UploadByContent(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(config.RequestBody)
-	uploader := filesystem.Uploader{}
+	uploader := filesystem.Uploader{Path: Path.PathImageTesting(), IsPublic: true}
 	filePath, err := uploader.MoveContent(config.RequestBody["content"].(string))
 	if err != nil {
 		Error.ErrXtremeTestingSave("Unable to upload file: " + err.Error())

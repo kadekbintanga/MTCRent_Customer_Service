@@ -6,7 +6,6 @@ import (
 	"Service/App/Service/Error"
 	"Service/App/Service/General"
 	"Service/Config"
-	"github.com/globalxtreme/go-identifier/data"
 	"github.com/globalxtreme/gobaseconf/helpers/xtremelog"
 )
 
@@ -68,8 +67,9 @@ func (aa UseActivity) Save(description string) error {
 		"new": aa.Property.New,
 	}
 
-	activity.CausedBy = data.Employee.ID
-	activity.CausedByName = data.Employee.FullName
+	// TODO: Re-enable this code after installing github.com/globalxtreme/go-identifier module (If you use GX Identifier for authorization)
+	//activity.CausedBy = data.Employee.ID
+	//activity.CausedByName = data.Employee.FullName
 
 	err := Config.PgSQL.Create(&activity).Error
 	if err != nil {

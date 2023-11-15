@@ -1,6 +1,7 @@
 package main
 
 import (
+	Testing3 "Service/App/Excel/Testing"
 	"Service/App/Mail/Testing"
 	Testing2 "Service/App/PDF/Testing"
 	"Service/Config"
@@ -15,6 +16,18 @@ func main() {
 		panic(err.Error())
 	}
 
+	generateExcel()
+}
+
+func generateExcel() {
+	excel := Testing3.TestingExcel{}
+	err := excel.Generate()
+	if err != nil {
+		log.Print(err)
+	}
+}
+
+func generatePDF() {
 	tpdf := Testing2.TestingPDF{Name: "Yuswa"}
 	path := tpdf.Generate()
 	log.Print(path)
