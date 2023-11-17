@@ -2,12 +2,22 @@ package main
 
 import (
 	Testing3 "Service/App/Excel/Testing"
+	DevTest2 "Service/App/GRPC/Client/DevTest"
 	"Service/App/Mail/Testing"
 	Testing2 "Service/App/PDF/Testing"
 	"Service/Config"
+	"Service/RPC/gRPC/DevTest"
+	"fmt"
 	mail2 "github.com/globalxtreme/gobaseconf/mail"
 	"github.com/joho/godotenv"
 	"log"
+	"time"
+)
+
+const (
+	address     = "localhost:5050"
+	defaultName = "Yuswa"
+	timeout     = 5 * time.Second
 )
 
 func main() {
@@ -16,7 +26,21 @@ func main() {
 		panic(err.Error())
 	}
 
-	generateExcel()
+	Config.InitRPC()
+
+	fmt.Println(Config.DevTestRPC)
+
+	validation, cleanup := DevTest2.NewValidationClient()
+	defer cleanup()
+
+	message, _ := validation.ValidationName("Testing")
+	fmt.Println(fmt.Sprintf("Message: %s", message))
+
+	message, _ = validation.ValidationMultiField([]*DevTest.ValidationNameRequest{
+		&DevTest.ValidationNameRequest{Name: "John"},
+		&DevTest.ValidationNameRequest{Name: "Smith"},
+	})
+	fmt.Println(fmt.Sprintf("Message: %s", message))
 }
 
 func generateExcel() {

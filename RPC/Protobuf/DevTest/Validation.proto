@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+// <your-service-name-or-feature>
+package DevTest;
+
+// App/GRPC/<your-service-name>/<your-path-feature-if-exists>
+// Please follow this path for your protobuf
+option go_package = "RPC/gRPC/DevTest";
+
+service ValidationService {
+  rpc ValidateName(ValidationNameRequest) returns (ValidationResponse) {}
+  rpc ValidateMultiField(ValidationMultiFieldRequest) returns (ValidationResponse) {}
+}
+
+message ValidationNameRequest {
+  string name = 1;
+}
+
+message ValidationMultiFieldRequest {
+  repeated ValidationNameRequest names = 1;
+}
+
+message ValidationResponse {
+  string message = 1;
+  bytes result = 2;
+}
