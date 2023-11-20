@@ -23,11 +23,11 @@ const (
 func main() {
 	err := godotenv.Load()
 	if err != nil {
-		panic(err.Error())
+		panic(err)
 	}
+}
 
-	Config.InitRPC()
-
+func testGrpc() {
 	fmt.Println(Config.DevTestRPC)
 
 	validation, cleanup := DevTest2.NewValidationClient()

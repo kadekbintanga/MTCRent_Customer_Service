@@ -24,6 +24,7 @@ func main() {
 	Config.InitCors()
 	Config.InitRabbitMQ()
 	Config.InitMail()
+	Config.InitRPC()
 
 	newCors := cors.New(Config.CorsOptions)
 
