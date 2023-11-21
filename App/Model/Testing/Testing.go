@@ -1,11 +1,11 @@
 package Testing
 
 import (
-	"Service/App/Model"
+	"github.com/globalxtreme/gobaseconf/model"
 )
 
 type Testing struct {
-	Model.BaseModel
+	model.BaseModel
 	Name string       `gorm:"column:name;type:varchar(250);default:null"`
 	Subs []TestingSub `gorm:"foreignKey:testingId"`
 }
@@ -15,5 +15,5 @@ func (Testing) TableName() string {
 }
 
 func (model Testing) SetReference() uint {
-	return model.BaseModel.ID.ID
+	return model.BaseModel.ID
 }

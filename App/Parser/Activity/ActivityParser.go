@@ -26,7 +26,7 @@ func (parser ActivityParser) First() interface{} {
 	activity := parser.Activity
 
 	return map[string]interface{}{
-		"id":          activity.ID.ID,
+		"id":          activity.ID,
 		"feature":     strings.ToTitle(strings.ReplaceAll(activity.Feature, "_", " ")),
 		"subFeature":  strings.ToTitle(strings.ReplaceAll(activity.SubFeature, "_", " ")),
 		"action":      activity.Action,

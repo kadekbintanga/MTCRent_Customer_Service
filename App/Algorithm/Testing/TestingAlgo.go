@@ -36,7 +36,7 @@ func (algo TestingAlgo) Create(w http.ResponseWriter, r *http.Request) {
 		if subs, ok := config.RequestBody["subs"].([]interface{}); ok {
 			for _, sub := range subs {
 				var testingSub Testing.TestingSub
-				testingSub.TestingId = testing.ID.ID
+				testingSub.TestingId = testing.ID
 				testingSub.Name = sub.(string)
 
 				err = tx.Save(&testingSub).Error
@@ -49,7 +49,7 @@ func (algo TestingAlgo) Create(w http.ResponseWriter, r *http.Request) {
 		}
 
 		Activity.UseActivity{Model: testing}.SetNewProperty(Server.ACTION_CREATE).
-			Save(fmt.Sprintf("Enter new testing: %s [%d]", testing.Name, testing.ID.ID))
+			Save(fmt.Sprintf("Enter new testing: %s [%d]", testing.Name, testing.ID))
 
 		return nil
 	})

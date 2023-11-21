@@ -6,7 +6,7 @@ require (
 	github.com/SebastiaanKlippert/go-wkhtmltopdf v1.9.2
 	github.com/chai2010/webp v1.1.1
 	github.com/disintegration/imaging v1.6.2
-	github.com/globalxtreme/gobaseconf v1.2.8
+	github.com/globalxtreme/gobaseconf v1.2.9
 	github.com/go-co-op/gocron v1.30.1
 	github.com/gocraft/work v0.5.1
 	github.com/gorilla/mux v1.8.0

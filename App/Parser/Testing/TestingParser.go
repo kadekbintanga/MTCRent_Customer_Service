@@ -28,14 +28,14 @@ func (parser TestingParser) First() interface{} {
 	var resSubs []interface{}
 	for _, sub := range activity.Subs {
 		resSubs = append(resSubs, map[string]interface{}{
-			"id":        sub.ID.ID,
+			"id":        sub.ID,
 			"name":      sub.Name,
 			"createdAt": sub.CreatedAt.Format(helpers.FullDateTimeLayout()),
 		})
 	}
 
 	return map[string]interface{}{
-		"id":        activity.ID.ID,
+		"id":        activity.ID,
 		"name":      activity.Name,
 		"createdAt": activity.CreatedAt.Format(helpers.FullDateTimeLayout()),
 		"file":      filesystem.Storage{}.GetFullPathURL("ckH2cahaAaDMNVgS2xdM1697957810885349000.png"),

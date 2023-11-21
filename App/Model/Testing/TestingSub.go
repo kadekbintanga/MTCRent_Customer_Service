@@ -1,11 +1,11 @@
 package Testing
 
 import (
-	"Service/App/Model"
+	"github.com/globalxtreme/gobaseconf/model"
 )
 
 type TestingSub struct {
-	Model.BaseModel
+	model.BaseModel
 	TestingId uint   `gorm:"column:testingId;type:bigint"`
 	Name      string `gorm:"column:name;type:varchar(250);default:null"`
 }
