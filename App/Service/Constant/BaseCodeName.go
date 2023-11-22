@@ -5,14 +5,14 @@ import (
 )
 
 type CodeNameInterface interface {
-	OptionCodes() []string
+	OptionCodeNames() []string
 }
 
 type CodeName struct{}
 
 func (cn CodeName) Get(cni CodeNameInterface) []map[string]interface{} {
 	var results []map[string]interface{}
-	for _, code := range cni.OptionCodes() {
+	for _, code := range cni.OptionCodeNames() {
 		results = append(results, cn.CodeAndName(code))
 	}
 
