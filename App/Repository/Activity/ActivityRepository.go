@@ -3,6 +3,7 @@ package Activity
 import (
 	"Service/App/Model/Activity"
 	Repository "Service/App/Repository"
+	"Service/App/Service/Helper"
 	"Service/Config"
 	"fmt"
 	"gorm.io/gorm"
@@ -26,7 +27,7 @@ func (repo ActivityRepository) Get(parameters url.Values) ([]Activity.Activity, 
 }
 
 func (repo ActivityRepository) Query(parameters url.Values) *gorm.DB {
-	fromDate, toDate := Repository.SetDateParameters(parameters)
+	fromDate, toDate := Helper.SetDateRange(parameters)
 
 	query := Config.PgSQL.Where("\"createdAt\" BETWEEN ? AND ?", fromDate, toDate)
 

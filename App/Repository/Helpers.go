@@ -1,26 +1,31 @@
 package Repository
 
 import (
-	"net/url"
+	"Service/Config"
+	"fmt"
+	"github.com/globalxtreme/gobaseconf/helpers/xtremelog"
+	"gorm.io/gorm"
+	"gorm.io/gorm/schema"
 	"time"
 )
 
-func SetDateParameters(parameters url.Values) (time.Time, time.Time) {
-	var fromDate, toDate time.Time
+func GetIncrementMonthly(model interface{}) int64 {
+	var totalData int64
+	Config.PgSQL.Unscoped().
+		Where("EXTRACT(MONTH FROM \"createdAt\") = ?", time.Now().Month()).
+		Model(&model).
+		Count(&totalData)
 
-	now := time.Now()
+	return totalData + 1
+}
 
-	if fromDateReq := parameters.Get("fromDate"); len(fromDateReq) > 0 {
-		fromDate, _ = time.Parse("02/01/2006 15:04:05", fromDateReq+" 00:00:00")
-	} else {
-		fromDate = time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location()).AddDate(0, -1, 0)
+func Truncate(db *gorm.DB, tables ...schema.Tabler) {
+	if len(tables) > 0 {
+		for _, table := range tables {
+			err := db.Exec(fmt.Sprintf("truncate table %s restart identity cascade", table.TableName()))
+			if err != nil {
+				xtremelog.Error(fmt.Sprintf("Truncate invalid: %v", err))
+			}
+		}
 	}
-
-	if toDateReq := parameters.Get("toDate"); len(toDateReq) > 0 {
-		toDate, _ = time.Parse("02/01/2006", toDateReq)
-	} else {
-		toDate = now
-	}
-
-	return fromDate, toDate
 }

@@ -4,7 +4,9 @@ import (
 	Testing3 "Service/App/Excel/Testing"
 	DevTest2 "Service/App/GRPC/Client/DevTest"
 	"Service/App/Mail/Testing"
+	Testing4 "Service/App/Model/Testing"
 	Testing2 "Service/App/PDF/Testing"
+	"Service/App/Repository"
 	"Service/Config"
 	"Service/RPC/gRPC/DevTest"
 	"fmt"
@@ -25,6 +27,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	Config.InitDB()
+
+	total := Repository.GetIncrementMonthly(Testing4.Testing{})
+	fmt.Println(total)
 }
 
 func testGrpc() {

@@ -3,8 +3,8 @@ package Testing
 import (
 	"Service/App/Model/Testing"
 	Repository "Service/App/Repository"
+	"Service/App/Service/Helper"
 	"Service/Config"
-	"fmt"
 	"github.com/globalxtreme/gobaseconf/helpers/xtremelog"
 	"net/url"
 )
@@ -14,9 +14,7 @@ type TestingRepository struct{}
 func (repo TestingRepository) Get(paramters url.Values) ([]Testing.Testing, interface{}, error) {
 	var testings []Testing.Testing
 
-	fromDate, toDate := Repository.SetDateParameters(paramters)
-	fmt.Println(fromDate)
-	fmt.Println(toDate)
+	fromDate, toDate := Helper.SetDateRange(paramters)
 
 	query := Config.PgSQL.Where("\"createdAt\" BETWEEN ? AND ?", fromDate, toDate)
 
