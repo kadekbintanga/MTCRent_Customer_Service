@@ -21,6 +21,7 @@ type UseActivity struct {
 	Description string                         `gorm:"-"`
 	Property    property                       `gorm:"-"`
 	Model       General.ActivityModelInterface `gorm:"-"`
+	//Employee    data.EmployeeIdentifierData    `gorm:"-"` // TODO: Re-enable this code after installing github.com/globalxtreme/go-identifier module (If you use GX Identifier for authorization)
 }
 
 func (aa UseActivity) SetSubFeature(subFeature string) UseActivity {
@@ -68,8 +69,8 @@ func (aa UseActivity) Save(description string) error {
 	}
 
 	// TODO: Re-enable this code after installing github.com/globalxtreme/go-identifier module (If you use GX Identifier for authorization)
-	//activity.CausedBy = data.Employee.ID
-	//activity.CausedByName = data.Employee.FullName
+	//activity.CausedBy = aa.Employee.ID
+	//activity.CausedByName = aa.Employee.FullName
 
 	err := Config.PgSQL.Create(&activity).Error
 	if err != nil {

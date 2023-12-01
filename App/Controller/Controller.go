@@ -1,7 +1,7 @@
 package Controller
 
 import (
-	Service "Service/App/Validation/Testing"
+	"Service/App/Request/Testing"
 	"github.com/globalxtreme/gobaseconf/response"
 	"net/http"
 )
@@ -9,7 +9,8 @@ import (
 type Controller struct{}
 
 func (ctr Controller) Testing(w http.ResponseWriter, r *http.Request) {
-	validate := Service.TestingRule{}
+	validate := Testing.TestingRequest{}
+	validate.Parse(r)
 	validate.Validate(r)
 
 	res := response.Response{}

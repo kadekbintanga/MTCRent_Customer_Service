@@ -22,6 +22,8 @@ github.com/globalxtreme/gobaseconf v1.2.11 h1:9dOt8jrRXxEklJPQ5FjMj8mGSL0BbeMNE+
 github.com/globalxtreme/gobaseconf v1.2.11/go.mod h1:JJpBD8eZxgywUED5wReqVpaB7orDxqaXBz6qV5T5PGk=
 github.com/globalxtreme/gobaseconf v1.2.14 h1:c9PqCk6BFae3FmyKg+U8S2RaqmcmFEsnzrdUTPVCGjQ=
 github.com/globalxtreme/gobaseconf v1.2.14/go.mod h1:JJpBD8eZxgywUED5wReqVpaB7orDxqaXBz6qV5T5PGk=
+github.com/globalxtreme/gobaseconf v1.3.1 h1:3zp11IPxxv0xhV56Yi7QOu2M0rPlUTEzA4/5OJ6Hdko=
+github.com/globalxtreme/gobaseconf v1.3.1/go.mod h1:JJpBD8eZxgywUED5wReqVpaB7orDxqaXBz6qV5T5PGk=
 github.com/go-co-op/gocron v1.30.1 h1:tjWUvJl5KrcwpkEkSXFSQFr4F9h5SfV/m4+RX0cV2fs=
 github.com/go-co-op/gocron v1.30.1/go.mod h1:39f6KNSGVOU1LO/ZOoZfcSxwlsJDQOKSu8erN0SH48Y=
 github.com/go-playground/assert/v2 v2.2.0 h1:JvknZsQTYeFEAhQwI4qEt9cyV5ONwRHC+lYKSsYSR8s=
