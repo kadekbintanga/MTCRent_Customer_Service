@@ -40,4 +40,4 @@ By following these steps, you can execute go-create-project from any location in
 go-create-project your-project-path-and-name
 ```
 
-For documentation, you can read it on [notion](https://notion.so), which we will create later!
+For documentation, you can read it on [Go-Lang Backend Service]([https://notion.so](https://www.notion.so/globalxtreme/Go-Lang-Backend-Service-527f335297b8465f838fc2598538dae7)https://www.notion.so/globalxtreme/Go-Lang-Backend-Service-527f335297b8465f838fc2598538dae7), which we will create later!
