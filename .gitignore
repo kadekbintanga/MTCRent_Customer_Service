@@ -2,3 +2,6 @@
 .env
 main-go
 scheduler-go
+queue-go
+grpc-go
+rabbitmq-go
