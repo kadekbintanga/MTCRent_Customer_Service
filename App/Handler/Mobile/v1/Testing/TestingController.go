@@ -7,9 +7,9 @@ import (
 	"net/http"
 )
 
-type TestingController struct{}
+type TestingHandler struct{}
 
-func (ctr TestingController) Get(w http.ResponseWriter, r *http.Request) {
+func (ctr TestingHandler) Get(w http.ResponseWriter, r *http.Request) {
 	repo := TestingRepo.TestingRepository{}
 	testings, pagination, _ := repo.Get(r.URL.Query())
 

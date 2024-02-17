@@ -8,9 +8,9 @@ import (
 	"net/http"
 )
 
-type TestingController struct{}
+type TestingHandler struct{}
 
-func (ctr TestingController) Get(w http.ResponseWriter, r *http.Request) {
+func (ctr TestingHandler) Get(w http.ResponseWriter, r *http.Request) {
 	repo := TestingRepo.TestingRepository{}
 	testings, pagination, _ := repo.Get(r.URL.Query())
 
@@ -20,17 +20,17 @@ func (ctr TestingController) Get(w http.ResponseWriter, r *http.Request) {
 	res.Success(w)
 }
 
-func (ctr TestingController) Create(w http.ResponseWriter, r *http.Request) {
+func (ctr TestingHandler) Create(w http.ResponseWriter, r *http.Request) {
 	algo := Testing2.TestingAlgo{}
 	algo.Create(w, r)
 }
 
-func (ctr TestingController) UploadByFile(w http.ResponseWriter, r *http.Request) {
+func (ctr TestingHandler) UploadByFile(w http.ResponseWriter, r *http.Request) {
 	algo := Testing2.TestingAlgo{}
 	algo.UploadByFile(w, r)
 }
 
-func (ctr TestingController) UploadByContent(w http.ResponseWriter, r *http.Request) {
+func (ctr TestingHandler) UploadByContent(w http.ResponseWriter, r *http.Request) {
 	algo := Testing2.TestingAlgo{}
 	algo.UploadByContent(w, r)
 }

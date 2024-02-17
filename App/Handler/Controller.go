@@ -1,4 +1,4 @@
-package Controller
+package Handler
 
 import (
 	"Service/App/Request/Testing"
@@ -6,9 +6,9 @@ import (
 	"net/http"
 )
 
-type Controller struct{}
+type Handler struct{}
 
-func (ctr Controller) Testing(w http.ResponseWriter, r *http.Request) {
+func (ctr Handler) Testing(w http.ResponseWriter, r *http.Request) {
 	validate := Testing.TestingRequest{}
 	validate.Parse(r)
 	validate.Validate(r)

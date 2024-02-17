@@ -7,9 +7,9 @@ import (
 	"net/http"
 )
 
-type ActivityController struct{}
+type ActivityHandler struct{}
 
-func (ctr ActivityController) Get(w http.ResponseWriter, r *http.Request) {
+func (ctr ActivityHandler) Get(w http.ResponseWriter, r *http.Request) {
 	repo := Activity.ActivityRepository{}
 	activities, pagination, _ := repo.Get(r.URL.Query())
 
