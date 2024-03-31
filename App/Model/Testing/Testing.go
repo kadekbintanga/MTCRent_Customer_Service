@@ -1,8 +1,6 @@
 package Testing
 
-import (
-	"github.com/globalxtreme/gobaseconf/model"
-)
+import "github.com/globalxtreme/gobaseconf/model"
 
 type Testing struct {
 	model.BaseModel
@@ -14,6 +12,6 @@ func (Testing) TableName() string {
 	return "testing"
 }
 
-func (model Testing) SetReference() uint {
+func (model Testing) SetReference() string {
 	return model.BaseModel.ID
 }

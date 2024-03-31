@@ -32,6 +32,10 @@ github.com/globalxtreme/gobaseconf v1.3.6 h1:/+suzpAwhgRoVKt+CxSVBZhUeSjYo7DD1uQ
 github.com/globalxtreme/gobaseconf v1.3.6/go.mod h1:JJpBD8eZxgywUED5wReqVpaB7orDxqaXBz6qV5T5PGk=
 github.com/globalxtreme/gobaseconf v1.3.9 h1:2/TITUMyqu+UCN9zXOHKBK7RZMMtlFqA2SiZzvVrKTo=
 github.com/globalxtreme/gobaseconf v1.3.9/go.mod h1:JJpBD8eZxgywUED5wReqVpaB7orDxqaXBz6qV5T5PGk=
+github.com/globalxtreme/gobaseconf v1.3.12 h1:NrAgNAoiTjrdCy4QRhvgpe6oK30nNrK7mIkrsvlvY/Q=
+github.com/globalxtreme/gobaseconf v1.3.12/go.mod h1:JPSdwQAUKxI4VI3Ncqxj/Tx1Y4AxSGG0qqDBJ56pT2c=
+github.com/globalxtreme/gobaseconf v1.3.13 h1:4u56ujYLl01jsE0PznKJD9fzvhp3yfwXZHlATtOhjLc=
+github.com/globalxtreme/gobaseconf v1.3.13/go.mod h1:JPSdwQAUKxI4VI3Ncqxj/Tx1Y4AxSGG0qqDBJ56pT2c=
 github.com/go-co-op/gocron v1.30.1 h1:tjWUvJl5KrcwpkEkSXFSQFr4F9h5SfV/m4+RX0cV2fs=
 github.com/go-co-op/gocron v1.30.1/go.mod h1:39f6KNSGVOU1LO/ZOoZfcSxwlsJDQOKSu8erN0SH48Y=
 github.com/go-playground/assert/v2 v2.2.0 h1:JvknZsQTYeFEAhQwI4qEt9cyV5ONwRHC+lYKSsYSR8s=
@@ -53,6 +57,7 @@ github.com/gomodule/redigo v1.8.9/go.mod h1:7ArFNvsTjH8GMMzB4uy1snslv2BwmginuMs0
 github.com/google/go-cmp v0.5.5/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
 github.com/google/uuid v1.4.0 h1:MtMxsa51/r9yyhkyLsVeVt0B+BGQZzpQiTQ4eHZ8bc4=
 github.com/google/uuid v1.4.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
+github.com/google/uuid v1.6.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/gorilla/mux v1.8.0 h1:i40aqfkR1h2SlN9hojwV5ZA91wcXFOvkdNIeFDP5koI=
 github.com/gorilla/mux v1.8.0/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=
 github.com/jackc/pgpassfile v1.0.0 h1:/6Hmqy13Ss2zCq62VdNG8tM1wchn8zjSGOBJ6icpsIM=
