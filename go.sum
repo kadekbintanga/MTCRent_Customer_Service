@@ -14,6 +14,8 @@ github.com/gabriel-vasile/mimetype v1.4.3 h1:in2uUcidCuFcDKtdcBxlR0rJ1+fsokWf+uq
 github.com/gabriel-vasile/mimetype v1.4.3/go.mod h1:d8uq/6HKRL6CGdk+aubisF/M5GcPfT7nKyLpA0lbSSk=
 github.com/globalxtreme/gobaseconf v1.3.13 h1:4u56ujYLl01jsE0PznKJD9fzvhp3yfwXZHlATtOhjLc=
 github.com/globalxtreme/gobaseconf v1.3.13/go.mod h1:JPSdwQAUKxI4VI3Ncqxj/Tx1Y4AxSGG0qqDBJ56pT2c=
+github.com/globalxtreme/gobaseconf v1.3.17 h1:oR1kOrmUOMlS38z0N8RLcTJnsmhhIy1BmG6x+ehbsgE=
+github.com/globalxtreme/gobaseconf v1.3.17/go.mod h1:FTB+47vCsHR/VJgbKB81/bBYqAftLVyemB+HoraalYM=
 github.com/go-co-op/gocron v1.37.0 h1:ZYDJGtQ4OMhTLKOKMIch+/CY70Brbb1dGdooLEhh7b0=
 github.com/go-co-op/gocron v1.37.0/go.mod h1:3L/n6BkO7ABj+TrfSVXLRzsP26zmikL4ISkLQ0O8iNY=
 github.com/go-playground/assert/v2 v2.2.0 h1:JvknZsQTYeFEAhQwI4qEt9cyV5ONwRHC+lYKSsYSR8s=

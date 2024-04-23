@@ -1,27 +1,30 @@
-package main
+package Runner
 
 import (
 	"Service/App/MessageBorker/Testing"
 	"Service/App/Service/Constant/MessageBroker"
 	"Service/Config"
+	"github.com/globalxtreme/gobaseconf/config"
 	"github.com/globalxtreme/gobaseconf/rabbitmq"
 	"github.com/globalxtreme/gobaseconf/rabbitmq/command"
-	"github.com/joho/godotenv"
+	"github.com/spf13/cobra"
 )
 
-func main() {
-	err := godotenv.Load()
-	if err != nil {
-		panic(err.Error())
-	}
+func init() {
+	rootCmd.AddCommand(&cobra.Command{
+		Use:  "rabbitmq",
+		Long: "Running RabbitMQ",
+		Run: func(cmd *cobra.Command, args []string) {
+			config.InitDevMode()
+			Config.InitDB()
+			Config.InitRabbitMQ()
 
-	Config.InitDB()
-	Config.InitRabbitMQ()
+			setupRabbitMQConsumer()
 
-	setupRabbitMQConsumer()
-
-	cmd := command.RabbitMQConsumeCommand{}
-	cmd.Handle()
+			consumeCmd := command.RabbitMQConsumeCommand{}
+			consumeCmd.Handle()
+		},
+	})
 }
 
 func setupRabbitMQConsumer() {

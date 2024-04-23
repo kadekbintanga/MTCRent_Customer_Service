@@ -41,3 +41,34 @@ go-create-project your-project-path-and-name
 ```
 
 For documentation, you can read it on [Go-Lang Backend Service](https://www.notion.so/globalxtreme/Go-Lang-Backend-Service-527f335297b8465f838fc2598538dae7?pvs=4), which we will create later!
+
+#### how to install and run the application
+```shell
+# Install Application
+go build -o application main.go
+
+# Root (API)
+./application
+
+# Migration
+./application migration
+
+# Seeder
+./application seeder
+
+# gRPC
+./application grpc
+
+# Queue
+./application queue
+
+# RabbitMQ
+./application rabbitmq
+
+# Schedule
+./application schedule
+
+# Custom Commands (Example)
+./application dev-test
+```
+Add **"--dev"** for development mode.
