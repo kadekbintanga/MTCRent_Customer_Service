@@ -5,8 +5,8 @@ import (
 	"Service/App/Service/Constant/MessageBroker"
 	"Service/Config"
 	"github.com/globalxtreme/gobaseconf/config"
+	"github.com/globalxtreme/gobaseconf/console/command"
 	"github.com/globalxtreme/gobaseconf/rabbitmq"
-	"github.com/globalxtreme/gobaseconf/rabbitmq/command"
 	"github.com/spf13/cobra"
 )
 

@@ -1,3 +1,6 @@
-.idea
+/.fleet
+/.idea
+/.vscode
 .env
+.env.ops
 application
