@@ -1,7 +1,7 @@
 package saga
 
 import (
-	"github.com/globalxtreme/gobaseconf/helpers/xtremelog"
+	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
 	error2 "service/internal/pkg/error"
 	"service/internal/pkg/grpc/example"
 	"service/internal/pkg/saga/client"
@@ -40,7 +40,7 @@ func (saga *TestingSaga) TestingStore(request *example.TestingRequest) (string, 
 func (saga *TestingSaga) TestingRollbackStore() {
 	_, err := saga.TestingClient.Testing.RollbackStore(saga.TestingClient.Ctx, &example.RollBackRequest{Data: saga.testingRollBack})
 	if err != nil {
-		xtremelog.Error(err)
+		xtremepkg.Error(err)
 	}
 }
 

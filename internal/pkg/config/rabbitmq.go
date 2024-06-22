@@ -1,20 +1,20 @@
 package config
 
 import (
-	"github.com/globalxtreme/gobaseconf/config"
+	xtremerabbitmq "github.com/globalxtreme/go-core/v2/rabbitmq"
 	"os"
 	"time"
 )
 
 func InitRabbitMQ() {
-	config.RabbitMQConf.Connection = config.RabbitMQConnection{
+	xtremerabbitmq.RabbitMQConf.Connection = xtremerabbitmq.RabbitMQConnection{
 		Host:     os.Getenv("RABBITMQ_HOST"),
 		Port:     os.Getenv("RABBITMQ_PORT"),
 		Username: os.Getenv("RABBITMQ_USER"),
 		Password: os.Getenv("RABBITMQ_PASSWORD"),
 	}
 
-	config.RabbitMQConf.Exchange = config.RabbitMQExchange{
+	xtremerabbitmq.RabbitMQConf.Exchange = xtremerabbitmq.RabbitMQExchange{
 		Name:       "globalxtreme.direct",
 		Type:       "direct",
 		Durable:    true,
@@ -24,6 +24,6 @@ func InitRabbitMQ() {
 		Args:       nil,
 	}
 
-	config.RabbitMQConf.Queue = os.Getenv("RABBITMQ_QUEUE")
-	config.RabbitMQConf.Timeout = 5 * time.Second
+	xtremerabbitmq.RabbitMQConf.Queue = os.Getenv("RABBITMQ_QUEUE")
+	xtremerabbitmq.RabbitMQConf.Timeout = 5 * time.Second
 }

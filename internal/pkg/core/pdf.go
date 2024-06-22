@@ -2,7 +2,7 @@ package core
 
 import (
 	wkhtml "github.com/SebastiaanKlippert/go-wkhtmltopdf"
-	"github.com/globalxtreme/gobaseconf/helpers"
+	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
 	"log"
 )
 
@@ -18,7 +18,7 @@ func (x *PDF) NewGenerator(layout string, data interface{}) {
 
 	x.PDFG = pdfg
 
-	buffer := helpers.PDFHTMLTemplate(layout, data)
+	buffer := xtremepkg.PDFHTMLTemplate(layout, data)
 	page := wkhtml.NewPageReader(&buffer)
 	page.DisableExternalLinks.Set(true)
 
@@ -34,8 +34,8 @@ func (x *PDF) NewGenerator(layout string, data interface{}) {
 }
 
 func (x *PDF) Save(path string, filename string) error {
-	path = helpers.SetStorageAppDir(path)
-	helpers.CheckAndCreateDirectory(path)
+	path = xtremepkg.SetStorageAppDir(path)
+	xtremepkg.CheckAndCreateDirectory(path)
 
 	err := x.PDFG.Create()
 	if err != nil {

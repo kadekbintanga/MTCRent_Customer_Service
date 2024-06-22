@@ -1,13 +1,13 @@
 package queue
 
 import (
-	"github.com/globalxtreme/gobaseconf/queue"
+	xtremequeue "github.com/globalxtreme/go-core/v2/queue"
 	Telegram "service/internal/app/queue/job"
 	"service/internal/pkg/constant"
 )
 
-func Register() []queue.JobConf {
-	return []queue.JobConf{
+func Register() []xtremequeue.JobConf {
+	return []xtremequeue.JobConf{
 		{
 			Context:     Telegram.TelegramMessageJob{},
 			JobFunc:     (*Telegram.TelegramMessageJob).Consume,

@@ -2,14 +2,14 @@ package client
 
 import (
 	"context"
-	"github.com/globalxtreme/gobaseconf/grpc"
+	xtremegrpc "github.com/globalxtreme/go-core/v2/grpc"
 	"service/internal/pkg/config"
 	"service/internal/pkg/grpc/example"
 	"time"
 )
 
 type TestingClient struct {
-	grpc.GRPCClient
+	xtremegrpc.GRPCClient
 	Testing example.TestingServiceClient
 }
 

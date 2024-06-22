@@ -1,7 +1,7 @@
 package mail
 
 import (
-	"github.com/globalxtreme/gobaseconf/helpers"
+	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
 	"gopkg.in/mail.v2"
 )
 
@@ -14,7 +14,7 @@ func (m TestingMail) Message() *mail.Message {
 	msg := mail.NewMessage()
 	msg.SetHeader("To", m.Email)
 	msg.SetHeader("Subject", "Hello First!")
-	msg.SetBody("text/html", helpers.MailHTMLTemplate("testing_email.html", m))
+	msg.SetBody("text/html", xtremepkg.MailHTMLTemplate("testing_email.html", m))
 
 	return msg
 }

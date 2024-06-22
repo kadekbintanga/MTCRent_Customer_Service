@@ -1,7 +1,8 @@
 package config
 
 import (
-	"github.com/globalxtreme/gobaseconf/config"
+	xtremedb "github.com/globalxtreme/go-core/v2/database"
+	xtremerabbitmq "github.com/globalxtreme/go-core/v2/rabbitmq"
 	"gorm.io/gorm"
 	"os"
 )
@@ -11,8 +12,8 @@ var (
 )
 
 func InitDB() {
-	PgSQL = config.Connect(config.DBConf{
-		Driver:    config.POSTGRESQL_DRIVER,
+	PgSQL = xtremedb.Connect(xtremedb.DBConf{
+		Driver:    xtremedb.POSTGRESQL_DRIVER,
 		Host:      os.Getenv("DB_HOST"),
 		Port:      os.Getenv("DB_PORT"),
 		Username:  os.Getenv("DB_USERNAME"),
@@ -21,8 +22,8 @@ func InitDB() {
 		ParseTime: true,
 	})
 
-	config.RabbitMQSQL = config.Connect(config.DBConf{
-		Driver:    config.MYSQL_DRIVER,
+	xtremerabbitmq.RabbitMQSQL = xtremedb.Connect(xtremedb.DBConf{
+		Driver:    xtremedb.MYSQL_DRIVER,
 		Host:      os.Getenv("DB_RABBITMQ_HOST"),
 		Port:      os.Getenv("DB_RABBITMQ_PORT"),
 		Username:  os.Getenv("DB_RABBITMQ_USERNAME"),

@@ -1,7 +1,8 @@
 package repository
 
 import (
-	"github.com/globalxtreme/gobaseconf/helpers/xtremelog"
+	xtrememodel "github.com/globalxtreme/go-core/v2/model"
+	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
 	"gorm.io/gorm"
 	"net/url"
 	"service/internal/pkg/config"
@@ -72,10 +73,10 @@ func (repo *testingRepository) Find(parameter url.Values) ([]model.Testing, inte
 		query = query.Where("name LIKE ?", "%"+search+"%")
 	}
 
-	query, pagination := core.Paginate(parameter, query, model.Testing{})
+	query, pagination := xtrememodel.Paginate(parameter, query, model.Testing{})
 	err := query.Preload("Subs").Order("id DESC").Find(&testings).Error
 	if err != nil {
-		xtremelog.Error(err)
+		xtremepkg.LogError(err)
 		return nil, nil, err
 	}
 

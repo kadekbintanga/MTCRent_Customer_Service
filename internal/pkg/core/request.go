@@ -2,8 +2,8 @@ package core
 
 import (
 	"encoding/json"
-	"github.com/globalxtreme/gobaseconf/helpers/xtremelog"
-	"github.com/globalxtreme/gobaseconf/response/error"
+	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
+	xtremeres "github.com/globalxtreme/go-core/v2/response"
 	"net/http"
 )
 
@@ -16,8 +16,8 @@ type BaseRequest struct{}
 
 func (BaseRequest) Parse(r *http.Request, rule interface{}) interface{} {
 	if err := json.NewDecoder(r.Body).Decode(&rule); err != nil {
-		xtremelog.Error(err)
-		error.ErrXtremeBadRequest(err.Error())
+		xtremepkg.LogError(err)
+		xtremeres.ErrXtremeBadRequest(err.Error())
 	}
 
 	return rule

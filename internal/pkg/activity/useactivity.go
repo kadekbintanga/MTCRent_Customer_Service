@@ -1,7 +1,7 @@
 package activity
 
 import (
-	"github.com/globalxtreme/gobaseconf/helpers/xtremelog"
+	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
 	"service/internal/pkg/config"
 	"service/internal/pkg/constant"
 	"service/internal/pkg/core"
@@ -87,7 +87,7 @@ func (aa UseActivity) Save(description string) error {
 
 	err := config.PgSQL.Create(&activity).Error
 	if err != nil {
-		xtremelog.Error(err)
+		xtremepkg.LogError(err)
 		error2.ErrXtremeActivitySave(err.Error())
 	}
 

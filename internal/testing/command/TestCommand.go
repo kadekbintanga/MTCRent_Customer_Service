@@ -2,7 +2,7 @@ package command
 
 import (
 	"fmt"
-	"github.com/globalxtreme/gobaseconf/config"
+	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
 	"github.com/spf13/cobra"
 	"os"
 )
@@ -14,7 +14,7 @@ func (class *TestCommand) Command(cobraCmd *cobra.Command) {
 		Use:  "dev-test",
 		Long: "Development Test Command",
 		Run: func(cmd *cobra.Command, args []string) {
-			config.InitDevMode()
+			xtremepkg.InitDevMode()
 
 			class.Handle()
 		},

@@ -1,12 +1,12 @@
 package grpc
 
 import (
-	"github.com/globalxtreme/gobaseconf/grpc"
-	server2 "service/internal/app/grpc/server"
+	xtremegrpc "github.com/globalxtreme/go-core/v2/grpc"
+	"service/internal/app/grpc/server"
 )
 
-func Register(server grpc.GRPCServer) {
-	server.Register(
-		&server2.TestingServer{},
+func Register(srv xtremegrpc.GRPCServer) {
+	srv.Register(
+		&server.TestingServer{},
 	)
 }

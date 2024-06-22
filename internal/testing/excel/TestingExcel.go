@@ -1,8 +1,8 @@
 package excel
 
 import (
-	excel2 "github.com/globalxtreme/gobaseconf/excel"
-	"github.com/globalxtreme/gobaseconf/helpers"
+	xtremecore "github.com/globalxtreme/go-core/v2"
+	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
 	"github.com/xuri/excelize/v2"
 	"service/internal/pkg/constant"
 )
@@ -24,8 +24,8 @@ func (ex TestingExcel) Generate() error {
 	return nil
 }
 
-func (ex TestingExcel) newFile(sheets []string, properties [][][]interface{}) excel2.Excel {
-	excel := excel2.Excel{
+func (ex TestingExcel) newFile(sheets []string, properties [][][]interface{}) xtremecore.Excel {
+	excel := xtremecore.Excel{
 		Sheets:     sheets,
 		Properties: properties,
 		IsPublic:   false,
@@ -36,7 +36,7 @@ func (ex TestingExcel) newFile(sheets []string, properties [][][]interface{}) ex
 	return excel
 }
 
-func (ex TestingExcel) modifySheet(excel excel2.Excel) excel2.Excel {
+func (ex TestingExcel) modifySheet(excel xtremecore.Excel) xtremecore.Excel {
 	excel.SetStyle(&excelize.Style{
 		Border: []excelize.Border{
 			{Type: "left", Color: "860A35", Style: 1},
@@ -57,13 +57,13 @@ func (ex TestingExcel) modifySheet(excel excel2.Excel) excel2.Excel {
 
 	excel.MergeCells("A5:C5", "A6:A7")
 
-	excel.SetWidthCols([]excel2.ColWidth{
+	excel.SetWidthCols([]xtremecore.ColWidth{
 		{Cells: "A", Width: 5},
 		{Cells: "B", Width: 15},
 		{Cells: "C", Width: 5},
 	})
 
-	excel.SetHeightRows([]excel2.RowHeight{
+	excel.SetHeightRows([]xtremecore.RowHeight{
 		{Row: 1, Height: 15},
 	})
 
@@ -88,7 +88,7 @@ func (TestingExcel) setSheetsAndProperties() ([]string, [][][]interface{}) {
 
 	for sKey, property := range dataProperties {
 		for pKey, val := range property {
-			properties[sKey] = append(properties[sKey], []interface{}{pKey + 1, helpers.RandomString(10), val})
+			properties[sKey] = append(properties[sKey], []interface{}{pKey + 1, xtremepkg.RandomString(10), val})
 		}
 	}
 

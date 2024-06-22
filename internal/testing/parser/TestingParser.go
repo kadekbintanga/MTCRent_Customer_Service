@@ -1,8 +1,7 @@
 package parser
 
 import (
-	"github.com/globalxtreme/gobaseconf/filesystem"
-	"github.com/globalxtreme/gobaseconf/helpers"
+	xtremefs "github.com/globalxtreme/go-core/v2/filesystem"
 	"service/internal/pkg/model"
 )
 
@@ -30,15 +29,15 @@ func (parser TestingParser) First() interface{} {
 		resSubs = append(resSubs, map[string]interface{}{
 			"id":        sub.ID,
 			"name":      sub.Name,
-			"createdAt": sub.CreatedAt.Format(helpers.FullDateTimeLayout()),
+			"createdAt": sub.CreatedAt.Format("02/01/2006 15:04"),
 		})
 	}
 
 	return map[string]interface{}{
 		"id":        activity.ID,
 		"name":      activity.Name,
-		"createdAt": activity.CreatedAt.Format(helpers.FullDateTimeLayout()),
-		"file":      filesystem.Storage{}.GetFullPathURL("ckH2cahaAaDMNVgS2xdM1697957810885349000.png"),
+		"createdAt": activity.CreatedAt.Format("02/01/2006 15:04"),
+		"file":      xtremefs.Storage{}.GetFullPathURL("ckH2cahaAaDMNVgS2xdM1697957810885349000.png"),
 		"subs":      resSubs,
 	}
 }

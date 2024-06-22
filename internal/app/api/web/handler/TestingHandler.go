@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/globalxtreme/gobaseconf/response"
+	xtremeres "github.com/globalxtreme/go-core/v2/response"
 	"net/http"
 	"service/internal/testing/parser"
 	"service/internal/testing/repository"
@@ -16,7 +16,7 @@ func (ctr TestingHandler) Get(w http.ResponseWriter, r *http.Request) {
 
 	psr := parser.TestingParser{Array: testings}
 
-	res := response.Response{Array: psr.Get(), Pagination: &pagination}
+	res := xtremeres.Response{Array: psr.Get(), Pagination: &pagination}
 	res.Success(w)
 }
 

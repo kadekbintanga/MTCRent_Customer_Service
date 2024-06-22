@@ -2,39 +2,39 @@ package runner
 
 import (
 	"fmt"
-	"github.com/globalxtreme/gobaseconf/config"
-	"github.com/globalxtreme/gobaseconf/router"
+	xtremecore "github.com/globalxtreme/go-core/v2"
+	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 	"github.com/spf13/cobra"
 	"net/http"
 	"os"
 	"service/internal/app/api"
-	config2 "service/internal/pkg/config"
+	"service/internal/pkg/config"
 )
 
 var rootCmd = &cobra.Command{
 	Use:  "root",
 	Long: "Running service api",
 	Run: func(cmd *cobra.Command, args []string) {
-		config.InitDevMode()
-		config.SetHost()
+		xtremepkg.InitDevMode()
+		xtremepkg.InitHost()
 
-		config2.InitDB()
-		config2.InitCors()
-		config2.InitRabbitMQ()
-		config2.InitMail()
-		config2.InitRPC()
-		config2.InitValidation()
+		config.InitDB()
+		config.InitCors()
+		config.InitRabbitMQ()
+		config.InitMail()
+		config.InitRPC()
+		config.InitValidation()
 
-		newCors := cors.New(config2.CorsOptions)
+		newCors := cors.New(config.CorsOptions)
 
 		newRoute := mux.NewRouter()
-		router.RegisterRouter(newRoute, api.Register)
+		xtremecore.RegisterRouter(newRoute, api.Register)
 
-		fmt.Println(fmt.Sprintf("Server started on %s", config.HostFull))
+		fmt.Println(fmt.Sprintf("Server started on %s", xtremepkg.HostFull))
 
-		err := http.ListenAndServe(config.Host+":"+config.Port, newCors.Handler(newRoute))
+		err := http.ListenAndServe(xtremepkg.Host, newCors.Handler(newRoute))
 		if err != nil {
 			panic(err)
 		}
@@ -49,5 +49,5 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().BoolVar(&config.DevMode, "dev", false, "Set for development mode")
+	rootCmd.PersistentFlags().BoolVar(&xtremepkg.DevMode, "dev", false, "Set for development mode")
 }

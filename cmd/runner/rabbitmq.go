@@ -1,23 +1,23 @@
 package runner
 
 import (
-	"github.com/globalxtreme/gobaseconf/config"
-	"github.com/globalxtreme/gobaseconf/console/command"
+	"github.com/globalxtreme/go-core/v2/console/command"
+	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
 	"github.com/spf13/cobra"
-	rabbitmq2 "service/internal/app/rabbitmq"
-	config2 "service/internal/pkg/config"
+	"service/internal/app/rabbitmq"
+	"service/internal/pkg/config"
 )
 
 func init() {
 	rootCmd.AddCommand(&cobra.Command{
-		Use:  "rabbitmq",
+		Use:  "xtreme:rabbitmq",
 		Long: "Running RabbitMQ",
 		Run: func(cmd *cobra.Command, args []string) {
-			config.InitDevMode()
-			config2.InitDB()
-			config2.InitRabbitMQ()
+			xtremepkg.InitDevMode()
+			config.InitDB()
+			config.InitRabbitMQ()
 
-			rabbitmq2.Register()
+			rabbitmq.Register()
 
 			consumeCmd := command.RabbitMQConsumeCommand{}
 			consumeCmd.Handle()
