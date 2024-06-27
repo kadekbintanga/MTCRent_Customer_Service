@@ -11,8 +11,8 @@ import (
 	"service/internal/pkg/constant"
 	error2 "service/internal/pkg/error"
 	"service/internal/pkg/model"
+	parser2 "service/internal/pkg/parser"
 	request2 "service/internal/pkg/request"
-	parser2 "service/internal/testing/parser"
 	"service/internal/testing/repository"
 )
 

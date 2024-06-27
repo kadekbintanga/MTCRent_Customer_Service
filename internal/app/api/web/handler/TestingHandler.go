@@ -3,7 +3,7 @@ package handler
 import (
 	xtremeres "github.com/globalxtreme/go-core/v2/response"
 	"net/http"
-	"service/internal/testing/parser"
+	"service/internal/pkg/parser"
 	"service/internal/testing/repository"
 	"service/internal/testing/service"
 )

@@ -3,8 +3,8 @@ package handler
 import (
 	xtremeres "github.com/globalxtreme/go-core/v2/response"
 	"net/http"
-	parser2 "service/internal/activity/parser"
 	"service/internal/activity/repository"
+	parser2 "service/internal/pkg/parser"
 )
 
 type ActivityHandler struct{}

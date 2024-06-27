@@ -9,8 +9,12 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/gabriel-vasile/mimetype v1.4.4 h1:QjV6pZ7/XZ7ryI2KuyeEDE8wnh7fHP9YnQy+R0LnH8I=
 github.com/gabriel-vasile/mimetype v1.4.4/go.mod h1:JwLei5XPtWdGiMFB5Pjle1oEeoSeEuJfJE+TtfvdB/s=
+github.com/globalxtreme/go-core v0.0.0-20240622072453-c896d33d13fb h1:S9wGrPB9tns3KIhfuIS4HOAIt/3cQkZXUrKMXdC/ElU=
+github.com/globalxtreme/go-core v0.0.0-20240622072453-c896d33d13fb/go.mod h1:qjZEbzl3yHFZJZ9s248CIIBT9D8Dbwc9pefDVtPaO0Y=
 github.com/globalxtreme/go-core/v2 v2.0.8 h1:3WOhZ+i5WU4S1WMi3jvr/k+zP/lzF59VFQ65FyaDvsI=
 github.com/globalxtreme/go-core/v2 v2.0.8/go.mod h1:qkapCz8McVSK1oUzxcYvnuFhZmrgA0BtnhosIYEWAPY=
+github.com/globalxtreme/go-core/v2 v2.0.10 h1:36FmeGKl4BPwCTT66cfr2aUAnXbL90zt60Xf3QxDVHY=
+github.com/globalxtreme/go-core/v2 v2.0.10/go.mod h1:qkapCz8McVSK1oUzxcYvnuFhZmrgA0BtnhosIYEWAPY=
 github.com/go-co-op/gocron v1.37.0 h1:ZYDJGtQ4OMhTLKOKMIch+/CY70Brbb1dGdooLEhh7b0=
 github.com/go-co-op/gocron v1.37.0/go.mod h1:3L/n6BkO7ABj+TrfSVXLRzsP26zmikL4ISkLQ0O8iNY=
 github.com/go-playground/assert/v2 v2.2.0 h1:JvknZsQTYeFEAhQwI4qEt9cyV5ONwRHC+lYKSsYSR8s=

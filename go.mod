@@ -4,7 +4,7 @@ go 1.22
 
 require (
 	github.com/SebastiaanKlippert/go-wkhtmltopdf v1.9.2
-	github.com/globalxtreme/go-core/v2 v2.0.8
+	github.com/globalxtreme/go-core/v2 v2.0.10
 	github.com/go-co-op/gocron v1.37.0
 	github.com/go-playground/validator/v10 v10.22.0
 	github.com/gocraft/work v0.5.1
@@ -22,6 +22,7 @@ require (
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.4 // indirect
+	github.com/globalxtreme/go-core v0.0.0-20240622072453-c896d33d13fb // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-sql-driver/mysql v1.8.1 // indirect
