@@ -1,19 +1,19 @@
 package runner
 
 import (
-	"github.com/globalxtreme/gobaseconf/config"
+	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
 	"github.com/spf13/cobra"
 	"service/internal/app/database/seeder"
-	config2 "service/internal/pkg/config"
+	"service/internal/pkg/config"
 )
 
 func init() {
 	rootCmd.AddCommand(&cobra.Command{
-		Use:  "seeder",
+		Use:  "xtreme:seeder",
 		Long: "Running Seeder",
 		Run: func(cmd *cobra.Command, args []string) {
-			config.InitDevMode()
-			config2.InitDB()
+			xtremepkg.InitDevMode()
+			config.InitDB()
 
 			seeder.Run()
 		},

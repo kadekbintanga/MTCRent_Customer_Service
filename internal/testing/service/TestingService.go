@@ -2,8 +2,8 @@ package service
 
 import (
 	"fmt"
-	"github.com/globalxtreme/gobaseconf/filesystem"
-	"github.com/globalxtreme/gobaseconf/response"
+	xtremefs "github.com/globalxtreme/go-core/v2/filesystem"
+	xtremeres "github.com/globalxtreme/go-core/v2/response"
 	"gorm.io/gorm"
 	"net/http"
 	"service/internal/pkg/activity"
@@ -11,8 +11,8 @@ import (
 	"service/internal/pkg/constant"
 	error2 "service/internal/pkg/error"
 	"service/internal/pkg/model"
+	parser2 "service/internal/pkg/parser"
 	request2 "service/internal/pkg/request"
-	parser2 "service/internal/testing/parser"
 	"service/internal/testing/repository"
 )
 
@@ -45,20 +45,20 @@ func (srv *TestingService) Create(w http.ResponseWriter, r *http.Request) {
 
 	parser := parser2.TestingParser{Object: testing}
 
-	res := response.Response{Object: parser.First()}
+	res := xtremeres.Response{Object: parser.First()}
 	res.Success(w)
 }
 
 func (srv *TestingService) UploadByFile(w http.ResponseWriter, r *http.Request) {
-	uploader := filesystem.Uploader{Path: constant.PathImageTesting(), IsPublic: true}
+	uploader := xtremefs.Uploader{Path: constant.PathImageTesting(), IsPublic: true}
 	filePath, err := uploader.MoveFile(r, "testFile[testing][0]")
 	if err != nil {
 		error2.ErrXtremeTestingSave("Unable to upload file: " + err.Error())
 	}
 
-	storage := filesystem.Storage{IsPublic: uploader.IsPublic}
+	storage := xtremefs.Storage{IsPublic: uploader.IsPublic}
 
-	res := response.Response{Object: map[string]interface{}{
+	res := xtremeres.Response{Object: map[string]interface{}{
 		"url":      storage.GetFullPathURL(filePath.(string)),
 		"fullPath": storage.GetFullPath(filePath.(string)),
 		"path":     filePath.(string),
@@ -71,15 +71,15 @@ func (srv *TestingService) UploadByContent(w http.ResponseWriter, r *http.Reques
 	request.Parse(r)
 	request.Validate(r)
 
-	uploader := filesystem.Uploader{Path: constant.PathImageTesting(), IsPublic: true}
+	uploader := xtremefs.Uploader{Path: constant.PathImageTesting(), IsPublic: true}
 	filePath, err := uploader.MoveContent(request.Content)
 	if err != nil {
 		error2.ErrXtremeTestingSave("Unable to upload file: " + err.Error())
 	}
 
-	storage := filesystem.Storage{IsPublic: uploader.IsPublic}
+	storage := xtremefs.Storage{IsPublic: uploader.IsPublic}
 
-	res := response.Response{Object: map[string]interface{}{
+	res := xtremeres.Response{Object: map[string]interface{}{
 		"url":      storage.GetFullPathURL(filePath.(string)),
 		"fullPath": storage.GetFullPath(filePath.(string)),
 		"path":     filePath.(string),

@@ -1,18 +1,18 @@
 package error
 
 import (
-	"github.com/globalxtreme/gobaseconf/response"
+	xtremeres "github.com/globalxtreme/go-core/v2/response"
 	"net/http"
 )
 
 func ErrXtremeActivityNotFound() {
-	response.Error(http.StatusNotFound, "Service not found", "", nil)
+	xtremeres.Error(http.StatusNotFound, "Service not found", "", nil)
 }
 
 func ErrXtremeActivitySave(internalMsg string) {
-	response.Error(http.StatusInternalServerError, "Unable to save service", internalMsg, nil)
+	xtremeres.Error(http.StatusInternalServerError, "Unable to save service", internalMsg, nil)
 }
 
 func ErrXtremeActivityActionType() {
-	response.Error(http.StatusInternalServerError, "Activity action doesn't exists!!", "", nil)
+	xtremeres.Error(http.StatusInternalServerError, "Activity action doesn't exists!!", "", nil)
 }

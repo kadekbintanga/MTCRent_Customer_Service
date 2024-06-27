@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/globalxtreme/gobaseconf/config"
+	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
 	"github.com/rs/cors"
 )
 
@@ -10,7 +10,7 @@ var (
 )
 
 func InitCors() {
-	CorsOptions.AllowedOrigins = []string{config.HostFull}
+	CorsOptions.AllowedOrigins = []string{xtremepkg.HostFull}
 	CorsOptions.AllowCredentials = false
 	CorsOptions.AllowedMethods = []string{"GET", "POST", "PUT", "DELETE"}
 	CorsOptions.AllowedHeaders = []string{"*"}

@@ -1,13 +1,13 @@
 package migration
 
 import (
-	"github.com/globalxtreme/gobaseconf/database/migration"
+	xtremedb "github.com/globalxtreme/go-core/v2/database"
 	"service/internal/pkg/config"
 	"service/internal/pkg/model"
 )
 
-func Tables() []migration.Table {
-	return []migration.Table{
+func Tables() []xtremedb.Table {
+	return []xtremedb.Table{
 		{
 			Connection:  config.PgSQL,
 			CreateTable: model.Activity{},

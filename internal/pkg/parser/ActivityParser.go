@@ -1,7 +1,6 @@
 package parser
 
 import (
-	"github.com/globalxtreme/gobaseconf/helpers"
 	"service/internal/pkg/model"
 	"strings"
 )
@@ -33,6 +32,6 @@ func (parser ActivityParser) First() interface{} {
 		"description": activity.Description,
 		"reference":   activity.Reference,
 		"causedBy":    activity.CausedByName,
-		"createdAt":   activity.CreatedAt.Format(helpers.FullDateTimeLayout()),
+		"createdAt":   activity.CreatedAt.Format("02/01/2006 15:04"),
 	}
 }

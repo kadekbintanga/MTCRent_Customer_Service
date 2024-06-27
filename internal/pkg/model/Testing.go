@@ -1,11 +1,11 @@
 package model
 
 import (
-	base "github.com/globalxtreme/gobaseconf/model"
+	xtrememodel "github.com/globalxtreme/go-core/v2/model"
 )
 
 type Testing struct {
-	base.BaseModel
+	xtrememodel.BaseModel
 	Name string       `gorm:"column:name;type:varchar(250);default:null"`
 	Subs []TestingSub `gorm:"foreignKey:testingId"`
 }

@@ -2,28 +2,26 @@ package runner
 
 import (
 	"fmt"
-	"github.com/globalxtreme/gobaseconf/helpers/xtremelog"
+	xtremecore "github.com/globalxtreme/go-core/v2"
+	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
+	"github.com/gorilla/mux"
+	"github.com/spf13/cobra"
 	"reflect"
 	"runtime"
 	"service/internal/app/api"
 	"strconv"
 	"strings"
-
-	"github.com/globalxtreme/gobaseconf/config"
-	"github.com/globalxtreme/gobaseconf/router"
-	"github.com/gorilla/mux"
-	"github.com/spf13/cobra"
 )
 
 func init() {
 	rootCmd.AddCommand(&cobra.Command{
-		Use:  "route-list",
+		Use:  "xtreme:router",
 		Long: "Running Route List",
 		Run: func(cmd *cobra.Command, args []string) {
-			config.InitDevMode()
+			xtremepkg.InitDevMode()
 
 			newRoute := mux.NewRouter()
-			router.RegisterRouter(newRoute, api.Register)
+			xtremecore.RegisterRouter(newRoute, api.Register)
 
 			methodLen := 0
 			pathLen := 0
@@ -62,7 +60,7 @@ func init() {
 				printPath := fmt.Sprintf(pathFormat, routeList[1])
 
 				fmt.Printf("%s %s %s\n", printMethod, printPath, routeList[2])
-				xtremelog.Debug(routeList)
+				xtremepkg.LogDebug(routeList)
 			}
 		},
 	})

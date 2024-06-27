@@ -1,7 +1,7 @@
 package request
 
 import (
-	"github.com/globalxtreme/gobaseconf/middleware"
+	xtrememdw "github.com/globalxtreme/go-core/v2/middleware"
 	"net/http"
 	"service/internal/pkg/core"
 )
@@ -12,7 +12,7 @@ type TestingRequest struct {
 }
 
 func (rule *TestingRequest) Validate(r *http.Request) {
-	va := middleware.Validator{}
+	va := xtrememdw.Validator{}
 	va.Make(r, rule)
 }
 

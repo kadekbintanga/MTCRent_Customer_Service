@@ -2,7 +2,7 @@ package mobile
 
 import (
 	"github.com/gorilla/mux"
-	"service/internal/app/api/web/handler"
+	"service/internal/app/api/mobile/handler"
 )
 
 func Register(router *mux.Router) {

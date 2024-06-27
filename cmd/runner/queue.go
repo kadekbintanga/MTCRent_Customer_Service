@@ -1,24 +1,24 @@
 package runner
 
 import (
-	"github.com/globalxtreme/gobaseconf/config"
-	"github.com/globalxtreme/gobaseconf/queue"
+	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
+	xtremequeue "github.com/globalxtreme/go-core/v2/queue"
 	"github.com/spf13/cobra"
-	queue2 "service/internal/app/queue"
+	"service/internal/app/queue"
 	"service/internal/pkg/constant"
 )
 
 func init() {
 	rootCmd.AddCommand(&cobra.Command{
-		Use:  "queue",
+		Use:  "xtreme:queue",
 		Long: "Running Queue",
 		Run: func(cmd *cobra.Command, args []string) {
-			config.InitDevMode()
+			xtremepkg.InitDevMode()
 
 			queueNames := cmd.Flags().String("q", constant.QUEUE_HIGH, "Queue name")
-			configurations := queue2.Register()
+			configurations := queue.Register()
 
-			worker := queue.Queue{Names: *queueNames}
+			worker := xtremequeue.Queue{Names: *queueNames}
 			worker.Work(configurations)
 		},
 	})

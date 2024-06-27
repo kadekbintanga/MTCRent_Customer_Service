@@ -1,10 +1,10 @@
 package handler
 
 import (
-	"github.com/globalxtreme/gobaseconf/response"
+	xtremeres "github.com/globalxtreme/go-core/v2/response"
 	"net/http"
-	parser2 "service/internal/activity/parser"
 	"service/internal/activity/repository"
+	parser2 "service/internal/pkg/parser"
 )
 
 type ActivityHandler struct{}
@@ -15,6 +15,6 @@ func (ctr ActivityHandler) Get(w http.ResponseWriter, r *http.Request) {
 
 	parser := parser2.ActivityParser{Activities: activities}
 
-	res := response.Response{Array: parser.Get(), Pagination: &pagination}
+	res := xtremeres.Response{Array: parser.Get(), Pagination: &pagination}
 	res.Success(w)
 }

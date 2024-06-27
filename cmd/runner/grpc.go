@@ -2,29 +2,29 @@ package runner
 
 import (
 	"fmt"
-	"github.com/globalxtreme/gobaseconf/config"
-	"github.com/globalxtreme/gobaseconf/grpc"
+	xtremegrpc "github.com/globalxtreme/go-core/v2/grpc"
+	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
 	"github.com/spf13/cobra"
 	"log"
 	"os"
-	grpc2 "service/internal/app/grpc"
-	config2 "service/internal/pkg/config"
+	"service/internal/app/grpc"
+	"service/internal/pkg/config"
 )
 
 func init() {
 	rootCmd.AddCommand(&cobra.Command{
-		Use:  "grpc",
+		Use:  "xtreme:grpc",
 		Long: "Running gRPC",
 		Run: func(cmd *cobra.Command, args []string) {
-			config.InitDevMode()
-			config2.InitDB()
+			xtremepkg.InitDevMode()
+			config.InitDB()
 
 			addr := fmt.Sprintf("%s", os.Getenv("GRPC_HOST"))
 
-			server := grpc.GRPCServer{}
+			server := xtremegrpc.GRPCServer{}
 			server.NewServer(addr)
 
-			grpc2.Register(server)
+			grpc.Register(server)
 
 			fmt.Println(fmt.Sprintf("gRPC server is running: %s", addr))
 			if err := server.Serve(); err != nil {

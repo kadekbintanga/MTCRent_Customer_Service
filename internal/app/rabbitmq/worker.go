@@ -1,14 +1,14 @@
 package rabbitmq
 
 import (
-	"github.com/globalxtreme/gobaseconf/rabbitmq"
+	xtremerabbitmq "github.com/globalxtreme/go-core/v2/rabbitmq"
 	"service/internal/app/rabbitmq/consumer"
 	"service/internal/pkg/constant"
 )
 
 func Register() {
-	rabbitConsumer := rabbitmq.Consumer{}
-	rabbitConsumer.Set(map[string]rabbitmq.ConsumerInterface{
+	rabbitConsumer := xtremerabbitmq.Consumer{}
+	rabbitConsumer.Set(map[string]xtremerabbitmq.RabbitMQConsumerInterface{
 		constant.RABBITMQ_KEY_TESTING_MESSAGE: consumer.TestingConsumer{},
 	})
 }

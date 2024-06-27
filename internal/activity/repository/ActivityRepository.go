@@ -2,6 +2,7 @@ package repository
 
 import (
 	"fmt"
+	xtrememodel "github.com/globalxtreme/go-core/v2/model"
 	"gorm.io/gorm"
 	"net/url"
 	"service/internal/pkg/config"
@@ -26,17 +27,14 @@ type activityRepository struct {
 }
 
 func (repo activityRepository) Find(parameters url.Values) ([]model.Activity, interface{}, error) {
-	var activities []model.Activity
-
 	query := repo.filterByParam(parameters)
-	query, pagination := core.Paginate(parameters, query, &model.Activity{})
-	err := query.Order("id DESC").Find(&activities).Error
+	activities, pagination, err := xtrememodel.Paginate(query.Order("id DESC"), parameters, model.Activity{})
 	if err != nil {
 		fmt.Println(err)
 		return nil, nil, err
 	}
 
-	return activities, pagination.ParsePagination(), nil
+	return activities, pagination, nil
 }
 
 /** --- UNEXPORTED FUNCTIONS --- */

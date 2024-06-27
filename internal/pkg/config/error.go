@@ -3,8 +3,8 @@ package config
 import (
 	"errors"
 	"fmt"
-	"github.com/globalxtreme/gobaseconf/helpers/xtremelog"
-	"github.com/globalxtreme/gobaseconf/response"
+	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
+	xtremeres "github.com/globalxtreme/go-core/v2/response"
 	"net/http"
 	"os"
 	"service/internal/pkg/grpc/example"
@@ -14,7 +14,7 @@ func ErrorHandler(fn func() error) error {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Fprintf(os.Stderr, "panic: %v\n", r)
-			xtremelog.Error(r)
+			xtremepkg.LogError(r)
 		}
 	}()
 
@@ -25,9 +25,9 @@ func GRPCErrorHandler(fn func() (*example.EXResponse, error)) (res *example.EXRe
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Fprintf(os.Stderr, "panic: %v\n", r)
-			xtremelog.Error(r)
+			xtremepkg.LogError(r)
 
-			if panicData, ok := r.(*response.ResponseError); ok {
+			if panicData, ok := r.(*xtremeres.ResponseError); ok {
 				status := panicData.Status
 				err = errors.New(fmt.Sprintf("Code: %d. Message: %s. InternalMsg: %s", status.Code, status.Message, status.InternalMsg))
 			} else if panicData, ok := r.(error); ok {

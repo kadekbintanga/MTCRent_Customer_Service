@@ -1,22 +1,22 @@
 package runner
 
 import (
-	"github.com/globalxtreme/gobaseconf/config"
-	"github.com/globalxtreme/gobaseconf/console"
+	xtremeconsole "github.com/globalxtreme/go-core/v2/console"
+	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
 	"github.com/spf13/cobra"
-	console2 "service/internal/app/console"
-	config2 "service/internal/pkg/config"
+	"service/internal/app/console"
+	"service/internal/pkg/config"
 )
 
 func init() {
 	rootCmd.AddCommand(&cobra.Command{
-		Use:  "schedule",
+		Use:  "xtreme:schedule",
 		Long: "Running Schedule",
 		Run: func(cmd *cobra.Command, args []string) {
-			config.InitDevMode()
-			config2.InitDB()
+			xtremepkg.InitDevMode()
+			config.InitDB()
 
-			console.Schedules(console2.RegisterSchedule)
+			xtremeconsole.Schedules(console.RegisterSchedule)
 		},
 	})
 }

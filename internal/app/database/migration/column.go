@@ -1,9 +1,7 @@
 package migration
 
-import (
-	"github.com/globalxtreme/gobaseconf/database/migration"
-)
+import xtremedb "github.com/globalxtreme/go-core/v2/database"
 
-func Columns() []migration.Column {
-	return []migration.Column{}
+func Columns() []xtremedb.Column {
+	return []xtremedb.Column{}
 }

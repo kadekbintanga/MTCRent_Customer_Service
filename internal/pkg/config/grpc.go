@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/globalxtreme/gobaseconf/config"
+	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
 	"os"
 	"time"
 )
@@ -11,6 +11,6 @@ var (
 )
 
 func InitRPC() {
-	config.RPCDialTimeout = 5 * time.Second
+	xtremepkg.RPCDialTimeout = 5 * time.Second
 	TestingRPC = os.Getenv("GRPC_TESTING_HOST")
 }

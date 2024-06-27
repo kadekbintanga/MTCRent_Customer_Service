@@ -1,7 +1,8 @@
 package repository
 
 import (
-	"github.com/globalxtreme/gobaseconf/helpers/xtremelog"
+	xtrememodel "github.com/globalxtreme/go-core/v2/model"
+	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
 	"gorm.io/gorm"
 	"net/url"
 	"service/internal/pkg/config"
@@ -62,24 +63,22 @@ func (repo *testingRepository) FirstById(id string, args ...func(query *gorm.DB)
 }
 
 func (repo *testingRepository) Find(parameter url.Values) ([]model.Testing, interface{}, error) {
-	var testings []model.Testing
-
 	fromDate, toDate := core.SetDateRange(parameter)
 
-	query := config.PgSQL.Where("\"createdAt\" BETWEEN ? AND ?", fromDate, toDate)
+	query := config.PgSQL.Preload("Subs").
+		Where("\"createdAt\" BETWEEN ? AND ?", fromDate, toDate)
 
 	if search := parameter.Get("search"); len(search) > 3 {
 		query = query.Where("name LIKE ?", "%"+search+"%")
 	}
 
-	query, pagination := core.Paginate(parameter, query, model.Testing{})
-	err := query.Preload("Subs").Order("id DESC").Find(&testings).Error
+	testings, pagination, err := xtrememodel.Paginate(query.Order("id DESC"), parameter, model.Testing{})
 	if err != nil {
-		xtremelog.Error(err)
+		xtremepkg.LogError(err)
 		return nil, nil, err
 	}
 
-	return testings, pagination.ParsePagination(), nil
+	return testings, pagination, nil
 }
 
 func (repo *testingRepository) Store(req request.TestingRequest) model.Testing {
