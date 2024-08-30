@@ -14,6 +14,8 @@ func init() {
 		Long: "Running Schedule",
 		Run: func(cmd *cobra.Command, args []string) {
 			xtremepkg.InitDevMode()
+
+			config.InitTZ()
 			config.InitDB()
 
 			xtremeconsole.Schedules(console.RegisterSchedule)

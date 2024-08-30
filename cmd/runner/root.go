@@ -20,6 +20,7 @@ var rootCmd = &cobra.Command{
 		xtremepkg.InitDevMode()
 		xtremepkg.InitHost()
 
+		config.InitTZ()
 		config.InitDB()
 		config.InitCors()
 		config.InitRabbitMQ()

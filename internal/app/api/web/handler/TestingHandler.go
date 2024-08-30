@@ -3,6 +3,7 @@ package handler
 import (
 	xtremeres "github.com/globalxtreme/go-core/v2/response"
 	"net/http"
+	repository2 "service/internal/activity/repository"
 	"service/internal/pkg/parser"
 	"service/internal/testing/repository"
 	"service/internal/testing/service"
@@ -22,6 +23,7 @@ func (ctr TestingHandler) Get(w http.ResponseWriter, r *http.Request) {
 
 func (ctr TestingHandler) Create(w http.ResponseWriter, r *http.Request) {
 	srv := service.TestingService{}
+	srv.SetActivityRepository(repository2.NewActivityRepository())
 	srv.Create(w, r)
 }
 

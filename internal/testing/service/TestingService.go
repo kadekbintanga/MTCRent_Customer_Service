@@ -6,6 +6,7 @@ import (
 	xtremeres "github.com/globalxtreme/go-core/v2/response"
 	"gorm.io/gorm"
 	"net/http"
+	"net/url"
 	"service/internal/pkg/activity"
 	"service/internal/pkg/config"
 	"service/internal/pkg/constant"
@@ -17,7 +18,16 @@ import (
 )
 
 type TestingService struct {
-	repository repository.TestingRepository
+	repository         repository.TestingRepository
+	activityRepository ActivityRepository
+}
+
+type ActivityRepository interface {
+	Find(parameters url.Values) ([]model.Activity, interface{}, error)
+}
+
+func (srv *TestingService) SetActivityRepository(repo ActivityRepository) {
+	srv.activityRepository = repo
 }
 
 func (srv *TestingService) Create(w http.ResponseWriter, r *http.Request) {

@@ -4,7 +4,7 @@ import (
 	xtremeconsole "github.com/globalxtreme/go-core/v2/console"
 	"github.com/go-co-op/gocron"
 	"github.com/spf13/cobra"
-	"service/internal/testing/command"
+	"service/internal/app/console/command"
 )
 
 func RegisterCommand(cobraCmd *cobra.Command) {
