@@ -5,7 +5,7 @@ import (
 	"service/internal/app/grpc/server"
 )
 
-func Register(srv xtremegrpc.GRPCServer) {
+func Register(srv *xtremegrpc.GRPCServer) {
 	srv.Register(
 		&server.TestingServer{},
 	)

@@ -3,26 +3,25 @@ module service
 go 1.22
 
 require (
-	github.com/SebastiaanKlippert/go-wkhtmltopdf v1.9.2
-	github.com/globalxtreme/go-core/v2 v2.0.10
+	github.com/SebastiaanKlippert/go-wkhtmltopdf v1.9.3
+	github.com/globalxtreme/go-core/v2 v2.0.12
 	github.com/go-co-op/gocron v1.37.0
 	github.com/go-playground/validator/v10 v10.22.0
 	github.com/gocraft/work v0.5.1
 	github.com/gorilla/mux v1.8.1
 	github.com/mitchellh/mapstructure v1.5.0
-	github.com/rs/cors v1.11.0
+	github.com/rs/cors v1.11.1
 	github.com/spf13/cobra v1.8.1
 	github.com/xuri/excelize/v2 v2.8.1
-	google.golang.org/grpc v1.64.0
+	google.golang.org/grpc v1.66.0
 	google.golang.org/protobuf v1.34.2
 	gopkg.in/mail.v2 v2.3.1
-	gorm.io/gorm v1.25.10
+	gorm.io/gorm v1.25.11
 )
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
-	github.com/gabriel-vasile/mimetype v1.4.4 // indirect
-	github.com/globalxtreme/go-core v0.0.0-20240622072453-c896d33d13fb // indirect
+	github.com/gabriel-vasile/mimetype v1.4.5 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-sql-driver/mysql v1.8.1 // indirect
@@ -47,13 +46,13 @@ require (
 	github.com/xuri/efp v0.0.0-20240408161823-9ad904a10d6d // indirect
 	github.com/xuri/nfp v0.0.0-20240318013403-ab9948c2c4a7 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
-	golang.org/x/crypto v0.24.0 // indirect
+	golang.org/x/crypto v0.26.0 // indirect
 	golang.org/x/image v0.16.0 // indirect
-	golang.org/x/net v0.26.0 // indirect
-	golang.org/x/sync v0.7.0 // indirect
-	golang.org/x/sys v0.21.0 // indirect
-	golang.org/x/text v0.16.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240617180043-68d350f18fd4 // indirect
+	golang.org/x/net v0.28.0 // indirect
+	golang.org/x/sync v0.8.0 // indirect
+	golang.org/x/sys v0.24.0 // indirect
+	golang.org/x/text v0.17.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240827150818-7e3bb234dfed // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gorm.io/driver/mysql v1.5.7 // indirect
 	gorm.io/driver/postgres v1.5.9 // indirect

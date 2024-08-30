@@ -13,6 +13,8 @@ func init() {
 		Long: "Running Seeder",
 		Run: func(cmd *cobra.Command, args []string) {
 			xtremepkg.InitDevMode()
+
+			config.InitTZ()
 			config.InitDB()
 
 			seeder.Run()

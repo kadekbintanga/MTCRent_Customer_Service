@@ -14,6 +14,8 @@ func init() {
 		Long: "Running RabbitMQ",
 		Run: func(cmd *cobra.Command, args []string) {
 			xtremepkg.InitDevMode()
+
+			config.InitTZ()
 			config.InitDB()
 			config.InitRabbitMQ()
 
