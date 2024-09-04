@@ -5,6 +5,7 @@ import (
 	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
+	"net/url"
 	"service/internal/pkg/config"
 	"time"
 )
@@ -12,6 +13,23 @@ import (
 type TransactionRepository interface {
 	SetTransaction(tx *gorm.DB)
 }
+
+type FirstRepository[M any] interface {
+	FirstById(id string, args ...func(query *gorm.DB) *gorm.DB) M
+}
+
+type FindRepository[M any] interface {
+	Find(parameter url.Values) []M
+}
+
+type PaginateRepository[M any] interface {
+	Paginate(parameter url.Values) ([]M, interface{}, error)
+}
+
+// TODO: Re-enable this code after installing github.com/globalxtreme/go-identifier module (If you use GX Identifier for authorization)
+//type EmployeeIdentifierRepository interface {
+//	SetEmployeeIdentifier(employee data.EmployeeIdentifierData)
+//}
 
 func GetIncrementMonthly(model interface{}) int64 {
 	var totalData int64
