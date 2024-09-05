@@ -26,11 +26,11 @@ func (parser ActivityParser) First() interface{} {
 
 	return map[string]interface{}{
 		"id":          activity.ID,
-		"feature":     strings.ToTitle(strings.ReplaceAll(activity.Feature, "_", " ")),
+		"feature":     strings.ToTitle(strings.ReplaceAll(activity.ReferenceType, "_", " ")),
 		"subFeature":  strings.ToTitle(strings.ReplaceAll(activity.SubFeature, "_", " ")),
 		"action":      activity.Action,
 		"description": activity.Description,
-		"reference":   activity.Reference,
+		"reference":   activity.ReferenceID,
 		"causedBy":    activity.CausedByName,
 		"createdAt":   activity.CreatedAt.Format("02/01/2006 15:04"),
 	}
