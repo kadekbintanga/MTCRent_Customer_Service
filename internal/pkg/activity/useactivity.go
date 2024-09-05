@@ -20,19 +20,19 @@ type property struct {
 }
 
 type UseActivity struct {
-	Reference   string   `gorm:"-"`
-	Feature     string   `gorm:"-"`
-	SubFeature  string   `gorm:"-"`
-	Action      string   `gorm:"-"`
-	Description string   `gorm:"-"`
-	Property    property `gorm:"-"`
-	Parser      core.BaseActivityPropertyParserInterface
+	ReferenceID   string   `gorm:"-"`
+	ReferenceType string   `gorm:"-"`
+	SubFeature    string   `gorm:"-"`
+	Action        string   `gorm:"-"`
+	Description   string   `gorm:"-"`
+	Property      property `gorm:"-"`
+	Parser        core.BaseActivityPropertyParserInterface
 	//Employee    data.EmployeeIdentifierData    `gorm:"-"` // TODO: Re-enable this code after installing github.com/globalxtreme/go-identifier module (If you use GX Identifier for authorization)
 }
 
 func (aa UseActivity) SetReference(md ActivityModelInterface) UseActivity {
-	aa.Feature = md.TableName()
-	aa.Reference = md.SetReference()
+	aa.ReferenceID = md.SetReference()
+	aa.ReferenceType = md.TableName()
 
 	return aa
 }
@@ -71,11 +71,11 @@ func (aa UseActivity) SetNewProperty(action string, subs ...string) UseActivity 
 
 func (aa UseActivity) Save(description string) error {
 	var activity model.Activity
-	activity.Feature = aa.Feature
 	activity.SubFeature = aa.SubFeature
 	activity.Action = aa.Action
 	activity.Description = description
-	activity.Reference = aa.Reference
+	activity.ReferenceID = aa.ReferenceID
+	activity.ReferenceType = aa.ReferenceType
 	activity.Properties = map[string]interface{}{
 		"old": aa.Property.Old,
 		"new": aa.Property.New,
