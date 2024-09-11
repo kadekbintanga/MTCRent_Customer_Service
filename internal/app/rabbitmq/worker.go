@@ -9,6 +9,6 @@ import (
 func Register() {
 	rabbitConsumer := xtremerabbitmq.Consumer{}
 	rabbitConsumer.Set(map[string]xtremerabbitmq.RabbitMQConsumerInterface{
-		constant.RABBITMQ_KEY_TESTING_MESSAGE: consumer.TestingConsumer{},
+		constant.RABBITMQ_KEY_TESTING_MESSAGE: &consumer.TestingConsumer{},
 	})
 }
