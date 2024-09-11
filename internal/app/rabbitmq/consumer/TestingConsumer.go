@@ -3,11 +3,17 @@ package consumer
 import (
 	"errors"
 	"fmt"
+	"sync"
 )
 
-type TestingConsumer struct{}
+type TestingConsumer struct {
+	mutex sync.Mutex
+}
 
-func (cons TestingConsumer) Consume(message any) error {
+func (consume *TestingConsumer) Consume(message any) error {
+	consume.mutex.Lock()
+	defer consume.mutex.Unlock()
+
 	data, ok := message.(map[string]interface{})
 	if !ok {
 		return errors.New("Your message is not map[string]interface{}")

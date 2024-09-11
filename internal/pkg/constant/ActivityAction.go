@@ -1,11 +1,11 @@
 package constant
 
-type ActivityAction struct{}
-
 const ACTION_CREATE = "create"
 const ACTION_UPDATE = "update"
 const ACTION_DELETE = "delete"
 const ACTION_GENERAL = "general"
+
+type ActivityAction struct{}
 
 func (srv ActivityAction) OptionCodeNames() []string {
 	return []string{
