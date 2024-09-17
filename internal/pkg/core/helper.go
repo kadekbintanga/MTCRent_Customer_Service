@@ -3,7 +3,6 @@ package core
 import (
 	"math/rand"
 	"net/url"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -39,15 +38,4 @@ func StrPadLeft(original string, padLength int, padChar rune) string {
 func RandInt(min, max int) int {
 	rand.Seed(time.Now().UnixNano())
 	return rand.Intn(max-min+1) + min
-}
-
-func StringToArrayInt(text string) []int {
-	var array []int
-	texts := strings.Split(text, ",")
-	for _, value := range texts {
-		item, _ := strconv.Atoi(value)
-		array = append(array, item)
-	}
-
-	return array
 }

@@ -11,7 +11,7 @@ import (
 
 type ActivityModelInterface interface {
 	TableName() string
-	SetReference() string
+	SetReference() uint
 }
 
 type property struct {
@@ -20,7 +20,7 @@ type property struct {
 }
 
 type UseActivity struct {
-	ReferenceID   string   `gorm:"-"`
+	ReferenceID   uint     `gorm:"-"`
 	ReferenceType string   `gorm:"-"`
 	SubFeature    string   `gorm:"-"`
 	Action        string   `gorm:"-"`

@@ -6,7 +6,7 @@ import (
 
 type TestingSub struct {
 	xtrememodel.BaseModel
-	TestingId string `gorm:"column:testingId;type:varchar(45);not null"`
+	TestingId uint   `gorm:"column:testingId;type:bigint;not null"`
 	Name      string `gorm:"column:name;type:varchar(250);default:null"`
 }
 
