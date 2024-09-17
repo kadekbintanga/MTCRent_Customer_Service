@@ -14,6 +14,6 @@ func (Testing) TableName() string {
 	return "testing"
 }
 
-func (model Testing) SetReference() string {
+func (model Testing) SetReference() uint {
 	return model.BaseModel.ID
 }
