@@ -6,7 +6,8 @@ import (
 
 type Testing struct {
 	xtrememodel.BaseModel
-	Name string       `gorm:"column:name;type:varchar(250);default:null"`
+	Name string `gorm:"column:name;type:varchar(250);default:null"`
+
 	Subs []TestingSub `gorm:"foreignKey:testingId"`
 }
 

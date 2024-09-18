@@ -5,10 +5,14 @@ import (
 	"github.com/go-co-op/gocron"
 	"github.com/spf13/cobra"
 	"service/internal/app/console/command"
+	"service/internal/app/console/command/generator"
 )
 
 func RegisterCommand(cobraCmd *cobra.Command) {
 	xtremeconsole.Commands(cobraCmd, []xtremeconsole.BaseCommand{
+		// File Generator
+		&generator.GenMigrationCommand{},
+
 		&command.TestCommand{},
 	})
 }

@@ -51,22 +51,27 @@ go build -o application main.go
 ./application
 
 # Migration
-./application migration
+./application xtreme:migration
 
 # Seeder
-./application seeder
+./application xtreme:seeder
 
 # gRPC
-./application grpc
+./application xtreme:grpc
 
 # Queue
-./application queue
+./application xtreme:queue
 
 # RabbitMQ
-./application rabbitmq
+./application xtreme:rabbitmq
 
 # Schedule
-./application schedule
+./application xtreme:schedule
+
+# Generator
+
+# Migration file
+./application gen:migration <Name>
 
 # Custom Commands (Example)
 ./application dev-test

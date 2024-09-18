@@ -4,7 +4,7 @@ import (
 	xtremedb "github.com/globalxtreme/go-core/v2/database"
 	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
 	"github.com/spf13/cobra"
-	"service/internal/app/database/migration"
+	"service/internal/app/database"
 	"service/internal/pkg/config"
 )
 
@@ -16,7 +16,7 @@ func init() {
 			xtremepkg.InitDevMode()
 			config.InitDB()
 
-			xtremedb.Migrate(migration.Tables(), migration.Columns())
+			xtremedb.Migrate(config.PgSQL, database.Migrations())
 		},
 	})
 }
