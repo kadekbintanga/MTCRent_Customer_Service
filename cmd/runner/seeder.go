@@ -3,7 +3,7 @@ package runner
 import (
 	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
 	"github.com/spf13/cobra"
-	"service/internal/app/database/seeder"
+	"service/internal/app/database"
 	"service/internal/pkg/config"
 )
 
@@ -17,7 +17,7 @@ func init() {
 			config.InitTZ()
 			config.InitDB()
 
-			seeder.Run()
+			database.Seeder()
 		},
 	})
 }
