@@ -1,4 +1,4 @@
-package migrations
+package migration
 
 import (
 	xtremedb "github.com/globalxtreme/go-core/v2/database"
