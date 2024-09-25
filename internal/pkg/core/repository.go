@@ -14,8 +14,12 @@ type TransactionRepository interface {
 	SetTransaction(tx *gorm.DB)
 }
 
-type FirstRepository[M any] interface {
-	FirstById(id string, args ...func(query *gorm.DB) *gorm.DB) M
+type FirstIdRepository[M any] interface {
+	FirstById(id any, args ...func(query *gorm.DB) *gorm.DB) M
+}
+
+type FirstUUIDRepository[M any] interface {
+	FirstByUUID(uuid string, args ...func(query *gorm.DB) *gorm.DB) M
 }
 
 type FindRepository[M any] interface {

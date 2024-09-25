@@ -70,7 +70,7 @@ func (srv *TestingServer) RollbackStore(ctx context.Context, in *example.RollBac
 		err = config.PgSQL.Transaction(func(tx *gorm.DB) error {
 			repo := repository.NewTestingRepository(tx)
 
-			testing := repo.FirstById(srv.rollbackData["id"].(string), func(query *gorm.DB) *gorm.DB {
+			testing := repo.FirstById(srv.rollbackData["id"], func(query *gorm.DB) *gorm.DB {
 				return query.Preload("Subs")
 			})
 

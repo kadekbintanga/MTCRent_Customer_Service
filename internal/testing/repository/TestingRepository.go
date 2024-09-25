@@ -17,7 +17,7 @@ import (
 type TestingRepository interface {
 	core.TransactionRepository
 
-	FirstById(id string, args ...func(query *gorm.DB) *gorm.DB) model.Testing
+	FirstById(id any, args ...func(query *gorm.DB) *gorm.DB) model.Testing
 	Find(parameter url.Values) ([]model.Testing, interface{}, error)
 
 	Store(request request.TestingRequest) model.Testing
@@ -46,7 +46,7 @@ func (repo *testingRepository) SetTransaction(tx *gorm.DB) {
 	repo.transaction = tx
 }
 
-func (repo *testingRepository) FirstById(id string, args ...func(query *gorm.DB) *gorm.DB) model.Testing {
+func (repo *testingRepository) FirstById(id any, args ...func(query *gorm.DB) *gorm.DB) model.Testing {
 	var testing model.Testing
 
 	query := config.PgSQL
