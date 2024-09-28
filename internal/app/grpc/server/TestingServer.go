@@ -9,6 +9,7 @@ import (
 	"gorm.io/gorm"
 	"service/internal/pkg/activity"
 	"service/internal/pkg/config"
+	"service/internal/pkg/core"
 	"service/internal/pkg/grpc/example"
 	"service/internal/pkg/request"
 	"service/internal/testing/repository"
@@ -25,7 +26,7 @@ func (srv *TestingServer) Register(serverRPC *grpc.Server) {
 }
 
 func (srv *TestingServer) Store(ctx context.Context, in *example.TestingRequest) (*example.EXResponse, error) {
-	res, err := config.GRPCErrorHandler(func() (*example.EXResponse, error) {
+	res, err := core.GRPCErrorHandler(func() (*example.EXResponse, error) {
 		err := config.PgSQL.Transaction(func(tx *gorm.DB) error {
 			repo := repository.NewTestingRepository(tx)
 			testing := repo.Store(request.TestingRequest{Name: in.GetName()})
@@ -61,7 +62,7 @@ func (srv *TestingServer) Store(ctx context.Context, in *example.TestingRequest)
 }
 
 func (srv *TestingServer) RollbackStore(ctx context.Context, in *example.RollBackRequest) (*example.EXResponse, error) {
-	res, err := config.GRPCErrorHandler(func() (*example.EXResponse, error) {
+	res, err := core.GRPCErrorHandler(func() (*example.EXResponse, error) {
 		err := json.Unmarshal(in.GetData(), &srv.rollbackData)
 		if err != nil {
 			return nil, errors.New(fmt.Sprintf("Unable to unmarshal data! Err: %v", err))

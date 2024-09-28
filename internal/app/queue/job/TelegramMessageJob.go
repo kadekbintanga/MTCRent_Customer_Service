@@ -5,7 +5,7 @@ import (
 	"github.com/gocraft/work"
 	"github.com/mitchellh/mapstructure"
 	"log"
-	"service/internal/pkg/config"
+	"service/internal/pkg/core"
 	"service/internal/pkg/thirdparty"
 )
 
@@ -16,7 +16,7 @@ type TelegramMessageJob struct {
 }
 
 func (j *TelegramMessageJob) Consume(job *work.Job) error {
-	err := config.ErrorHandler(func() error {
+	err := core.ErrorHandler(func() error {
 		log.Println(fmt.Sprintf("SendTelegramMessageJob::PROCESSING"))
 
 		mapstructure.Decode(job.Args, &j)
