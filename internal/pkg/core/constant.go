@@ -1,6 +1,9 @@
 package core
 
-import "strings"
+import (
+	"regexp"
+	"strings"
+)
 
 /** --- ID & NAME --- */
 
@@ -12,8 +15,8 @@ type IDNameInterface interface {
 
 type IDName struct{}
 
-func (in IDName) Get(ind IDNameInterface) []map[string]interface{} {
-	var results []map[string]interface{}
+func (in IDName) Get(ind IDNameInterface) []interface{} {
+	var results []interface{}
 	for id, name := range ind.OptionIDNames() {
 		results = append(results, map[string]interface{}{
 			"id":   id,
@@ -45,10 +48,10 @@ type CodeNameInterface interface {
 	OptionCodeNames() []string
 }
 
-type CodeName struct{}
+type SnakeName struct{}
 
-func (cn CodeName) Get(cni CodeNameInterface) []map[string]interface{} {
-	var results []map[string]interface{}
+func (cn SnakeName) Get(cni CodeNameInterface) []interface{} {
+	var results []interface{}
 	for _, code := range cni.OptionCodeNames() {
 		results = append(results, cn.CodeAndName(code))
 	}
@@ -56,14 +59,43 @@ func (cn CodeName) Get(cni CodeNameInterface) []map[string]interface{} {
 	return results
 }
 
-func (cn CodeName) Display(code string) string {
+func (cn SnakeName) Display(code string) string {
 	display := strings.Replace(code, "_", " ", -1)
 	display = strings.Replace(display, "-", " ", -1)
 
 	return strings.Title(display)
 }
 
-func (cn CodeName) CodeAndName(code string) map[string]interface{} {
+func (cn SnakeName) CodeAndName(code string) map[string]interface{} {
+	return map[string]interface{}{
+		"code":    code,
+		"display": cn.Display(code),
+	}
+}
+
+type CamelNameInterface interface {
+	OptionCamelNames() []string
+}
+
+type CamelName struct{}
+
+func (cn CamelName) Get(cni CamelNameInterface) []interface{} {
+	var results []interface{}
+	for _, code := range cni.OptionCamelNames() {
+		results = append(results, cn.CodeAndName(code))
+	}
+
+	return results
+}
+
+func (cn CamelName) Display(code string) string {
+	re := regexp.MustCompile("([a-z])([A-Z])")
+	display := re.ReplaceAllString(code, "${1} ${2}")
+
+	return strings.Title(display)
+}
+
+func (cn CamelName) CodeAndName(code string) map[string]interface{} {
 	return map[string]interface{}{
 		"code":    code,
 		"display": cn.Display(code),
