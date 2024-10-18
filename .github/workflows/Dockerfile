@@ -26,7 +26,7 @@ WORKDIR /app
 COPY . .
 
 # Build the application
-RUN /usr/local/go/bin/go build -o application main.go
+RUN /usr/local/go/bin/go build -o application cmd/main.go
 
 # Final stage
 FROM ubuntu:22.04
