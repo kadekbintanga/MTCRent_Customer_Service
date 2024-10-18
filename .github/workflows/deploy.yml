@@ -1,4 +1,4 @@
-name: Deploy on Release
+name: Continuous Integration & Push to Kubernetes
 
 on:
   push:
@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -30,10 +31,21 @@ jobs:
           # You can use ${{ steps.get-latest-release.outputs.result }} as needed
 
       - name: Login to Local Docker Registry
-        run: docker login -u ${{ secrets.LOCAL_REGISTRY_USERNAME }} -p ${{ secrets.LOCAL_REGISTRY_PASSWORD }} ${{ secrets.LOCAL_REGISTRY_URL }}
+        run: docker login -u ${{ secrets.LOCAL_REGISTRY_USERNAME_OPS }} -p ${{ secrets.LOCAL_REGISTRY_PASSWORD_OPS }} ${{ secrets.LOCAL_REGISTRY_URL_OPS }}
 
       - name: Push Docker image
-        run: docker buildx build --platform linux/amd64 -t ${{ secrets.LOCAL_REGISTRY_URL }}/${{ secrets.DOCKER_IMAGE }}:${{ steps.get-latest-release.outputs.result }} -f .github/workflows/Dockerfile . --push
+        run: docker buildx build --platform linux/amd64 -t ${{ secrets.LOCAL_REGISTRY_URL_OPS }}/${{ secrets.DOCKER_IMAGE_OPS }}:${{ steps.get-latest-release.outputs.result }} -f .github/workflows/Dockerfile cmd/main.go --push
 
       - name: Notify Deployment
         run: echo "Deployment of version ${{ steps.get-latest-release.outputs.result }} to local registry completed."
+
+      - name: Push new image version to the kubernetes
+        env:
+          SCHEDULED_DATE: "06/10/2024" # d/m/Y
+          SCHEDULED_TIME: "00:00" # H:i
+          ONLY_PUSH: "true"
+        run: |
+          curl -X POST -u "${{ secrets.KUBE_USERNAME_OPS }}:${{ secrets.KUBE_PASSWORD_OPS }}" \
+            -H "Content-Type: application/json" \
+            -d '{"image": "'"${{ secrets.LOCAL_REGISTRY_URL_OPS }}/${{ secrets.DOCKER_IMAGE_OPS }}"'", "version": "'"${{ steps.get-latest-release.outputs.result }}"'", "scheduledDate": "'"$SCHEDULED_DATE"'", "scheduledTime": "'"$SCHEDULED_TIME"'", "onlyPush": $ONLY_PUSH}' \
+            ${{ secrets.KUBE_PUSH_URL_OPS }}
