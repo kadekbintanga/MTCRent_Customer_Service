@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	xtremequeue "github.com/globalxtreme/go-core/v2/queue"
+	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
 	"github.com/gocraft/work"
 	"net/http"
 	"service/internal/pkg/constant"
@@ -32,9 +32,7 @@ func (tel *Telegram) Queue(message string) {
 		"message":    message,
 	}
 
-	xtremequeue.RegisterRedis()
-
-	ctx := work.NewEnqueuer(constant.QUEUE_HIGH, xtremequeue.RedisPool)
+	ctx := work.NewEnqueuer(constant.QUEUE_HIGH, xtremepkg.RedisPool)
 	_, err := ctx.Enqueue(constant.JOB_TELEGRAM_MESSAGE, args)
 	if err != nil {
 		fmt.Println(fmt.Sprintf("%v", err))
