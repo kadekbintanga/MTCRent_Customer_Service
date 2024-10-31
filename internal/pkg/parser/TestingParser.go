@@ -43,15 +43,28 @@ func (parser TestingParser) First() interface{} {
 }
 
 func (parser TestingParser) CreateActivity(action string) interface{} {
-	return parser.First()
+	activity := parser.Object
+
+	var resSubs []interface{}
+	for _, sub := range activity.Subs {
+		resSubs = append(resSubs, map[string]interface{}{
+			"name": sub.Name,
+		})
+	}
+
+	return map[string]interface{}{
+		"name": activity.Name,
+		"file": xtremefs.Storage{}.GetFullPathURL("ckH2cahaAaDMNVgS2xdM1697957810885349000.png"),
+		"subs": resSubs,
+	}
 }
 
 func (parser TestingParser) UpdateActivity(action string) interface{} {
-	return parser.First()
+	return parser.CreateActivity(action)
 }
 
 func (parser TestingParser) DeleteActivity(action string) interface{} {
-	return parser.First()
+	return parser.CreateActivity(action)
 }
 
 func (parser TestingParser) GeneralActivity(action string) interface{} {
@@ -63,5 +76,5 @@ func (parser TestingParser) GeneralActivity(action string) interface{} {
 		}
 	}
 
-	return parser.First()
+	return parser.CreateActivity(action)
 }

@@ -15,7 +15,9 @@ func init() {
 			xtremepkg.InitDevMode()
 
 			config.InitTZ()
-			config.InitDB()
+
+			DBConn := config.InitDB()
+			defer DBConn()
 
 			database.Seeder()
 		},

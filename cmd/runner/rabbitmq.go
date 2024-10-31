@@ -16,8 +16,15 @@ func init() {
 			xtremepkg.InitDevMode()
 
 			config.InitTZ()
-			config.InitDB()
-			config.InitRabbitMQ()
+
+			DBConn := config.InitDB()
+			defer DBConn()
+
+			rabbitMQConn := config.InitRabbitMQ()
+			defer rabbitMQConn()
+
+			logRPC := xtremepkg.InitLogRPC()
+			defer logRPC()
 
 			rabbitmq.Register()
 

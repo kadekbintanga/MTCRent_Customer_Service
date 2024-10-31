@@ -16,7 +16,12 @@ func init() {
 			xtremepkg.InitDevMode()
 
 			config.InitTZ()
-			config.InitDB()
+
+			DBConn := config.InitDB()
+			defer DBConn()
+
+			logRPC := xtremepkg.InitLogRPC()
+			defer logRPC()
 
 			xtremeconsole.Schedules(console.RegisterSchedule)
 		},

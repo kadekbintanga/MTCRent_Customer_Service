@@ -6,13 +6,13 @@ import (
 )
 
 func ErrXtremeActivityNotFound() {
-	xtremeres.Error(http.StatusNotFound, "Service not found", "", nil)
+	xtremeres.Error(http.StatusNotFound, "Object not found", "", false, nil)
 }
 
 func ErrXtremeActivitySave(internalMsg string) {
-	xtremeres.Error(http.StatusInternalServerError, "Unable to save service", internalMsg, nil)
+	xtremeres.Error(http.StatusInternalServerError, "Unable to save activity", internalMsg, false, nil)
 }
 
 func ErrXtremeActivityActionType() {
-	xtremeres.Error(http.StatusInternalServerError, "Activity action doesn't exists!!", "", nil)
+	xtremeres.Error(http.StatusInternalServerError, "Object action doesn't exists!!", "", false, nil)
 }

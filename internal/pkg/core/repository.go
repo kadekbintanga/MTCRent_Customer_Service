@@ -50,7 +50,7 @@ func Truncate(db *gorm.DB, tables ...schema.Tabler) {
 		for _, table := range tables {
 			err := db.Exec(fmt.Sprintf("truncate table %s restart identity cascade", table.TableName()))
 			if err != nil {
-				xtremepkg.LogError(fmt.Sprintf("Truncate invalid: %v", err))
+				xtremepkg.LogError(fmt.Sprintf("Truncate invalid: %v", err), false)
 			}
 		}
 	}

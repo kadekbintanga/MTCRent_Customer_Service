@@ -6,21 +6,21 @@ import (
 )
 
 func ErrXtremeTestingGet(internalMsg string) {
-	xtremeres.Error(http.StatusNotFound, "Testing not found", internalMsg, nil)
+	xtremeres.Error(http.StatusNotFound, "Testing not found", internalMsg, false, nil)
 }
 
 func ErrXtremeTestingSave(internalMsg string) {
-	xtremeres.Error(http.StatusInternalServerError, "Unable to save testing", internalMsg, nil)
+	xtremeres.Error(http.StatusInternalServerError, "Unable to save testing", internalMsg, false, nil)
 }
 
 func ErrXtremeTestingDelete(internalMsg string) {
-	xtremeres.Error(http.StatusInternalServerError, "Unable to delete testing", internalMsg, nil)
+	xtremeres.Error(http.StatusInternalServerError, "Unable to delete testing", internalMsg, false, nil)
 }
 
 func ErrXtremeTestingSubSave(internalMsg string) {
-	xtremeres.Error(http.StatusInternalServerError, "Unable to save testing sub", internalMsg, nil)
+	xtremeres.Error(http.StatusInternalServerError, "Unable to save testing sub", internalMsg, false, nil)
 }
 
 func ErrXtremeTestingSubDelete(internalMsg string) {
-	xtremeres.Error(http.StatusInternalServerError, "Unable to delete testing sub", internalMsg, nil)
+	xtremeres.Error(http.StatusInternalServerError, "Unable to delete testing sub", internalMsg, false, nil)
 }
