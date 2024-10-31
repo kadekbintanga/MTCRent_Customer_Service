@@ -44,9 +44,9 @@ func InitRabbitMQ() func() {
 	xtremerabbitmq.RabbitMQConf.Queue = os.Getenv("RABBITMQ_QUEUE")
 	xtremerabbitmq.RabbitMQConf.Timeout = 5 * time.Second
 
-	closeRabbitMQ := func() {
+	rabbitMQClose := func() {
 		rabbitmqDB.Close()
 	}
 
-	return closeRabbitMQ
+	return rabbitMQClose
 }

@@ -15,7 +15,6 @@ func InitTZ() {
 	loc, err := time.LoadLocation(tz)
 	if err != nil {
 		log.Panicf("Error loading location: %v\n", err)
-		return
 	}
 
 	time.Local = loc

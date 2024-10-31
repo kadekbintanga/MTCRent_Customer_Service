@@ -27,9 +27,9 @@ func InitDB() func() {
 		log.Panicf("Getting DB object is failed: %s", err.Error())
 	}
 
-	closeDB := func() {
+	DBClose := func() {
 		pgsqlDB.Close()
 	}
 
-	return closeDB
+	return DBClose
 }

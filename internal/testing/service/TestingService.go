@@ -48,7 +48,7 @@ func (srv *TestingService) Create(w http.ResponseWriter, r *http.Request) {
 		}
 
 		activity.UseActivity{}.SetReference(testing).SetNewProperty(constant.ACTION_CREATE).
-			Save(fmt.Sprintf("Enter new testing: %s [%s]", testing.Name, testing.ID))
+			Save(fmt.Sprintf("Enter new testing: %s [%d]", testing.Name, testing.ID))
 
 		return nil
 	})

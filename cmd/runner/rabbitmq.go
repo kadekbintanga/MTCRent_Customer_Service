@@ -17,14 +17,14 @@ func init() {
 
 			config.InitTZ()
 
-			DBConn := config.InitDB()
-			defer DBConn()
+			DBClose := config.InitDB()
+			defer DBClose()
 
-			rabbitMQConn := config.InitRabbitMQ()
-			defer rabbitMQConn()
+			rabbitMQClose := config.InitRabbitMQ()
+			defer rabbitMQClose()
 
-			logRPC := xtremepkg.InitLogRPC()
-			defer logRPC()
+			logCleanup := xtremepkg.InitLogRPC()
+			defer logCleanup()
 
 			rabbitmq.Register()
 
