@@ -26,14 +26,14 @@ var rootCmd = &cobra.Command{
 		config.InitRPC()
 		config.InitValidation()
 
-		DBConn := config.InitDB()
-		defer DBConn()
+		DBClose := config.InitDB()
+		defer DBClose()
 
-		rabbitMQConn := config.InitRabbitMQ()
-		defer rabbitMQConn()
+		rabbitMQClose := config.InitRabbitMQ()
+		defer rabbitMQClose()
 
-		logRPC := xtremepkg.InitLogRPC()
-		defer logRPC()
+		logCleanup := xtremepkg.InitLogRPC()
+		defer logCleanup()
 
 		newCors := cors.New(config.CorsOptions)
 

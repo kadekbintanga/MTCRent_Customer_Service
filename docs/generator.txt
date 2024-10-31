@@ -1,4 +1,5 @@
 File generator:
+For Next Development
 
 1. Feature
 ./application generator:feature {feature-name/domain-name}

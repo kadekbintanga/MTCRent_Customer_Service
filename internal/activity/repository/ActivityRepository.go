@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"fmt"
 	xtrememodel "github.com/globalxtreme/go-core/v2/model"
 	"gorm.io/gorm"
 	"net/url"
@@ -30,7 +29,6 @@ func (repo activityRepository) Find(parameters url.Values) ([]model.Activity, in
 	query := repo.filterByParam(parameters)
 	activities, pagination, err := xtrememodel.Paginate(query.Order("id DESC"), parameters, model.Activity{})
 	if err != nil {
-		fmt.Println(err)
 		return nil, nil, err
 	}
 
@@ -42,7 +40,7 @@ func (repo activityRepository) Find(parameters url.Values) ([]model.Activity, in
 func (repo activityRepository) filterByParam(parameters url.Values) *gorm.DB {
 	fromDate, toDate := core.SetDateRange(parameters)
 
-	query := config.PgSQL.Where("\"createdAt\" BETWEEN ? AND ?", fromDate, toDate)
+	query := config.PgSQL.Where(`"createdAt" BETWEEN ? AND ?`, fromDate, toDate)
 
 	if feature := parameters.Get("feature"); len(feature) > 0 {
 		query = query.Where("feature = ?", feature)
@@ -52,8 +50,9 @@ func (repo activityRepository) filterByParam(parameters url.Values) *gorm.DB {
 		query = query.Where("action = ?", action)
 	}
 
-	if search := parameters.Get("search"); len(search) > 3 {
-		query = query.Where("description LIKE ? OR subFeature LIKE ?", "%"+search+"%", "%"+search+"%")
+	if searchReq := parameters.Get("search"); len(searchReq) > 3 {
+		searchVal := "%" + searchReq + "%"
+		query = query.Where(`description LIKE ? OR "subFeature" LIKE ?`, searchVal, searchVal)
 	}
 
 	return query

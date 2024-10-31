@@ -21,11 +21,11 @@ func init() {
 
 			config.InitTZ()
 
-			DBConn := config.InitDB()
-			defer DBConn()
+			DBClose := config.InitDB()
+			defer DBClose()
 
-			logRPC := xtremepkg.InitLogRPC()
-			defer logRPC()
+			logCleanup := xtremepkg.InitLogRPC()
+			defer logCleanup()
 
 			addr := fmt.Sprintf("%s", os.Getenv("GRPC_HOST"))
 

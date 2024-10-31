@@ -16,8 +16,8 @@ func init() {
 
 			config.InitTZ()
 
-			DBConn := config.InitDB()
-			defer DBConn()
+			DBClose := config.InitDB()
+			defer DBClose()
 
 			database.Seeder()
 		},
