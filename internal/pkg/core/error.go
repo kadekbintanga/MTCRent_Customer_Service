@@ -16,15 +16,29 @@ func ErrorHandler(fn func() error) error {
 	go func() {
 		defer func() {
 			if r := recover(); r != nil {
-				fmt.Fprintf(os.Stderr, "panic: %v\n", r)
-				xtremepkg.LogError(r)
+				bug := false
 
-				errChan <- fmt.Errorf("panic: %v", r)
+				var err error
+				if panicData, ok := r.(*xtremeres.ResponseError); ok {
+					status := panicData.Status
+					bug = status.Bug
+					err = errors.New(fmt.Sprintf("Code: %d. Message: %s. InternalMsg: %s", status.Code, status.Message, status.InternalMsg))
+				} else if panicData, ok := r.(error); ok {
+					err = errors.New(fmt.Sprintf("Code: %d. Message: %v", http.StatusInternalServerError, panicData.Error()))
+				} else {
+					bug = true
+					err = errors.New(fmt.Sprintf("Code: %d. Message: An error Occurred.", http.StatusInternalServerError))
+				}
+
+				fmt.Fprintf(os.Stderr, "panic: %v\n", r)
+				xtremepkg.LogError(r, bug)
+
+				errChan <- err
 			}
 		}()
 
 		if err := fn(); err != nil {
-			xtremepkg.LogError(err)
+			xtremepkg.LogError(err, false)
 			errChan <- err
 		} else {
 			close(errChan)
@@ -41,18 +55,22 @@ func GRPCErrorHandler(fn func() (*example.EXResponse, error)) (res *example.EXRe
 	go func() {
 		defer func() {
 			if r := recover(); r != nil {
-				fmt.Fprintf(os.Stderr, "panic: %v\n", r)
-				xtremepkg.LogError(r)
+				bug := false
 
 				var err error
 				if panicData, ok := r.(*xtremeres.ResponseError); ok {
 					status := panicData.Status
+					bug = status.Bug
 					err = errors.New(fmt.Sprintf("Code: %d. Message: %s. InternalMsg: %s", status.Code, status.Message, status.InternalMsg))
 				} else if panicData, ok := r.(error); ok {
 					err = errors.New(fmt.Sprintf("Code: %d. Message: %v", http.StatusInternalServerError, panicData.Error()))
 				} else {
+					bug = true
 					err = errors.New(fmt.Sprintf("Code: %d. Message: An error Occurred.", http.StatusInternalServerError))
 				}
+
+				fmt.Fprintf(os.Stderr, "panic: %v\n", r)
+				xtremepkg.LogError(r, bug)
 
 				errChan <- err
 			}
@@ -60,7 +78,7 @@ func GRPCErrorHandler(fn func() (*example.EXResponse, error)) (res *example.EXRe
 
 		res, err := fn()
 		if err != nil {
-			xtremepkg.LogError(err)
+			xtremepkg.LogError(err, false)
 
 			errChan <- err
 		} else {

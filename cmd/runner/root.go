@@ -21,12 +21,19 @@ var rootCmd = &cobra.Command{
 		xtremepkg.InitHost()
 
 		config.InitTZ()
-		config.InitDB()
 		config.InitCors()
-		config.InitRabbitMQ()
 		config.InitMail()
 		config.InitRPC()
 		config.InitValidation()
+
+		DBConn := config.InitDB()
+		defer DBConn()
+
+		rabbitMQConn := config.InitRabbitMQ()
+		defer rabbitMQConn()
+
+		logRPC := xtremepkg.InitLogRPC()
+		defer logRPC()
 
 		newCors := cors.New(config.CorsOptions)
 

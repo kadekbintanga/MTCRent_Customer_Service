@@ -20,7 +20,12 @@ func init() {
 			xtremepkg.InitDevMode()
 
 			config.InitTZ()
-			config.InitDB()
+
+			DBConn := config.InitDB()
+			defer DBConn()
+
+			logRPC := xtremepkg.InitLogRPC()
+			defer logRPC()
 
 			addr := fmt.Sprintf("%s", os.Getenv("GRPC_HOST"))
 

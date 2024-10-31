@@ -18,6 +18,9 @@ func init() {
 
 			config.InitTZ()
 
+			logRPC := xtremepkg.InitLogRPC()
+			defer logRPC()
+
 			queueNames := cmd.Flags().String("q", constant.QUEUE_HIGH, "Queue name")
 			configurations := queue.Register()
 

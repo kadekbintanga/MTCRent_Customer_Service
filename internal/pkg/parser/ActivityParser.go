@@ -6,15 +6,15 @@ import (
 )
 
 type ActivityParser struct {
-	Activities []model.Activity
-	Activity   model.Activity
+	Array  []model.Activity
+	Object model.Activity
 }
 
 func (parser ActivityParser) Get() []interface{} {
 	var result []interface{}
 
-	for _, activity := range parser.Activities {
-		firstParser := ActivityParser{Activity: activity}
+	for _, activity := range parser.Array {
+		firstParser := ActivityParser{Object: activity}
 		result = append(result, firstParser.First())
 	}
 
@@ -22,7 +22,7 @@ func (parser ActivityParser) Get() []interface{} {
 }
 
 func (parser ActivityParser) First() interface{} {
-	activity := parser.Activity
+	activity := parser.Object
 
 	return map[string]interface{}{
 		"id":          activity.ID,

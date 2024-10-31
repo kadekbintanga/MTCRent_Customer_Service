@@ -14,7 +14,11 @@ func init() {
 		Long: "Running Migration",
 		Run: func(cmd *cobra.Command, args []string) {
 			xtremepkg.InitDevMode()
-			config.InitDB()
+
+			config.InitTZ()
+
+			DBConn := config.InitDB()
+			defer DBConn()
 
 			xtremedb.Migrate(config.PgSQL, database.Migrations())
 		},

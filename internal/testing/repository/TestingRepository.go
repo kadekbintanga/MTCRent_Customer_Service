@@ -2,7 +2,6 @@ package repository
 
 import (
 	xtrememodel "github.com/globalxtreme/go-core/v2/model"
-	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
 	"gorm.io/gorm"
 	"net/url"
 	"service/internal/pkg/config"
@@ -74,7 +73,6 @@ func (repo *testingRepository) Find(parameter url.Values) ([]model.Testing, inte
 
 	testings, pagination, err := xtrememodel.Paginate(query.Order("id DESC"), parameter, model.Testing{})
 	if err != nil {
-		xtremepkg.LogError(err)
 		return nil, nil, err
 	}
 
