@@ -1,17 +1,21 @@
 package console
 
 import (
+	"service/internal/app/console/command"
+	"service/internal/app/console/command/generator"
+
 	xtremeconsole "github.com/globalxtreme/go-core/v2/console"
 	"github.com/go-co-op/gocron"
 	"github.com/spf13/cobra"
-	"service/internal/app/console/command"
-	"service/internal/app/console/command/generator"
 )
 
 func RegisterCommand(cobraCmd *cobra.Command) {
 	xtremeconsole.Commands(cobraCmd, []xtremeconsole.BaseCommand{
 		// File Generator
 		&generator.GenMigrationCommand{},
+		&generator.GenParserCommand{},
+		&generator.GenHandlerCommand{},
+		&generator.GenModelCommand{},
 
 		&command.TestCommand{},
 	})
