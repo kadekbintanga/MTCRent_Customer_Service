@@ -73,6 +73,15 @@ go build -o application main.go
 # Migration file
 ./application gen:migration <Name>
 
+# Handler File
+./application gen:handler <Name> --type=<web/mobile> --resource
+
+# Model File
+./application gen:model <Name> --migration //--migration for autocreate migration 
+
+# Parser File
+./application gen:parser <Name> --model
+
 # Custom Commands (Example)
 ./application dev-test
 ```
