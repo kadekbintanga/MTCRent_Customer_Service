@@ -3,6 +3,7 @@ package console
 import (
 	"service/internal/app/console/command"
 	"service/internal/app/console/command/generator"
+	"service/internal/app/console/command/rabbitmq"
 
 	xtremeconsole "github.com/globalxtreme/go-core/v2/console"
 	"github.com/go-co-op/gocron"
@@ -16,6 +17,10 @@ func RegisterCommand(cobraCmd *cobra.Command) {
 		&generator.GenParserCommand{},
 		&generator.GenHandlerCommand{},
 		&generator.GenModelCommand{},
+
+		// RabbitMQ Consumer
+		&rabbitmq.RabbitMQConsumerGlobalCommand{},
+		&rabbitmq.RabbitMQConsumerLocalCommand{},
 
 		&command.TestCommand{},
 	})

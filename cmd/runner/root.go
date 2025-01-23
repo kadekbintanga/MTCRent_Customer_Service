@@ -29,6 +29,9 @@ var rootCmd = &cobra.Command{
 		DBClose := config.InitDB()
 		defer DBClose()
 
+		// TODO: Aktifkan saat up ke operational
+		//xtremedb.Migrate(config.PgSQL, database.Migrations())
+
 		rabbitMQClose := config.InitRabbitMQ()
 		defer rabbitMQClose()
 
