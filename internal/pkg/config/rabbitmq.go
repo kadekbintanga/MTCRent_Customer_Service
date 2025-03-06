@@ -11,7 +11,9 @@ import (
 )
 
 func InitRabbitMQ() func() {
-	xtremerabbitmq.RabbitMQSQL = xtremedb.Connect(xtremedb.DBConf{
+	var rabbitMQClose func()
+
+	xtremerabbitmq.RabbitMQSQL, rabbitMQClose = xtremedb.Connect(xtremedb.DBConf{
 		Driver:    xtremedb.MYSQL_DRIVER,
 		Host:      os.Getenv("DB_RABBITMQ_HOST"),
 		Port:      os.Getenv("DB_RABBITMQ_PORT"),
@@ -20,11 +22,6 @@ func InitRabbitMQ() func() {
 		Database:  os.Getenv("DB_RABBITMQ_DATABASE"),
 		ParseTime: true,
 	})
-
-	rabbitmqDB, err := xtremerabbitmq.RabbitMQSQL.DB()
-	if err != nil {
-		log.Panicf("Getting RabbitMQ DB object is failed: %s", err.Error())
-	}
 
 	xtremerabbitmq.RabbitMQConf.Connection = make(map[string]xtremerabbitmq.RabbitMQConnectionConf, 2)
 
@@ -49,10 +46,6 @@ func InitRabbitMQ() func() {
 	}
 
 	xtremerabbitmq.RabbitMQConf.Timeout = 5 * time.Second
-
-	rabbitMQClose := func() {
-		rabbitmqDB.Close()
-	}
 
 	return rabbitMQClose
 }
