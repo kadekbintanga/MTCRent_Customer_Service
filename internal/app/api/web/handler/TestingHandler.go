@@ -4,6 +4,7 @@ import (
 	xtremeres "github.com/globalxtreme/go-core/v2/response"
 	"net/http"
 	repository2 "service/internal/activity/repository"
+	form2 "service/internal/pkg/form"
 	"service/internal/pkg/parser"
 	"service/internal/testing/repository"
 	"service/internal/testing/service"
@@ -22,17 +23,38 @@ func (ctr TestingHandler) Get(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ctr TestingHandler) Create(w http.ResponseWriter, r *http.Request) {
-	srv := service.TestingService{}
+	form := form2.TestingForm{}
+	form.Parse(r)
+	form.Validate(r)
+
+	srv := service.NewTestingService()
 	srv.SetActivityRepository(repository2.NewActivityRepository())
-	srv.Create(w, r)
+
+	testing := srv.Create(form)
+
+	psr := parser.TestingParser{Object: testing}
+	res := xtremeres.Response{Object: psr.First()}
+	res.Success(w)
 }
 
 func (ctr TestingHandler) UploadByFile(w http.ResponseWriter, r *http.Request) {
-	srv := service.TestingService{}
-	srv.UploadByFile(w, r)
+	form := form2.TestingUploadForm{Request: r}
+
+	srv := service.NewTestingService()
+	uploaded := srv.UploadByFile(form)
+
+	res := xtremeres.Response{Object: uploaded}
+	res.Success(w)
 }
 
 func (ctr TestingHandler) UploadByContent(w http.ResponseWriter, r *http.Request) {
-	srv := service.TestingService{}
-	srv.UploadByContent(w, r)
+	form := form2.TestingUploadContentForm{}
+	form.Parse(r)
+	form.Validate(r)
+
+	srv := service.NewTestingService()
+	uploaded := srv.UploadByContent(form)
+
+	res := xtremeres.Response{Object: uploaded}
+	res.Success(w)
 }

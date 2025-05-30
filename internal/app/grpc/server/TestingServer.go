@@ -10,8 +10,8 @@ import (
 	"service/internal/pkg/activity"
 	"service/internal/pkg/config"
 	"service/internal/pkg/core"
+	"service/internal/pkg/form"
 	"service/internal/pkg/grpc/example"
-	"service/internal/pkg/request"
 	"service/internal/testing/repository"
 )
 
@@ -29,7 +29,7 @@ func (srv *TestingServer) Store(ctx context.Context, in *example.TestingRequest)
 	res, err := core.GRPCErrorHandler(func() (*example.EXResponse, error) {
 		err := config.PgSQL.Transaction(func(tx *gorm.DB) error {
 			repo := repository.NewTestingRepository(tx)
-			testing := repo.Store(request.TestingRequest{Name: in.GetName()})
+			testing := repo.Store(form.TestingForm{Name: in.GetName()})
 
 			subs := in.GetSubs()
 			if subs != nil && len(subs) > 0 {

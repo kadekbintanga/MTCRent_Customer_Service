@@ -7,8 +7,8 @@ import (
 	"service/internal/pkg/config"
 	"service/internal/pkg/core"
 	error2 "service/internal/pkg/error"
+	"service/internal/pkg/form"
 	"service/internal/pkg/model"
-	"service/internal/pkg/request"
 )
 
 /** --- INTERFACE --- */
@@ -19,7 +19,7 @@ type TestingRepository interface {
 	FirstById(id any, args ...func(query *gorm.DB) *gorm.DB) model.Testing
 	Find(parameter url.Values) ([]model.Testing, interface{}, error)
 
-	Store(request request.TestingRequest) model.Testing
+	Store(form form.TestingForm) model.Testing
 	Delete(testing model.Testing)
 
 	AddSub(testing model.Testing, sub string) model.TestingSub
@@ -79,9 +79,9 @@ func (repo *testingRepository) Find(parameter url.Values) ([]model.Testing, inte
 	return testings, pagination, nil
 }
 
-func (repo *testingRepository) Store(req request.TestingRequest) model.Testing {
+func (repo *testingRepository) Store(form form.TestingForm) model.Testing {
 	testing := model.Testing{
-		Name: req.Name,
+		Name: form.Name,
 	}
 
 	err := repo.transaction.Create(&testing).Error

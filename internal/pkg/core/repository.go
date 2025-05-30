@@ -30,6 +30,11 @@ type PaginateRepository[M any] interface {
 	Paginate(parameter url.Values) ([]M, interface{}, error)
 }
 
+type NumberPoolRepository interface {
+	TransactionRepository
+	TakenNumberPool(number ...string) string
+}
+
 // TODO: Re-enable this code after installing github.com/globalxtreme/go-identifier module (If you use GX Identifier for authorization)
 //type EmployeeIdentifierRepository interface {
 //	SetEmployeeIdentifier(employee data.EmployeeIdentifierData)
@@ -54,4 +59,23 @@ func Truncate(db *gorm.DB, tables ...schema.Tabler) {
 			}
 		}
 	}
+}
+
+func TakenNumberPool(repo NumberPoolRepository, tx *gorm.DB) (string, func()) {
+	var numberPool string
+	tx.Transaction(func(tx *gorm.DB) error {
+		repo.SetTransaction(tx)
+		numberPool = repo.TakenNumberPool()
+
+		return nil
+	})
+
+	errFunc := func() {
+		if r := recover(); r != nil {
+			repo.TakenNumberPool(numberPool)
+			panic(r)
+		}
+	}
+
+	return numberPool, errFunc
 }
