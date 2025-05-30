@@ -1,4 +1,4 @@
-package request
+package form
 
 import (
 	xtrememdw "github.com/globalxtreme/go-core/v2/middleware"
@@ -6,15 +6,15 @@ import (
 	"service/internal/pkg/core"
 )
 
-type TestingUploadContentRequest struct {
+type TestingUploadContentForm struct {
 	Content string `json:"content" validate:"required"`
 }
 
-func (rule *TestingUploadContentRequest) Validate(r *http.Request) {
+func (rule *TestingUploadContentForm) Validate(r *http.Request) {
 	va := xtrememdw.Validator{}
 	va.Make(r, rule)
 }
 
-func (rule *TestingUploadContentRequest) Parse(r *http.Request) {
+func (rule *TestingUploadContentForm) Parse(r *http.Request) {
 	core.BaseRequest{}.Parse(r, &rule)
 }

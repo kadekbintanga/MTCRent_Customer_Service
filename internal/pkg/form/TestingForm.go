@@ -1,4 +1,4 @@
-package request
+package form
 
 import (
 	xtrememdw "github.com/globalxtreme/go-core/v2/middleware"
@@ -6,16 +6,16 @@ import (
 	"service/internal/pkg/core"
 )
 
-type TestingRequest struct {
+type TestingForm struct {
 	Name string   `json:"name"`
 	Subs []string `json:"subs" validate:"required"`
 }
 
-func (rule *TestingRequest) Validate(r *http.Request) {
+func (rule *TestingForm) Validate(r *http.Request) {
 	va := xtrememdw.Validator{}
 	va.Make(r, rule)
 }
 
-func (rule *TestingRequest) Parse(r *http.Request) {
+func (rule *TestingForm) Parse(r *http.Request) {
 	core.BaseRequest{}.Parse(r, &rule)
 }

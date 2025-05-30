@@ -3,46 +3,54 @@ package service
 import (
 	"fmt"
 	xtremefs "github.com/globalxtreme/go-core/v2/filesystem"
-	xtremeres "github.com/globalxtreme/go-core/v2/response"
 	"gorm.io/gorm"
-	"net/http"
-	"net/url"
 	"service/internal/pkg/activity"
 	"service/internal/pkg/config"
 	"service/internal/pkg/constant"
 	error2 "service/internal/pkg/error"
+	form2 "service/internal/pkg/form"
 	"service/internal/pkg/model"
-	parser2 "service/internal/pkg/parser"
-	request2 "service/internal/pkg/request"
+	"service/internal/pkg/port"
 	"service/internal/testing/repository"
 )
 
-type TestingService struct {
+type TestingService interface {
+	SetTransaction(tx *gorm.DB)
+	SetActivityRepository(repo port.ActivityRepository)
+
+	Create(form form2.TestingForm) model.Testing
+	UploadByFile(form form2.TestingUploadForm) map[string]interface{}
+	UploadByContent(form form2.TestingUploadContentForm) map[string]interface{}
+}
+
+func NewTestingService() TestingService {
+	return &testingService{}
+}
+
+type testingService struct {
+	tx *gorm.DB
+
 	repository         repository.TestingRepository
-	activityRepository ActivityRepository
+	activityRepository port.ActivityRepository
 }
 
-type ActivityRepository interface {
-	Find(parameters url.Values) ([]model.Activity, interface{}, error)
+func (srv *testingService) SetTransaction(tx *gorm.DB) {
+	srv.tx = tx
 }
 
-func (srv *TestingService) SetActivityRepository(repo ActivityRepository) {
+func (srv *testingService) SetActivityRepository(repo port.ActivityRepository) {
 	srv.activityRepository = repo
 }
 
-func (srv *TestingService) Create(w http.ResponseWriter, r *http.Request) {
-	request := request2.TestingRequest{}
-	request.Parse(r)
-	request.Validate(r)
-
+func (srv *testingService) Create(form form2.TestingForm) model.Testing {
 	var testing model.Testing
 
 	config.PgSQL.Transaction(func(tx *gorm.DB) error {
 		srv.repository = repository.NewTestingRepository(tx)
 
-		testing = srv.repository.Store(request)
+		testing = srv.repository.Store(form)
 
-		for _, sub := range request.Subs {
+		for _, sub := range form.Subs {
 			testingSub := srv.repository.AddSub(testing, sub)
 			testing.Subs = append(testing.Subs, testingSub)
 		}
@@ -53,46 +61,37 @@ func (srv *TestingService) Create(w http.ResponseWriter, r *http.Request) {
 		return nil
 	})
 
-	parser := parser2.TestingParser{Object: testing}
-
-	res := xtremeres.Response{Object: parser.First()}
-	res.Success(w)
+	return testing
 }
 
-func (srv *TestingService) UploadByFile(w http.ResponseWriter, r *http.Request) {
+func (srv *testingService) UploadByFile(form form2.TestingUploadForm) map[string]interface{} {
 	uploader := xtremefs.Uploader{Path: constant.PathImageTesting(), IsPublic: true}
-	filePath, err := uploader.MoveFile(r, "testFile[testing][0]")
+	filePath, err := uploader.MoveFile(form.Request, "testFile[testing][0]")
 	if err != nil {
 		error2.ErrXtremeTestingSave("Unable to upload file: " + err.Error())
 	}
 
 	storage := xtremefs.Storage{IsPublic: uploader.IsPublic}
 
-	res := xtremeres.Response{Object: map[string]interface{}{
+	return map[string]interface{}{
 		"url":      storage.GetFullPathURL(filePath.(string)),
 		"fullPath": storage.GetFullPath(filePath.(string)),
 		"path":     filePath.(string),
-	}}
-	res.Success(w)
+	}
 }
 
-func (srv *TestingService) UploadByContent(w http.ResponseWriter, r *http.Request) {
-	request := request2.TestingUploadContentRequest{}
-	request.Parse(r)
-	request.Validate(r)
-
+func (srv *testingService) UploadByContent(form form2.TestingUploadContentForm) map[string]interface{} {
 	uploader := xtremefs.Uploader{Path: constant.PathImageTesting(), IsPublic: true}
-	filePath, err := uploader.MoveContent(request.Content)
+	filePath, err := uploader.MoveContent(form.Content)
 	if err != nil {
 		error2.ErrXtremeTestingSave("Unable to upload file: " + err.Error())
 	}
 
 	storage := xtremefs.Storage{IsPublic: uploader.IsPublic}
 
-	res := xtremeres.Response{Object: map[string]interface{}{
+	return map[string]interface{}{
 		"url":      storage.GetFullPathURL(filePath.(string)),
 		"fullPath": storage.GetFullPath(filePath.(string)),
 		"path":     filePath.(string),
-	}}
-	res.Success(w)
+	}
 }
