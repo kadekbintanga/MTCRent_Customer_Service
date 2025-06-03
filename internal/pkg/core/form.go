@@ -6,14 +6,17 @@ import (
 	"net/http"
 )
 
-type RequestInterface interface {
-	Validate(r *http.Request)
-	Parse(r *http.Request)
+type FormInterface interface {
+	Validate()
 }
 
-type BaseRequest struct{}
+type APIFormInterface interface {
+	APIParse(r *http.Request)
+}
 
-func (BaseRequest) Parse(r *http.Request, rule interface{}) interface{} {
+type BaseForm struct{}
+
+func (BaseForm) APIParse(r *http.Request, rule interface{}) interface{} {
 	if err := json.NewDecoder(r.Body).Decode(&rule); err != nil {
 		xtremeres.ErrXtremeBadRequest(err.Error())
 	}

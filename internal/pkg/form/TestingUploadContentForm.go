@@ -10,11 +10,11 @@ type TestingUploadContentForm struct {
 	Content string `json:"content" validate:"required"`
 }
 
-func (rule *TestingUploadContentForm) Validate(r *http.Request) {
+func (rule *TestingUploadContentForm) Validate() {
 	va := xtrememdw.Validator{}
-	va.Make(r, rule)
+	va.Make(rule)
 }
 
-func (rule *TestingUploadContentForm) Parse(r *http.Request) {
-	core.BaseRequest{}.Parse(r, &rule)
+func (rule *TestingUploadContentForm) APIParse(r *http.Request) {
+	core.BaseForm{}.APIParse(r, &rule)
 }

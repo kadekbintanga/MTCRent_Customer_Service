@@ -11,11 +11,11 @@ type TestingForm struct {
 	Subs []string `json:"subs" validate:"required"`
 }
 
-func (rule *TestingForm) Validate(r *http.Request) {
+func (rule *TestingForm) Validate() {
 	va := xtrememdw.Validator{}
-	va.Make(r, rule)
+	va.Make(rule)
 }
 
-func (rule *TestingForm) Parse(r *http.Request) {
-	core.BaseRequest{}.Parse(r, &rule)
+func (rule *TestingForm) APIParse(r *http.Request) {
+	core.BaseForm{}.APIParse(r, &rule)
 }
