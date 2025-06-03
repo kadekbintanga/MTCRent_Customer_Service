@@ -24,8 +24,8 @@ func (ctr TestingHandler) Get(w http.ResponseWriter, r *http.Request) {
 
 func (ctr TestingHandler) Create(w http.ResponseWriter, r *http.Request) {
 	form := form2.TestingForm{}
-	form.Parse(r)
-	form.Validate(r)
+	form.APIParse(r)
+	form.Validate()
 
 	srv := service.NewTestingService()
 	srv.SetActivityRepository(repository2.NewActivityRepository())
@@ -38,7 +38,8 @@ func (ctr TestingHandler) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ctr TestingHandler) UploadByFile(w http.ResponseWriter, r *http.Request) {
-	form := form2.TestingUploadForm{Request: r}
+	form := form2.TestingUploadForm{}
+	form.APIParse(r)
 
 	srv := service.NewTestingService()
 	uploaded := srv.UploadByFile(form)
@@ -49,8 +50,8 @@ func (ctr TestingHandler) UploadByFile(w http.ResponseWriter, r *http.Request) {
 
 func (ctr TestingHandler) UploadByContent(w http.ResponseWriter, r *http.Request) {
 	form := form2.TestingUploadContentForm{}
-	form.Parse(r)
-	form.Validate(r)
+	form.APIParse(r)
+	form.Validate()
 
 	srv := service.NewTestingService()
 	uploaded := srv.UploadByContent(form)

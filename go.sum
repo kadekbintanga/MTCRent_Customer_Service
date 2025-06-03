@@ -21,6 +21,8 @@ github.com/globalxtreme/go-core/v2 v2.1.5 h1:z2DswU+nDtLISp0AEOVhhqlLvSibRsftrZ+
 github.com/globalxtreme/go-core/v2 v2.1.5/go.mod h1:evClhzl6W+njbrbWFpP/vcjUqh+kCNkL0vKuaC0OJVs=
 github.com/globalxtreme/go-core/v2 v2.1.6 h1:/IZADfZJymSIYRr22lRR/PeY1xrh4mq8Hdw9UfDs9ms=
 github.com/globalxtreme/go-core/v2 v2.1.6/go.mod h1:evClhzl6W+njbrbWFpP/vcjUqh+kCNkL0vKuaC0OJVs=
+github.com/globalxtreme/go-core/v2 v2.1.7 h1:dwjJQKiCQLuZGt6jZopvSj4nnAEBd7I8vw5fWXDl5eg=
+github.com/globalxtreme/go-core/v2 v2.1.7/go.mod h1:evClhzl6W+njbrbWFpP/vcjUqh+kCNkL0vKuaC0OJVs=
 github.com/go-co-op/gocron v1.37.0 h1:ZYDJGtQ4OMhTLKOKMIch+/CY70Brbb1dGdooLEhh7b0=
 github.com/go-co-op/gocron v1.37.0/go.mod h1:3L/n6BkO7ABj+TrfSVXLRzsP26zmikL4ISkLQ0O8iNY=
 github.com/go-playground/assert/v2 v2.2.0 h1:JvknZsQTYeFEAhQwI4qEt9cyV5ONwRHC+lYKSsYSR8s=
