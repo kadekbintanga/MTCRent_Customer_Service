@@ -17,6 +17,7 @@ func RegisterCommand(cobraCmd *cobra.Command) {
 		&generator.GenParserCommand{},
 		&generator.GenHandlerCommand{},
 		&generator.GenModelCommand{},
+		&generator.GenPrivateAPICredentialCommand{},
 
 		// RabbitMQ Consumer
 		&rabbitmq.RabbitMQConsumerGlobalCommand{},

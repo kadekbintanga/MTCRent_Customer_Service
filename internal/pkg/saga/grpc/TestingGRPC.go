@@ -1,4 +1,4 @@
-package client
+package grpc
 
 import (
 	"context"
@@ -8,13 +8,13 @@ import (
 	"time"
 )
 
-type TestingClient struct {
+type TestingGRPC struct {
 	xtremegrpc.GRPCClient
 	Testing example.TestingServiceClient
 }
 
-func NewTestingClient(timeout ...time.Duration) (*TestingClient, context.CancelFunc) {
-	client := TestingClient{}
+func NewTestingGRPC(timeout ...time.Duration) (*TestingGRPC, context.CancelFunc) {
+	client := TestingGRPC{}
 	cleanup := client.RPCDialClient(config.TestingRPC, timeout...)
 
 	client.Testing = example.NewTestingServiceClient(client.Conn)

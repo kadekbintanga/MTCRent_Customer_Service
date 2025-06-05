@@ -9,6 +9,7 @@ import (
 	"reflect"
 	"runtime"
 	"service/internal/app/api"
+	"service/internal/app/privateapi"
 	"strconv"
 	"strings"
 )
@@ -21,7 +22,7 @@ func init() {
 			xtremepkg.InitDevMode()
 
 			newRoute := mux.NewRouter()
-			xtremecore.RegisterRouter(newRoute, api.Register)
+			xtremecore.RegisterRouter(newRoute, api.Register, privateapi.Register)
 
 			methodLen := 0
 			pathLen := 0
