@@ -1,9 +1,9 @@
 package privateapi
 
 import (
+	xtremeapi "github.com/globalxtreme/go-core/v2/api"
 	xtremeres "github.com/globalxtreme/go-core/v2/response"
 	"net/url"
-	xtremeapi "service/api"
 	"service/internal/pkg/config"
 )
 
