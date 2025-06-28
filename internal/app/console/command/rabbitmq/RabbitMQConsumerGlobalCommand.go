@@ -4,7 +4,9 @@ import (
 	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
 	xtremerabbitmq "github.com/globalxtreme/go-core/v2/rabbitmq"
 	"github.com/spf13/cobra"
+	"service/internal/app/rabbitmq"
 	"service/internal/pkg/config"
+	"service/internal/pkg/constant"
 )
 
 type RabbitMQConsumerGlobalCommand struct{}
@@ -22,6 +24,9 @@ func (class *RabbitMQConsumerGlobalCommand) Command(cobraCmd *cobra.Command) {
 			rabbitmqConn := config.InitRabbitMQ()
 			defer rabbitmqConn()
 
+			dialRabbitMQConnClose := config.InitRabbitMQConnection()
+			defer dialRabbitMQConnClose()
+
 			logCleanup := xtremepkg.InitLogRPC()
 			defer logCleanup()
 
@@ -38,9 +43,13 @@ func (class *RabbitMQConsumerGlobalCommand) Handle() {
 		//	Exchange: "service.domain.feature.action.exchange",
 		//	Consumer: &rabbitmq.TestingConsumer{},
 		//},
-		//{
-		//	Queue:    "service.domain.feature.action.queue",
-		//	Consumer: &rabbitmq.TestingConsumer{},
-		//},
+		{
+			Queue:    constant.RABBITMQ_QUEUE_SERVICE_DOMAIN_FEATURE_ACTION,
+			Consumer: &rabbitmq.TestingConsumer{},
+		},
+		{
+			Queue:    constant.RABBITMQ_QUEUE_SERVICE_DOMAIN_FEATURE_ACTION_PROCESSED,
+			Consumer: &rabbitmq.TestingProcessedConsumer{},
+		},
 	})
 }

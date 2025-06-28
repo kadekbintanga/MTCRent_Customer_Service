@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	xtremefs "github.com/globalxtreme/go-core/v2/filesystem"
+	xtremerabbitmq "github.com/globalxtreme/go-core/v2/rabbitmq"
 	"gorm.io/gorm"
 	"service/internal/pkg/activity"
 	"service/internal/pkg/config"
@@ -19,6 +20,7 @@ type TestingService interface {
 	SetActivityRepository(repo port.ActivityRepository)
 
 	Create(form form2.TestingForm) model.Testing
+	CreateConsumer(form form2.TestingForm) model.Testing
 	UploadByFile(form form2.TestingUploadForm) map[string]interface{}
 	UploadByContent(form form2.TestingUploadContentForm) map[string]interface{}
 }
@@ -60,6 +62,38 @@ func (srv *testingService) Create(form form2.TestingForm) model.Testing {
 
 		return nil
 	})
+
+	return testing
+}
+
+func (srv *testingService) CreateConsumer(form form2.TestingForm) model.Testing {
+	var testing model.Testing
+
+	var consumerResponse map[string]interface{}
+	manualConsumer := xtremerabbitmq.PrepareManualConsumer(form.AsyncTransaction, &consumerResponse)
+	defer manualConsumer()
+
+	config.PgSQL.Transaction(func(tx *gorm.DB) error {
+		srv.repository = repository.NewTestingRepository(tx)
+
+		testing = srv.repository.Store(form)
+
+		for _, sub := range form.Subs {
+			testingSub := srv.repository.AddSub(testing, sub)
+			testing.Subs = append(testing.Subs, testingSub)
+		}
+
+		activity.UseActivity{}.SetReference(testing).SetNewProperty(constant.ACTION_CREATE).
+			Save(fmt.Sprintf("Enter new testing: %s [%d]", testing.Name, testing.ID))
+
+		return nil
+	})
+
+	// Taruh ini di parser
+	consumerResponse = map[string]interface{}{
+		"name":     testing.Name,
+		"totalSub": len(testing.Subs),
+	}
 
 	return testing
 }

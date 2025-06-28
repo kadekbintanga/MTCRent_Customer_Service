@@ -7,13 +7,20 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"fmt"
+	xtrememodel "github.com/globalxtreme/go-core/v2/model"
+	xtremerabbitmq "github.com/globalxtreme/go-core/v2/rabbitmq"
+	xtremeres "github.com/globalxtreme/go-core/v2/response"
 	"github.com/joho/godotenv"
 	"io"
 	"mime/multipart"
 	"service/internal/pkg/config"
-	"service/internal/pkg/saga/privateapi"
+	"service/internal/pkg/constant"
 	"strings"
 )
+
+type testing struct {
+	Test *xtrememodel.ArrayMapInterfaceColumn
+}
 
 func main() {
 	err := godotenv.Load()
@@ -21,11 +28,60 @@ func main() {
 		panic(err.Error())
 	}
 
-	config.InitPrivateAPIClient()
+	//sendRabbitMQ()
+	manualConsumerFunc()
+}
 
-	api := privateapi.NewTestingAPI()
-	data := api.Get()
-	fmt.Println(data.Result)
+func manualConsumerFunc() {
+	RabbitMQClose := config.InitRabbitMQ()
+	defer RabbitMQClose()
+
+	dialRabbitMQConnClose := config.InitRabbitMQConnection()
+	defer dialRabbitMQConnClose()
+
+	var consumerResponse map[string]interface{}
+	manualConsumer := xtremerabbitmq.PrepareManualConsumer(xtremerabbitmq.AsyncTransactionForm{
+		MessageId:  1644,
+		SenderId:   "1",
+		SenderType: "messages",
+	}, &consumerResponse)
+	defer manualConsumer()
+
+	xtremeres.ErrXtremeRabbitMQMessageGet("")
+
+	consumerResponse = map[string]interface{}{
+		"name": "Testing",
+		"subs": []string{"test"},
+	}
+}
+
+func getCase1() interface{} {
+	return map[string]interface{}{
+		"name": "Dedi",
+	}
+}
+
+func sendRabbitMQ() {
+	RabbitMQClose := config.InitRabbitMQ()
+	defer RabbitMQClose()
+
+	dialRabbitMQConnClose := config.InitRabbitMQConnection()
+	defer dialRabbitMQConnClose()
+
+	senderId := "1"
+	senderType := "messages"
+	push := xtremerabbitmq.RabbitMQ{
+		Connection: xtremerabbitmq.RABBITMQ_CONNECTION_GLOBAL,
+		Queue:      constant.RABBITMQ_QUEUE_SERVICE_DOMAIN_FEATURE_ACTION,
+		SenderId:   &senderId,
+		SenderType: &senderType,
+		Data: map[string]interface{}{
+			"name": "Testing",
+			"subs": []string{"test"},
+		},
+	}
+	push.OnDelivery("services", true)
+	push.Push()
 }
 
 func padKey(key string, length int) []byte {

@@ -2,26 +2,29 @@ package rabbitmq
 
 import (
 	xtrememodel "github.com/globalxtreme/go-core/v2/model"
+	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
 	"service/internal/pkg/core"
 	form2 "service/internal/pkg/form"
 	"service/internal/testing/service"
 	"sync"
 )
 
-type TestingConsumer struct {
+type TestingProcessedConsumer struct {
 	mutex sync.Mutex
 }
 
-func (consume *TestingConsumer) Consume(message xtrememodel.RabbitMQMessage) (interface{}, error) {
+func (consume *TestingProcessedConsumer) Consume(message xtrememodel.RabbitMQMessage) (interface{}, error) {
 	consume.mutex.Lock()
 	defer consume.mutex.Unlock()
 
 	return core.RabbitMQErrorHandler(func() (interface{}, error) {
 		form := form2.TestingForm{}
-		err := form.RabbitMQParse(message)
+		response, err := form.RabbitMQProcessedParse(message)
 		if err != nil {
 			return nil, err
 		}
+
+		xtremepkg.LogInfo(response.Status.Name)
 
 		srv := service.NewTestingService()
 		testing := srv.CreateConsumer(form)
