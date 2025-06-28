@@ -7,3 +7,4 @@ const RABBITMQ_EXCHANGE_SERVICE_DOMAIN_FEATURE_ACTION = "service.domain.feature.
 /** --- QUEUE --- */
 
 const RABBITMQ_QUEUE_SERVICE_DOMAIN_FEATURE_ACTION = "service.domain.feature.action.queue"
+const RABBITMQ_QUEUE_SERVICE_DOMAIN_FEATURE_ACTION_PROCESSED = "service.domain.feature.action.processed.queue"
