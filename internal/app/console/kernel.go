@@ -18,10 +18,12 @@ func RegisterCommand(cobraCmd *cobra.Command) {
 		&generator.GenHandlerCommand{},
 		&generator.GenModelCommand{},
 		&generator.GenPrivateAPICredentialCommand{},
+		&generator.GenAsyncWorkflowConsumerCommand{},
 
 		// RabbitMQ Consumer
 		&rabbitmq.RabbitMQConsumerGlobalCommand{},
 		&rabbitmq.RabbitMQConsumerLocalCommand{},
+		&rabbitmq.RabbitMQConsumerAsyncWorkflowCommand{},
 
 		&command.TestCommand{},
 	})
