@@ -9,10 +9,12 @@ import (
 	"fmt"
 	xtrememodel "github.com/globalxtreme/go-core/v2/model"
 	xtremerabbitmq "github.com/globalxtreme/go-core/v2/rabbitmq"
+	xtremeres "github.com/globalxtreme/go-core/v2/response"
 	"github.com/joho/godotenv"
 	"io"
 	"mime/multipart"
 	"service/internal/pkg/config"
+	"service/internal/pkg/constant"
 	"strings"
 )
 
@@ -26,8 +28,37 @@ func main() {
 		panic(err.Error())
 	}
 
-	sendRabbitMQ()
-	//manualConsumerFunc()
+	//sendRabbitMQ()
+	manualConsumerFunc()
+}
+
+func manualConsumerFunc() {
+	RabbitMQClose := config.InitRabbitMQ()
+	defer RabbitMQClose()
+
+	dialRabbitMQConnClose := config.InitRabbitMQConnection()
+	defer dialRabbitMQConnClose()
+
+	var consumerResponse map[string]interface{}
+	manualConsumer := xtremerabbitmq.PrepareManualConsumer(xtremerabbitmq.AsyncTransactionForm{
+		MessageId:  1644,
+		SenderId:   "1",
+		SenderType: "messages",
+	}, &consumerResponse)
+	defer manualConsumer()
+
+	xtremeres.ErrXtremeRabbitMQMessageGet("")
+
+	consumerResponse = map[string]interface{}{
+		"name": "Testing",
+		"subs": []string{"test"},
+	}
+}
+
+func getCase1() interface{} {
+	return map[string]interface{}{
+		"name": "Dedi",
+	}
 }
 
 func sendRabbitMQ() {
@@ -37,41 +68,20 @@ func sendRabbitMQ() {
 	dialRabbitMQConnClose := config.InitRabbitMQConnection()
 	defer dialRabbitMQConnClose()
 
-	async := xtremerabbitmq.GXAsyncWorkflow{
-		Action:        "customer.save",
-		ReferenceId:   "1",
-		ReferenceType: "customers",
-	}
-
-	async.OnStep(xtremerabbitmq.GXAsyncWorkflowStepOpt{
-		Service:     "customer",
-		Queue:       "service.customer.convert.async-workflow-1",
-		Description: "Testing workflow 1",
-		Payload: map[string]interface{}{
-			"name": "testing",
-			"subs": []string{"testing subs"},
+	senderId := "1"
+	senderType := "messages"
+	push := xtremerabbitmq.RabbitMQ{
+		Connection: xtremerabbitmq.RABBITMQ_CONNECTION_GLOBAL,
+		Queue:      constant.RABBITMQ_QUEUE_SERVICE_DOMAIN_FEATURE_ACTION,
+		SenderId:   &senderId,
+		SenderType: &senderType,
+		Data: map[string]interface{}{
+			"name": "Testing",
+			"subs": []string{"test"},
 		},
-	})
-
-	async.OnStep(xtremerabbitmq.GXAsyncWorkflowStepOpt{
-		Service:     "crm",
-		Queue:       "service.customer.convert.async-workflow-2",
-		Description: "Testing workflow 2",
-	})
-
-	async.OnStep(xtremerabbitmq.GXAsyncWorkflowStepOpt{
-		Service:     "sales",
-		Queue:       "service.customer.convert.async-workflow-3",
-		Description: "Testing workflow 3",
-	})
-
-	async.OnStep(xtremerabbitmq.GXAsyncWorkflowStepOpt{
-		Service:     "sales",
-		Queue:       "service.customer.convert.async-workflow-4",
-		Description: "Testing workflow 4",
-	})
-
-	async.Push()
+	}
+	push.OnDelivery("services", true)
+	push.Push()
 }
 
 func padKey(key string, length int) []byte {
