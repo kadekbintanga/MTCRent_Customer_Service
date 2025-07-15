@@ -5,6 +5,7 @@ import (
 	"service/internal/pkg/model"
 )
 
+// TODO: Hanya contoh. nanti langsung hapus saja
 type TestingParser struct {
 	Array  []model.Testing
 	Object model.Testing

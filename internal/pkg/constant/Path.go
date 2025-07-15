@@ -4,6 +4,7 @@ const PATH_EXCEL = "excels/"
 const PATH_IMAGE = "images/"
 const PATH_PDF = "pdfs/"
 
+// TODO: Hanya contoh. nanti langsung hapus saja
 const PATH_TESTING = "testings/"
 
 func PathPDFTesting() string {

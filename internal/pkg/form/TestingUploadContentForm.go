@@ -6,6 +6,7 @@ import (
 	"service/internal/pkg/core"
 )
 
+// TODO: Hanya contoh. nanti langsung hapus saja
 type TestingUploadContentForm struct {
 	Content string `json:"content" validate:"required"`
 }

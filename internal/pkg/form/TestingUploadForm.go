@@ -4,6 +4,7 @@ import (
 	"net/http"
 )
 
+// TODO: Hanya contoh. nanti langsung hapus saja
 type TestingUploadForm struct {
 	Request *http.Request
 }

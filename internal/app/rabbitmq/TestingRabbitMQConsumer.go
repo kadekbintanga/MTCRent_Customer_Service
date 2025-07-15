@@ -8,11 +8,12 @@ import (
 	"sync"
 )
 
-type TestingConsumer struct {
+// TODO: Hanya contoh. nanti langsung hapus saja
+type TestingRabbitMQConsumer struct {
 	mutex sync.Mutex
 }
 
-func (consume *TestingConsumer) Consume(message xtrememodel.RabbitMQMessage) (interface{}, error) {
+func (consume *TestingRabbitMQConsumer) Consume(message xtrememodel.RabbitMQMessage) (interface{}, error) {
 	consume.mutex.Lock()
 	defer consume.mutex.Unlock()
 

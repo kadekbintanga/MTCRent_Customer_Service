@@ -8,6 +8,7 @@ import (
 	"service/internal/pkg/saga/privateapi"
 )
 
+// TODO: Hanya contoh. nanti langsung hapus saja
 type TestingSaga struct {
 	testingGRPC *grpc.TestingGRPC
 	testingAPI  privateapi.TestingAPI

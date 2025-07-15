@@ -14,6 +14,7 @@ import (
 	"service/internal/testing/repository"
 )
 
+// TODO: Hanya contoh. nanti langsung hapus saja
 type TestingService interface {
 	SetTransaction(tx *gorm.DB)
 	SetActivityRepository(repo port.ActivityRepository)

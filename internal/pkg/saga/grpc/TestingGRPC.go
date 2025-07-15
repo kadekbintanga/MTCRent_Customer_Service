@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// TODO: Hanya contoh. nanti langsung hapus saja
 type TestingGRPC struct {
 	xtremegrpc.GRPCClient
 	Testing example.TestingServiceClient

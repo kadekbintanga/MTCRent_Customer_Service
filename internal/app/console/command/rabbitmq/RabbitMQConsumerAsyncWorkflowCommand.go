@@ -6,15 +6,14 @@ import (
 	"github.com/spf13/cobra"
 	"service/internal/app/rabbitmq"
 	"service/internal/pkg/config"
-	"service/internal/pkg/constant"
 )
 
-type RabbitMQConsumerGlobalCommand struct{}
+type RabbitMQConsumerAsyncWorkflowCommand struct{}
 
-func (class *RabbitMQConsumerGlobalCommand) Command(cobraCmd *cobra.Command) {
+func (class *RabbitMQConsumerAsyncWorkflowCommand) Command(cobraCmd *cobra.Command) {
 	addCommand := cobra.Command{
-		Use:  "rabbitmq:consumer-global",
-		Long: "RabbitMQ Consumer Global",
+		Use:  "rabbitmq:consumer-async-workflow",
+		Long: "RabbitMQ Consumer Async Workflow",
 		Run: func(cmd *cobra.Command, args []string) {
 			xtremepkg.InitDevMode()
 
@@ -37,15 +36,11 @@ func (class *RabbitMQConsumerGlobalCommand) Command(cobraCmd *cobra.Command) {
 	cobraCmd.AddCommand(&addCommand)
 }
 
-func (class *RabbitMQConsumerGlobalCommand) Handle() {
-	xtremerabbitmq.Consume(xtremerabbitmq.RABBITMQ_CONNECTION_GLOBAL, []xtremerabbitmq.RabbitMQConsumeOpt{
-		//{
-		//	Exchange: "service.domain.feature.action.exchange",
-		//	Consumer: &rabbitmq.TestingConsumer{},
-		//},
+func (class *RabbitMQConsumerAsyncWorkflowCommand) Handle() {
+	xtremerabbitmq.ConsumeWorkflow([]xtremerabbitmq.AsyncWorkflowConsumeOpt{
 		{
-			Queue:    constant.RABBITMQ_QUEUE_SERVICE_DOMAIN_FEATURE_ACTION, // TODO: Hanya contoh. nanti langsung hapus saja
-			Consumer: &rabbitmq.TestingRabbitMQConsumer{},
+			Queue:    "service.customer.convert.async-workflow-1", // TODO: Hanya contoh. nanti langsung hapus saja
+			Consumer: &rabbitmq.TestingAsyncWorkflowConsumer{},
 		},
 	})
 }

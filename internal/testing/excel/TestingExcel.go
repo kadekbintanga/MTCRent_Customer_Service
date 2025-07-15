@@ -7,6 +7,7 @@ import (
 	"service/internal/pkg/constant"
 )
 
+// TODO: Hanya contoh. nanti langsung hapus saja
 type TestingExcel struct {
 }
 

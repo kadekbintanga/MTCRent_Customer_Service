@@ -5,6 +5,7 @@ import (
 	"gopkg.in/mail.v2"
 )
 
+// TODO: Hanya contoh. nanti langsung hapus saja
 type TestingMail struct {
 	Name  string
 	Email string
