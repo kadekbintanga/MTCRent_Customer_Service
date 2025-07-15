@@ -8,11 +8,19 @@ import (
 	"service/internal/pkg/core"
 )
 
+// TODO: Hanya contoh. nanti langsung hapus saja
 type TestingForm struct {
-	Name string   `json:"name"`
-	Subs []string `json:"subs" validate:"required"`
-
-	AsyncTransaction xtremerabbitmq.AsyncTransactionForm `json:"asyncTransaction"`
+	Name   string   `json:"name"`
+	Subs   []string `json:"subs" validate:"required"`
+	Action string   `json:"action"`
+	Status struct {
+		ID   uint   `json:"id"`
+		Name string `json:"name"`
+		Subs []struct {
+			Name string `json:"name"`
+		} `json:"subs"`
+		Types []string `json:"types"`
+	} `json:"status"`
 }
 
 func (rule *TestingForm) Validate() {
@@ -22,6 +30,10 @@ func (rule *TestingForm) Validate() {
 
 func (rule *TestingForm) APIParse(r *http.Request) {
 	core.BaseForm{}.APIParse(r, &rule)
+}
+
+func (rule *TestingForm) AsyncWorkflowParse(payload interface{}) error {
+	return core.BaseForm{}.AsyncWorkflowParse(payload, &rule)
 }
 
 func (rule *TestingForm) RabbitMQParse(message xtrememodel.RabbitMQMessage) error {

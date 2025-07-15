@@ -7,6 +7,7 @@ import (
 	"service/internal/pkg/config"
 )
 
+// TODO: Hanya contoh. nanti langsung hapus saja
 type TestingAPI interface {
 	Get() xtremeres.ResponseSuccessWithPagination                      // Response bebas, sesuaikan dengan kebutuhan
 	Store(payload interface{}) xtremeres.ResponseSuccessWithPagination // Response bebas, sesuaikan dengan kebutuhan

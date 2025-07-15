@@ -4,6 +4,7 @@ import (
 	xtrememodel "github.com/globalxtreme/go-core/v2/model"
 )
 
+// TODO: Hanya contoh. nanti langsung hapus saja
 type TestingSub struct {
 	xtrememodel.BaseModel
 	TestingId uint   `gorm:"column:testingId;type:bigint;not null"`

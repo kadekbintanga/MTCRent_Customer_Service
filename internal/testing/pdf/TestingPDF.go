@@ -7,6 +7,7 @@ import (
 	"service/internal/pkg/core"
 )
 
+// TODO: Hanya contoh. nanti langsung hapus saja
 type TestingPDF struct {
 	Name string
 }

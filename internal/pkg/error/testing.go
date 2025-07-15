@@ -5,6 +5,8 @@ import (
 	"net/http"
 )
 
+// TODO: Hanya contoh. nanti langsung hapus saja
+
 func ErrXtremeTestingGet(internalMsg string) {
 	xtremeres.Error(http.StatusNotFound, "Testing not found", internalMsg, false, nil)
 }

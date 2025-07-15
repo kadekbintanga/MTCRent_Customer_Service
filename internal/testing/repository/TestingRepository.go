@@ -13,6 +13,7 @@ import (
 
 /** --- INTERFACE --- */
 
+// TODO: Hanya contoh. nanti langsung hapus saja
 type TestingRepository interface {
 	core.TransactionRepository
 

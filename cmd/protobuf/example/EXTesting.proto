@@ -9,6 +9,7 @@ option go_package = "internal/pkg/grpc/example";
 
 import "EXResponse.proto";
 
+// TODO: Hanya contoh. nanti langsung hapus saja
 service TestingService {
   rpc Store(TestingRequest) returns (EXResponse) {}
   rpc RollbackStore(RollBackRequest) returns (EXResponse) {}

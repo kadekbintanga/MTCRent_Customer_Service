@@ -36,6 +36,24 @@ func (BaseForm) APIParse(r *http.Request, form interface{}) interface{} {
 	return form
 }
 
+func (BaseForm) AsyncWorkflowParse(payload interface{}, form interface{}) error {
+	if payload == nil {
+		return errors.New("Your message is nil")
+	}
+
+	payloadMap, ok := payload.(map[string]interface{})
+	if !ok {
+		return errors.New("Your message is not a map")
+	}
+
+	err := mapstructure.Decode(payloadMap, &form)
+	if err != nil {
+		return errors.New("Your message parameter is invalid: " + err.Error())
+	}
+
+	return nil
+}
+
 func (BaseForm) RabbitMQParse(message xtrememodel.RabbitMQMessage, form interface{}) error {
 	data, ok := message.Payload["data"].(map[string]interface{})
 	if !ok {

@@ -3,7 +3,6 @@ package service
 import (
 	"fmt"
 	xtremefs "github.com/globalxtreme/go-core/v2/filesystem"
-	xtremerabbitmq "github.com/globalxtreme/go-core/v2/rabbitmq"
 	"gorm.io/gorm"
 	"service/internal/pkg/activity"
 	"service/internal/pkg/config"
@@ -15,6 +14,7 @@ import (
 	"service/internal/testing/repository"
 )
 
+// TODO: Hanya contoh. nanti langsung hapus saja
 type TestingService interface {
 	SetTransaction(tx *gorm.DB)
 	SetActivityRepository(repo port.ActivityRepository)
@@ -69,10 +69,6 @@ func (srv *testingService) Create(form form2.TestingForm) model.Testing {
 func (srv *testingService) CreateConsumer(form form2.TestingForm) model.Testing {
 	var testing model.Testing
 
-	var consumerResponse map[string]interface{}
-	manualConsumer := xtremerabbitmq.PrepareManualConsumer(form.AsyncTransaction, &consumerResponse)
-	defer manualConsumer()
-
 	config.PgSQL.Transaction(func(tx *gorm.DB) error {
 		srv.repository = repository.NewTestingRepository(tx)
 
@@ -88,12 +84,6 @@ func (srv *testingService) CreateConsumer(form form2.TestingForm) model.Testing 
 
 		return nil
 	})
-
-	// Taruh ini di parser
-	consumerResponse = map[string]interface{}{
-		"name":     testing.Name,
-		"totalSub": len(testing.Subs),
-	}
 
 	return testing
 }
