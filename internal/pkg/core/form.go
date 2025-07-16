@@ -18,6 +18,10 @@ type APIFormInterface interface {
 	APIParse(r *http.Request)
 }
 
+type AsyncWorkflowFormInterface interface {
+	AsyncWorkflowParse(payload interface{}) error
+}
+
 type RabbitMQFormInterface interface {
 	RabbitMQParse(message xtrememodel.RabbitMQMessage) error
 }
