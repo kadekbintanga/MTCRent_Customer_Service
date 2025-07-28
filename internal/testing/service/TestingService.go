@@ -50,7 +50,7 @@ func (srv *testingService) Create(form form2.TestingForm) model.Testing {
 	config.PgSQL.Transaction(func(tx *gorm.DB) error {
 		srv.repository = repository.NewTestingRepository(tx)
 
-		testing = srv.repository.Store(form)
+		testing = srv.repository.Create(form)
 
 		for _, sub := range form.Subs {
 			testingSub := srv.repository.AddSub(testing, sub)
@@ -72,7 +72,7 @@ func (srv *testingService) CreateConsumer(form form2.TestingForm) model.Testing 
 	config.PgSQL.Transaction(func(tx *gorm.DB) error {
 		srv.repository = repository.NewTestingRepository(tx)
 
-		testing = srv.repository.Store(form)
+		testing = srv.repository.Create(form)
 
 		for _, sub := range form.Subs {
 			testingSub := srv.repository.AddSub(testing, sub)

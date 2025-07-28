@@ -16,6 +16,7 @@ func (class *RabbitMQConsumerAsyncWorkflowCommand) Command(cobraCmd *cobra.Comma
 		Long: "RabbitMQ Consumer Async Workflow",
 		Run: func(cmd *cobra.Command, args []string) {
 			xtremepkg.InitDevMode()
+			xtremepkg.InitRedisPool()
 
 			DBClose := config.InitDB()
 			defer DBClose()

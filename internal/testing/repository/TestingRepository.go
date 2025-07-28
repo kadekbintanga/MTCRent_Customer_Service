@@ -20,7 +20,7 @@ type TestingRepository interface {
 	FirstById(id any, args ...func(query *gorm.DB) *gorm.DB) model.Testing
 	Find(parameter url.Values) ([]model.Testing, interface{}, error)
 
-	Store(form form.TestingForm) model.Testing
+	Create(form form.TestingForm) model.Testing
 	Delete(testing model.Testing)
 
 	AddSub(testing model.Testing, sub string) model.TestingSub
@@ -80,7 +80,7 @@ func (repo *testingRepository) Find(parameter url.Values) ([]model.Testing, inte
 	return testings, pagination, nil
 }
 
-func (repo *testingRepository) Store(form form.TestingForm) model.Testing {
+func (repo *testingRepository) Create(form form.TestingForm) model.Testing {
 	testing := model.Testing{
 		Name: form.Name,
 	}
