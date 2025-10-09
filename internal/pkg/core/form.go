@@ -6,6 +6,7 @@ import (
 	xtrememodel "github.com/globalxtreme/go-core/v2/model"
 	xtremerabbitmq "github.com/globalxtreme/go-core/v2/rabbitmq"
 	xtremeres "github.com/globalxtreme/go-core/v2/response"
+	formParser "github.com/go-playground/form/v4"
 	"github.com/mitchellh/mapstructure"
 	"net/http"
 )
@@ -16,6 +17,10 @@ type FormInterface interface {
 
 type APIFormInterface interface {
 	APIParse(r *http.Request)
+}
+
+type APIMultipartFormInterface interface {
+	APIMultipartParse(r *http.Request)
 }
 
 type AsyncWorkflowFormInterface interface {
@@ -40,6 +45,48 @@ func (BaseForm) APIParse(r *http.Request, form interface{}) interface{} {
 	return form
 }
 
+func (BaseForm) APIMultipartParse(r *http.Request, form interface{}) interface{} {
+	decoder := formParser.NewDecoder()
+	formValue := r.MultipartForm.Value
+	convertedFormValue := make(map[string][]string, 0)
+
+	for key, value := range formValue {
+		var convertedKey string
+		lastIndex := 0
+		isNumber := false
+		for i := 0; i < len(key); i++ {
+			switch key[i] {
+			case '[':
+				convertedKey += key[lastIndex:i]
+				lastIndex = i + 1
+				isNumber = true
+			case ']':
+				if !isNumber {
+					convertedKey += "."
+					convertedKey += key[lastIndex:i]
+				} else {
+					convertedKey += "["
+					convertedKey += key[lastIndex:i]
+					convertedKey += "]"
+				}
+				lastIndex = i + 1
+			default:
+				isNumber = isNumber && key[i] >= '0' && key[i] <= '9'
+			}
+		}
+		if convertedKey == "" {
+			convertedKey = key
+		}
+		convertedFormValue[convertedKey] = value
+	}
+
+	if err := decoder.Decode(&form, convertedFormValue); err != nil {
+		xtremeres.ErrXtremeBadRequest(err.Error())
+	}
+
+	return form
+}
+
 func (BaseForm) AsyncWorkflowParse(payload interface{}, form interface{}) error {
 	if payload == nil {
 		return errors.New("Your message is nil")
@@ -50,7 +97,19 @@ func (BaseForm) AsyncWorkflowParse(payload interface{}, form interface{}) error 
 		return errors.New("Your message is not a map")
 	}
 
-	err := mapstructure.Decode(payloadMap, &form)
+	decoderConfig := &mapstructure.DecoderConfig{
+		Metadata:         nil,
+		Result:           form,
+		TagName:          "json",
+		WeaklyTypedInput: true,
+	}
+
+	decoder, err := mapstructure.NewDecoder(decoderConfig)
+	if err != nil {
+		return errors.New("Failed to create decoder: " + err.Error())
+	}
+
+	err = decoder.Decode(payloadMap)
 	if err != nil {
 		return errors.New("Your message parameter is invalid: " + err.Error())
 	}
