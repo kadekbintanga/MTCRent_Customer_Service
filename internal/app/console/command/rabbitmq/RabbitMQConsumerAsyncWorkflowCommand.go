@@ -41,7 +41,7 @@ func (class *RabbitMQConsumerAsyncWorkflowCommand) Handle() {
 	xtremerabbitmq.ConsumeWorkflow([]xtremerabbitmq.AsyncWorkflowConsumeOpt{
 		{
 			Queue:    "service.customer.convert.async-workflow-1", // TODO: Hanya contoh. nanti langsung hapus saja
-			Consumer: &rabbitmq.TestingAsyncWorkflowConsumer{},
+			Consumer: &rabbitmq.TestingAsyncWorkflowExecutor{},
 		},
 	})
 }

@@ -13,7 +13,7 @@ type TestingRabbitMQConsumer struct {
 	mutex sync.Mutex
 }
 
-func (consume *TestingRabbitMQConsumer) Consume(message xtrememodel.RabbitMQMessage) (interface{}, error) {
+func (consume *TestingRabbitMQConsumer) Consume(message xtrememodel.RabbitMQMessage) (interface{}, error, []byte) {
 	consume.mutex.Lock()
 	defer consume.mutex.Unlock()
 
