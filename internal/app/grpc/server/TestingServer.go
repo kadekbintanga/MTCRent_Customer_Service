@@ -29,7 +29,7 @@ func (srv *TestingServer) Store(ctx context.Context, in *example.TestingRequest)
 	res, err := core.GRPCErrorHandler(func() (*example.EXResponse, error) {
 		err := config.PgSQL.Transaction(func(tx *gorm.DB) error {
 			repo := repository.NewTestingRepository(tx)
-			testing := repo.Store(form.TestingForm{Name: in.GetName()})
+			testing := repo.Create(form.TestingForm{Name: in.GetName()})
 
 			subs := in.GetSubs()
 			if subs != nil && len(subs) > 0 {

@@ -16,6 +16,7 @@ func (class *RabbitMQConsumerAsyncWorkflowCommand) Command(cobraCmd *cobra.Comma
 		Long: "RabbitMQ Consumer Async Workflow",
 		Run: func(cmd *cobra.Command, args []string) {
 			xtremepkg.InitDevMode()
+			xtremepkg.InitRedisPool()
 
 			DBClose := config.InitDB()
 			defer DBClose()
@@ -40,7 +41,7 @@ func (class *RabbitMQConsumerAsyncWorkflowCommand) Handle() {
 	xtremerabbitmq.ConsumeWorkflow([]xtremerabbitmq.AsyncWorkflowConsumeOpt{
 		{
 			Queue:    "service.customer.convert.async-workflow-1", // TODO: Hanya contoh. nanti langsung hapus saja
-			Consumer: &rabbitmq.TestingAsyncWorkflowConsumer{},
+			Consumer: &rabbitmq.TestingAsyncWorkflowExecutor{},
 		},
 	})
 }

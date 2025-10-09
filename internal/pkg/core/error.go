@@ -7,6 +7,7 @@ import (
 	xtremeres "github.com/globalxtreme/go-core/v2/response"
 	"net/http"
 	"os"
+	"runtime/debug"
 	"service/internal/pkg/grpc/example"
 )
 
@@ -22,12 +23,18 @@ func ErrorHandler(fn func() error) error {
 				if panicData, ok := r.(*xtremeres.ResponseError); ok {
 					status := panicData.Status
 					bug = status.Bug
-					err = errors.New(fmt.Sprintf("Code: %d. Message: %s. InternalMsg: %s", status.Code, status.Message, status.InternalMsg))
+
+					errMsg := status.Message
+					if status.InternalMsg != "" {
+						errMsg += ". " + status.InternalMsg
+					}
+
+					err = errors.New(fmt.Sprintf("%s. Code: %d.", errMsg, status.Code))
 				} else if panicData, ok := r.(error); ok {
-					err = errors.New(fmt.Sprintf("Code: %d. Message: %v", http.StatusInternalServerError, panicData.Error()))
+					err = errors.New(fmt.Sprintf("%v. Code: %d.", panicData.Error(), http.StatusInternalServerError))
 				} else {
 					bug = true
-					err = errors.New(fmt.Sprintf("Code: %d. Message: An error Occurred.", http.StatusInternalServerError))
+					err = errors.New(fmt.Sprintf("An error Occurred. Code: %d.", http.StatusInternalServerError))
 				}
 
 				fmt.Fprintf(os.Stderr, "panic: %v\n", r)
@@ -48,9 +55,10 @@ func ErrorHandler(fn func() error) error {
 	return <-errChan
 }
 
-func RabbitMQErrorHandler(fn func() (interface{}, error)) (res interface{}, err error) {
+func RabbitMQErrorHandler(fn func() (interface{}, error)) (res interface{}, err error, trace []byte) {
 	resChan := make(chan interface{})
 	errChan := make(chan error)
+	traceChan := make(chan []byte)
 
 	go func() {
 		defer func() {
@@ -61,18 +69,25 @@ func RabbitMQErrorHandler(fn func() (interface{}, error)) (res interface{}, err 
 				if panicData, ok := r.(*xtremeres.ResponseError); ok {
 					status := panicData.Status
 					bug = status.Bug
-					err = errors.New(fmt.Sprintf("Code: %d. Message: %s. InternalMsg: %s", status.Code, status.Message, status.InternalMsg))
+
+					errMsg := status.Message
+					if status.InternalMsg != "" {
+						errMsg += ". " + status.InternalMsg
+					}
+
+					err = errors.New(fmt.Sprintf("%s. Code: %d.", errMsg, status.Code))
 				} else if panicData, ok := r.(error); ok {
-					err = errors.New(fmt.Sprintf("Code: %d. Message: %v", http.StatusInternalServerError, panicData.Error()))
+					err = errors.New(fmt.Sprintf("%v. Code: %d.", panicData.Error(), http.StatusInternalServerError))
 				} else {
 					bug = true
-					err = errors.New(fmt.Sprintf("Code: %d. Message: An error Occurred.", http.StatusInternalServerError))
+					err = errors.New(fmt.Sprintf("An error Occurred. Code: %d.", http.StatusInternalServerError))
 				}
 
 				fmt.Fprintf(os.Stderr, "panic: %v\n", r)
 				xtremepkg.LogError(r, bug)
 
 				errChan <- err
+				traceChan <- debug.Stack()
 			}
 		}()
 
@@ -81,6 +96,7 @@ func RabbitMQErrorHandler(fn func() (interface{}, error)) (res interface{}, err 
 			xtremepkg.LogError(err, false)
 
 			errChan <- err
+			traceChan <- nil
 		} else {
 			resChan <- res
 		}
@@ -88,9 +104,10 @@ func RabbitMQErrorHandler(fn func() (interface{}, error)) (res interface{}, err 
 
 	select {
 	case res := <-resChan:
-		return res, nil
+		return res, nil, nil
 	case err := <-errChan:
-		return nil, err
+		trace := <-traceChan
+		return nil, err, trace
 	}
 }
 
@@ -107,12 +124,18 @@ func GRPCErrorHandler(fn func() (*example.EXResponse, error)) (res *example.EXRe
 				if panicData, ok := r.(*xtremeres.ResponseError); ok {
 					status := panicData.Status
 					bug = status.Bug
-					err = errors.New(fmt.Sprintf("Code: %d. Message: %s. InternalMsg: %s", status.Code, status.Message, status.InternalMsg))
+
+					errMsg := status.Message
+					if status.InternalMsg != "" {
+						errMsg += ". " + status.InternalMsg
+					}
+
+					err = errors.New(fmt.Sprintf("%s. Code: %d.", errMsg, status.Code))
 				} else if panicData, ok := r.(error); ok {
-					err = errors.New(fmt.Sprintf("Code: %d. Message: %v", http.StatusInternalServerError, panicData.Error()))
+					err = errors.New(fmt.Sprintf("%v. Code: %d.", panicData.Error(), http.StatusInternalServerError))
 				} else {
 					bug = true
-					err = errors.New(fmt.Sprintf("Code: %d. Message: An error Occurred.", http.StatusInternalServerError))
+					err = errors.New(fmt.Sprintf("An error Occurred. Code: %d.", http.StatusInternalServerError))
 				}
 
 				fmt.Fprintf(os.Stderr, "panic: %v\n", r)

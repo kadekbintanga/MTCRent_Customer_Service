@@ -10,14 +10,14 @@ import (
 )
 
 // TODO: Hanya contoh. nanti langsung hapus saja
-type TestingAsyncWorkflowConsumer struct {
+type TestingAsyncWorkflowExecutor struct {
 	xtremerabbitmq.AsyncWorkflowConsumerBase
 
 	mutex sync.Mutex
 	form  *form2.TestingForm
 }
 
-func (c *TestingAsyncWorkflowConsumer) Consume(payload interface{}) (interface{}, error) {
+func (c *TestingAsyncWorkflowExecutor) Consume(payload interface{}) (interface{}, error, []byte) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 
@@ -38,7 +38,7 @@ func (c *TestingAsyncWorkflowConsumer) Consume(payload interface{}) (interface{}
 	})
 }
 
-func (c *TestingAsyncWorkflowConsumer) Response(payload interface{}, data ...interface{}) interface{} {
+func (c *TestingAsyncWorkflowExecutor) Response(payload interface{}, data ...interface{}) interface{} {
 	if c.form == nil {
 		c.form = &form2.TestingForm{}
 		err := c.form.AsyncWorkflowParse(payload)
@@ -53,7 +53,7 @@ func (c *TestingAsyncWorkflowConsumer) Response(payload interface{}, data ...int
 	}
 }
 
-func (c *TestingAsyncWorkflowConsumer) ForwardPayload() []xtremerabbitmq.AsyncWorkflowForwardPayloadResult {
+func (c *TestingAsyncWorkflowExecutor) ForwardPayload() []xtremerabbitmq.AsyncWorkflowForwardPayloadResult {
 	return []xtremerabbitmq.AsyncWorkflowForwardPayloadResult{
 		{
 			Queue: "service.customer.convert.async-workflow-4",

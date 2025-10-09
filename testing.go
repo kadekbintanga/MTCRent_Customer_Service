@@ -9,7 +9,6 @@ import (
 	"fmt"
 	xtrememodel "github.com/globalxtreme/go-core/v2/model"
 	xtremerabbitmq "github.com/globalxtreme/go-core/v2/rabbitmq"
-	xtremeres "github.com/globalxtreme/go-core/v2/response"
 	"github.com/joho/godotenv"
 	"io"
 	"mime/multipart"
@@ -29,30 +28,6 @@ func main() {
 	}
 
 	//sendRabbitMQ()
-	manualConsumerFunc()
-}
-
-func manualConsumerFunc() {
-	RabbitMQClose := config.InitRabbitMQ()
-	defer RabbitMQClose()
-
-	dialRabbitMQConnClose := config.InitRabbitMQConnection()
-	defer dialRabbitMQConnClose()
-
-	var consumerResponse map[string]interface{}
-	manualConsumer := xtremerabbitmq.PrepareManualConsumer(xtremerabbitmq.AsyncTransactionForm{
-		MessageId:  1644,
-		SenderId:   "1",
-		SenderType: "messages",
-	}, &consumerResponse)
-	defer manualConsumer()
-
-	xtremeres.ErrXtremeRabbitMQMessageGet("")
-
-	consumerResponse = map[string]interface{}{
-		"name": "Testing",
-		"subs": []string{"test"},
-	}
 }
 
 func getCase1() interface{} {

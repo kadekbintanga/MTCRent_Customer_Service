@@ -23,6 +23,10 @@ type APIMultipartFormInterface interface {
 	APIMultipartParse(r *http.Request)
 }
 
+type AsyncWorkflowFormInterface interface {
+	AsyncWorkflowParse(payload interface{}) error
+}
+
 type RabbitMQFormInterface interface {
 	RabbitMQParse(message xtrememodel.RabbitMQMessage) error
 }
@@ -93,7 +97,19 @@ func (BaseForm) AsyncWorkflowParse(payload interface{}, form interface{}) error 
 		return errors.New("Your message is not a map")
 	}
 
-	err := mapstructure.Decode(payloadMap, &form)
+	decoderConfig := &mapstructure.DecoderConfig{
+		Metadata:         nil,
+		Result:           form,
+		TagName:          "json",
+		WeaklyTypedInput: true,
+	}
+
+	decoder, err := mapstructure.NewDecoder(decoderConfig)
+	if err != nil {
+		return errors.New("Failed to create decoder: " + err.Error())
+	}
+
+	err = decoder.Decode(payloadMap)
 	if err != nil {
 		return errors.New("Your message parameter is invalid: " + err.Error())
 	}
