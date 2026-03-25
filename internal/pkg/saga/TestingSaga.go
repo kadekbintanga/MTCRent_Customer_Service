@@ -11,22 +11,31 @@ import (
 )
 
 // TODO: Hanya contoh. nanti langsung hapus saja
-type TestingSaga struct {
+type TestingSaga interface {
+	TestingStore(request *example.TestingRequest) (string, []byte)
+	TestingStoreAPI(request *example.TestingRequest) interface{}
+
+	Close()
+	TestingRollbackStore()
+	TestingAPIRollbackStore()
+}
+
+func NewTestingSaga() TestingSaga {
+	return &testingSaga{
+		testingAPI: privateapi.NewTestingAPI(),
+	}
+}
+
+type testingSaga struct {
 	testingAPI privateapi.TestingAPI
 
 	testingRPCRollBack []byte
 	testingAPIRollBack interface{}
 }
 
-/** --- SETTER --- */
-
-func (sg *TestingSaga) NewTestingSaga() {
-	sg.testingAPI = privateapi.NewTestingAPI()
-}
-
 /** --- ITEM SERVICE CLIENT --- */
 
-func (sg *TestingSaga) TestingStore(request *example.TestingRequest) (string, []byte) {
+func (sg *testingSaga) TestingStore(request *example.TestingRequest) (string, []byte) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -42,7 +51,7 @@ func (sg *TestingSaga) TestingStore(request *example.TestingRequest) (string, []
 	return resp.GetMessage(), result
 }
 
-func (sg *TestingSaga) TestingStoreAPI(request *example.TestingRequest) interface{} {
+func (sg *testingSaga) TestingStoreAPI(request *example.TestingRequest) interface{} {
 	resp := sg.testingAPI.Store(request)
 	result := resp.Result
 	if result != nil {
@@ -52,7 +61,7 @@ func (sg *TestingSaga) TestingStoreAPI(request *example.TestingRequest) interfac
 	return result
 }
 
-func (sg *TestingSaga) TestingRollbackStore() {
+func (sg *testingSaga) TestingRollbackStore() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -62,13 +71,13 @@ func (sg *TestingSaga) TestingRollbackStore() {
 	}
 }
 
-func (sg *TestingSaga) TestingAPIRollbackStore() {
+func (sg *testingSaga) TestingAPIRollbackStore() {
 	sg.testingAPI.RollBack(sg.testingAPIRollBack)
 }
 
 /** --- DEFER FUNCTION --- */
 
-func (sg *TestingSaga) Close() {
+func (sg *testingSaga) Close() {
 	if r := recover(); r != nil {
 		if len(sg.testingRPCRollBack) > 0 {
 			sg.TestingRollbackStore()
