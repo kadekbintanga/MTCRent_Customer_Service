@@ -3,12 +3,14 @@ package core
 import (
 	"errors"
 	"fmt"
-	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
-	xtremeres "github.com/globalxtreme/go-core/v2/response"
 	"net/http"
 	"os"
 	"runtime/debug"
-	"service/internal/pkg/grpc/example"
+
+	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
+	xtremeres "github.com/globalxtreme/go-core/v2/response"
+
+	"service/internal/pkg/grpc/customer"
 )
 
 func ErrorHandler(fn func() error) error {
@@ -111,8 +113,8 @@ func RabbitMQErrorHandler(fn func() (interface{}, error)) (res interface{}, err 
 	}
 }
 
-func GRPCErrorHandler(fn func() (*example.EXResponse, error)) (res *example.EXResponse, err error) {
-	resChan := make(chan *example.EXResponse)
+func GRPCErrorHandler(fn func() (*customer.CTResponse, error)) (res *customer.CTResponse, err error) {
+	resChan := make(chan *customer.CTResponse)
 	errChan := make(chan error)
 
 	go func() {

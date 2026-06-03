@@ -4,6 +4,7 @@ package constant
 
 // TODO: Hanya contoh. nanti langsung hapus saja
 const RABBITMQ_EXCHANGE_SERVICE_DOMAIN_FEATURE_ACTION = "service.domain.feature.action.exchange"
+const RABBITMQ_EXCHANGE_RENTAL_CUSTOMER_STATUS_UPDATE = "rental.customer.status.update.exchange"
 
 /** --- QUEUE --- */
 

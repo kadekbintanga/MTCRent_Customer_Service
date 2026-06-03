@@ -4,6 +4,7 @@ import (
 	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
 	xtremerabbitmq "github.com/globalxtreme/go-core/v2/rabbitmq"
 	"github.com/spf13/cobra"
+
 	"service/internal/app/rabbitmq"
 	"service/internal/pkg/config"
 	"service/internal/pkg/constant"
@@ -46,6 +47,10 @@ func (class *RabbitMQConsumerGlobalCommand) Handle() {
 		{
 			Queue:    constant.RABBITMQ_QUEUE_SERVICE_DOMAIN_FEATURE_ACTION, // TODO: Hanya contoh. nanti langsung hapus saja
 			Consumer: &rabbitmq.TestingRabbitMQConsumer{},
+		},
+		{
+			Exchange: constant.RABBITMQ_EXCHANGE_RENTAL_CUSTOMER_STATUS_UPDATE,
+			Consumer: &rabbitmq.RentalCustomerStatusUpdateConsumer{},
 		},
 	})
 }
