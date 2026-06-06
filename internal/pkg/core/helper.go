@@ -4,6 +4,7 @@ import (
 	"math/rand"
 	"net/url"
 	"os"
+	"path"
 	"strings"
 	"time"
 )
@@ -47,4 +48,11 @@ func StrPadLeft(original string, padLength int, padChar rune) string {
 func RandInt(min, max int) int {
 	rand.Seed(time.Now().UnixNano())
 	return rand.Intn(max-min+1) + min
+}
+
+func GetFullPathPublicStorage(link string, newPath string) string {
+	publicUrl := os.Getenv("PUBLIC_STORAGE_GATEWAY_BASE")
+	filename := path.Base(link)
+
+	return publicUrl + "/" + newPath + filename
 }

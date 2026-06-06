@@ -15,7 +15,7 @@ type CustomerHandler struct{}
 
 func (ctr CustomerHandler) Create(w http.ResponseWriter, r *http.Request) {
 	form := form2.CustomerForm{}
-	form.APIParse(r)
+	form.APIMultipartParse(r)
 	form.Validate()
 
 	srv := service.NewCustomerService()
@@ -28,13 +28,9 @@ func (ctr CustomerHandler) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ctr CustomerHandler) Delete(w http.ResponseWriter, r *http.Request) {
-	formFilter := form2.CustomerFilterForm{
-		UUID: mux.Vars(r)["uuid"],
-	}
-
 	srv := service.NewCustomerService()
 
-	srv.Delete(formFilter)
+	srv.Delete(mux.Vars(r)["uuid"])
 	res := xtremeres.Response{}
 	res.Success(w)
 }

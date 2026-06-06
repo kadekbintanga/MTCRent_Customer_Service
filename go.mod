@@ -6,6 +6,7 @@ require (
 	github.com/SebastiaanKlippert/go-wkhtmltopdf v1.9.3
 	github.com/globalxtreme/go-core/v2 v2.1.38
 	github.com/globalxtreme/go-identifier v1.2.1
+	github.com/globalxtreme/go-storage/v2 v2.0.3
 	github.com/go-co-op/gocron v1.37.0
 	github.com/go-playground/form/v4 v4.2.1
 	github.com/go-playground/validator/v10 v10.22.1

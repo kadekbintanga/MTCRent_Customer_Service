@@ -24,16 +24,17 @@ func (parser CustomerParser) First() interface{} {
 	customer := parser.Object
 
 	return map[string]interface{}{
-		"uuid":             customer.UUID,
-		"name":             customer.Name,
-		"IDNumber":         customer.IDNumber,
-		"SIMNumber":        customer.SIMNumber,
-		"phone":            customer.Phone,
-		"address":          customer.Address,
-		"status":           constant.CustomerStatus{}.IDAndName(customer.StatusId),
-		"blacklist_reason": customer.BlacklistReason,
-		"createdAt":        customer.CreatedAt,
-		"updatedAt":        customer.UpdatedAt,
+		"uuid":            customer.UUID,
+		"name":            customer.Name,
+		"IDNumber":        customer.IDNumber,
+		"SIMNumber":       customer.SIMNumber,
+		"phone":           customer.Phone,
+		"address":         customer.Address,
+		"status":          constant.CustomerStatus{}.IDAndName(customer.StatusId),
+		"blacklistReason": customer.BlacklistReason,
+		"IDPhoto":         customer.IDPhoto,
+		"createdAt":       customer.CreatedAt,
+		"updatedAt":       customer.UpdatedAt,
 	}
 }
 
@@ -41,16 +42,16 @@ func (parser CustomerParser) CreateActivity(action string) interface{} {
 	customer := parser.Object
 
 	return map[string]interface{}{
-		"id":               customer.ID,
-		"uuid":             customer.UUID,
-		"name":             customer.Name,
-		"idNumber":         customer.IDNumber,
-		"simNumber":        customer.SIMNumber,
-		"phone":            customer.Phone,
-		"address":          customer.Address,
-		"status":           constant.CustomerStatus{}.IDAndName(customer.StatusId),
-		"blacklist_reason": customer.BlacklistReason,
-		"createdAt":        customer.CreatedAt,
+		"id":              customer.ID,
+		"uuid":            customer.UUID,
+		"name":            customer.Name,
+		"idNumber":        customer.IDNumber,
+		"simNumber":       customer.SIMNumber,
+		"phone":           customer.Phone,
+		"address":         customer.Address,
+		"status":          constant.CustomerStatus{}.IDAndName(customer.StatusId),
+		"blacklistReason": customer.BlacklistReason,
+		"IDPhoto":         customer.IDPhoto,
 	}
 }
 
@@ -63,11 +64,12 @@ func (parser CustomerParser) DeleteActivity(action string) interface{} {
 }
 
 func (parser CustomerParser) GeneralActivity(action string) interface{} {
-	if action == "onlyName" {
+	if action == constant.ACTION_STATUS {
 		customer := parser.Object
 
 		return map[string]interface{}{
-			"name": customer.Name,
+			"status":          constant.CustomerStatus{}.IDAndName(customer.StatusId),
+			"blacklistReason": customer.BlacklistReason,
 		}
 	}
 

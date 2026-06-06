@@ -29,10 +29,6 @@ func (consume *RentalCustomerStatusUpdateConsumer) Consume(message xtrememodel.R
 
 		data, ok := dataRaw.(map[string]interface{})
 
-		formFilter := form2.CustomerFilterForm{
-			UUID: data["uuid"].(string),
-		}
-
 		form := form2.CustomerStatusForm{
 			StatusId:        data["statusId"].(int),
 			BlacklistReason: data["blacklistReason"].(string),
@@ -40,7 +36,7 @@ func (consume *RentalCustomerStatusUpdateConsumer) Consume(message xtrememodel.R
 		form.Validate()
 
 		srv := service.NewCustomerService()
-		srv.UpdateStatus(formFilter, form)
+		srv.UpdateStatus(data["uuid"].(string), form)
 
 		return nil, nil
 	})

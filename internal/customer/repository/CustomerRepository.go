@@ -23,10 +23,11 @@ type CustomerRepository interface {
 	core.FindRepository[form.CustomerFilterForm, model.Customer]
 	core.PaginateRepository[form.CustomerFilterForm, model.Customer]
 
-	Create(form form.CustomerForm) model.Customer
-	Update(customer model.Customer, form form.CustomerForm) model.Customer
+	Create(form form.CustomerForm, file *xtrememodel.MapInterfaceColumn) model.Customer
+	Update(customer model.Customer, form form.CustomerForm, file *xtrememodel.MapInterfaceColumn) model.Customer
 	UpdateStatus(customer model.Customer, form form.CustomerStatusForm) model.Customer
 	Delete(customer model.Customer)
+	CountIDandSIMNumber(form form.CustomerFilterForm) int64
 }
 
 func NewCustomerRepository(args ...*gorm.DB) CustomerRepository {
@@ -88,7 +89,7 @@ func (repo *customerRepository) PaginateByForm(form form.CustomerFilterForm) ([]
 	return customers, pagination
 }
 
-func (repo *customerRepository) Create(form form.CustomerForm) model.Customer {
+func (repo *customerRepository) Create(form form.CustomerForm, file *xtrememodel.MapInterfaceColumn) model.Customer {
 	customer := model.Customer{
 		Name:      form.Name,
 		IDNumber:  form.IDNumber,
@@ -96,6 +97,10 @@ func (repo *customerRepository) Create(form form.CustomerForm) model.Customer {
 		Phone:     form.Phone,
 		Address:   form.Address,
 		StatusId:  constant.CUSTOMER_STATUS_ACTIVE_ID,
+	}
+
+	if file != nil {
+		customer.IDPhoto = file
 	}
 
 	err := repo.Transaction.Create(&customer).Error
@@ -106,7 +111,7 @@ func (repo *customerRepository) Create(form form.CustomerForm) model.Customer {
 	return customer
 }
 
-func (repo *customerRepository) Update(customer model.Customer, form form.CustomerForm) model.Customer {
+func (repo *customerRepository) Update(customer model.Customer, form form.CustomerForm, file *xtrememodel.MapInterfaceColumn) model.Customer {
 	customer.Name = form.Name
 	customer.IDNumber = form.IDNumber
 	customer.SIMNumber = form.SIMNumber
@@ -114,6 +119,10 @@ func (repo *customerRepository) Update(customer model.Customer, form form.Custom
 	customer.Address = form.Address
 	customer.StatusId = form.StatusId
 	customer.BlacklistReason = form.BlacklistReason
+
+	if file != nil {
+		customer.IDPhoto = file
+	}
 
 	err := repo.Transaction.Updates(&customer).Error
 	if err != nil {
@@ -136,6 +145,18 @@ func (repo *customerRepository) Delete(customer model.Customer) {
 	if err != nil {
 		error2.ErrXtremeCustomerDelete(err.Error())
 	}
+}
+
+func (repo *customerRepository) CountIDandSIMNumber(form form.CustomerFilterForm) int64 {
+	var count int64
+
+	err := config.PgSQL.Model(&model.Customer{}).Where(`customers."IDNumber" = ? OR customers."SIMNumber" = ?`, form.IDNumber, form.SIMNumber).Count(&count).Error
+	if err != nil {
+		error2.ErrXtremeCustomerGet(err.Error())
+	}
+
+	return count
+
 }
 
 /** --- UNEXPORTED FUNCTIONS --- */

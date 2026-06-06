@@ -10,26 +10,32 @@ import (
 	error2 "service/internal/pkg/error"
 )
 
+type CustomerPhotoForm struct {
+	Link     *string `form:"link"`
+	MimeType *string `form:"mimeType" validate:"required"`
+	Deleted  *bool   `json:"deleted" form:"deleted"`
+}
+
 type CustomerForm struct {
-	Name            string `json:"name" validate:"required"`
-	IDNumber        string `json:"IDNumber" validate:"required,max=100,alphanum"`
-	SIMNumber       string `json:"SIMNumber" validate:"required,max=100,alphanum"`
-	Phone           string `json:"phone" validate:"required,min=8,max=20,numeric"`
-	Address         string `json:"address" validate:"required"`
-	StatusId        int    `json:"statusId"`
-	BlacklistReason string `json:"blacklistReason"`
+	Request         *http.Request
+	Name            string             `form:"name" validate:"required"`
+	IDNumber        string             `form:"IDNumber" validate:"required,max=100,alphanum"`
+	SIMNumber       string             `form:"SIMNumber" validate:"required,max=100,alphanum"`
+	Phone           string             `form:"phone" validate:"required,min=8,max=20,numeric"`
+	Address         string             `form:"address" validate:"required"`
+	StatusId        int                `form:"statusId" validate:"required"`
+	BlacklistReason string             `form:"blacklistReason"`
+	IDPhoto         *CustomerPhotoForm `form:"IDPhoto"`
 }
 
 func (rule *CustomerForm) Validate() {
 	va := xtrememdw.Validator{}
-	if rule.StatusId != 0 {
-		_, exists := constant.CustomerStatus{}.OptionIDNames()[rule.StatusId]
-		if !exists {
-			error2.ErrXtremeCustomerUpdate("Invalid status")
-		} else {
-			if rule.StatusId == constant.CUSTOMER_STATUS_BLACKLISTED_ID && rule.BlacklistReason == "" {
-				error2.ErrXtremeCustomerUpdate("Blacklist Reason is required")
-			}
+	_, exists := constant.CustomerStatus{}.OptionIDNames()[rule.StatusId]
+	if !exists {
+		error2.ErrXtremeCustomerUpdate("Invalid status")
+	} else {
+		if rule.StatusId == constant.CUSTOMER_STATUS_BLACKLISTED_ID && rule.BlacklistReason == "" {
+			error2.ErrXtremeCustomerUpdate("Blacklist Reason is required")
 		}
 	}
 	va.Make(rule)
@@ -37,4 +43,9 @@ func (rule *CustomerForm) Validate() {
 
 func (rule *CustomerForm) APIParse(r *http.Request) {
 	core.BaseForm{}.APIParse(r, &rule)
+}
+
+func (rule *CustomerForm) APIMultipartParse(r *http.Request) {
+	rule.Request = r
+	core.BaseForm{}.APIMultipartParse(r, &rule)
 }

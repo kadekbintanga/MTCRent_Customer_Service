@@ -7,7 +7,6 @@ import (
 	"github.com/globalxtreme/go-identifier/data"
 	"github.com/gorilla/mux"
 
-	repository2 "service/internal/activity/repository"
 	"service/internal/customer/repository"
 	"service/internal/customer/service"
 	form2 "service/internal/pkg/form"
@@ -47,13 +46,11 @@ func (ctr CustomerHandler) Detail(w http.ResponseWriter, r *http.Request) {
 
 func (ctr CustomerHandler) Create(w http.ResponseWriter, r *http.Request) {
 	form := form2.CustomerForm{}
-	form.APIParse(r)
+	form.APIMultipartParse(r)
 	form.Validate()
 
 	srv := service.NewCustomerService()
 	srv.SetEmployeeIdentifier(data.AuthEmployee(r))
-	srv.SetActivityRepository(repository2.NewActivityRepository())
-
 	customer := srv.Create(form)
 
 	psr := parser.CustomerParser{Object: customer}
@@ -62,18 +59,14 @@ func (ctr CustomerHandler) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ctr CustomerHandler) Update(w http.ResponseWriter, r *http.Request) {
-	formFilter := form2.CustomerFilterForm{
-		UUID: mux.Vars(r)["uuid"],
-	}
 	form := form2.CustomerForm{}
-	form.APIParse(r)
+	form.APIMultipartParse(r)
 	form.Validate()
 
 	srv := service.NewCustomerService()
 	srv.SetEmployeeIdentifier(data.AuthEmployee(r))
-	srv.SetActivityRepository(repository2.NewActivityRepository())
 
-	customer := srv.Update(formFilter, form)
+	customer := srv.Update(mux.Vars(r)["uuid"], form)
 
 	psr := parser.CustomerParser{Object: customer}
 	res := xtremeres.Response{Object: psr.First()}
@@ -81,15 +74,10 @@ func (ctr CustomerHandler) Update(w http.ResponseWriter, r *http.Request) {
 }
 
 func (ctr CustomerHandler) Delete(w http.ResponseWriter, r *http.Request) {
-	formFilter := form2.CustomerFilterForm{
-		UUID: mux.Vars(r)["uuid"],
-	}
-
 	srv := service.NewCustomerService()
 	srv.SetEmployeeIdentifier(data.AuthEmployee(r))
-	srv.SetActivityRepository(repository2.NewActivityRepository())
 
-	srv.Delete(formFilter)
+	srv.Delete(mux.Vars(r)["uuid"])
 	res := xtremeres.Response{}
 	res.Success(w)
 }

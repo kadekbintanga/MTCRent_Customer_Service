@@ -1,8 +1,9 @@
 package error
 
 import (
-	xtremeres "github.com/globalxtreme/go-core/v2/response"
 	"net/http"
+
+	xtremeres "github.com/globalxtreme/go-core/v2/response"
 )
 
 func ErrXtremePrivateAPIAuthentication(internalMsg string) {
@@ -23,4 +24,12 @@ func ErrXtremeRole() {
 
 func ErrXtremeINCRNumber(internalMsg string) {
 	xtremeres.Error(http.StatusInternalServerError, "Unable to generate number", internalMsg, false, nil)
+}
+
+func ErrXtremeFileUpload(internalMsg string) {
+	xtremeres.Error(http.StatusNotFound, "Cannot upload file", internalMsg, false, nil)
+}
+
+func ErrXtremeFileDelete(internalMsg string) {
+	xtremeres.Error(http.StatusInternalServerError, "Cannot delete file", internalMsg, false, nil)
 }

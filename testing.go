@@ -7,14 +7,18 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"fmt"
-	xtrememodel "github.com/globalxtreme/go-core/v2/model"
-	xtremerabbitmq "github.com/globalxtreme/go-core/v2/rabbitmq"
-	"github.com/joho/godotenv"
 	"io"
 	"mime/multipart"
 	"service/internal/pkg/config"
 	"service/internal/pkg/constant"
 	"strings"
+
+	error2 "service/internal/pkg/error"
+
+	xtrememodel "github.com/globalxtreme/go-core/v2/model"
+	xtremerabbitmq "github.com/globalxtreme/go-core/v2/rabbitmq"
+	gxstorage "github.com/globalxtreme/go-storage/v2"
+	"github.com/joho/godotenv"
 )
 
 type testing struct {
@@ -27,10 +31,19 @@ func main() {
 		panic(err.Error())
 	}
 
-	pad := 10
-	format := fmt.Sprintf("%%0%dd", pad)
-	number := fmt.Sprintf("%s"+format, "Testing", 456)
-	fmt.Println(number)
+	closeStorage := gxstorage.InitPublicStorageRPC()
+	defer closeStorage()
+
+	// Move file from path
+	move, err := gxstorage.MoveFromAnotherService(gxstorage.PublicStorageMoveCopyFromAnotherService{
+		File:         "https://storage.globalxtreme-gateway.net/link/dev-test/testing/uBQPAfkRYjfdhcCtHcyUvTq6Dwnxai15uo601780588974800289305.pdf",
+		ToPath:       "testing/",
+		FromClientID: "16880494322013651",
+	})
+	if err != nil {
+		error2.ErrXtremeFileUpload(err.Error())
+	}
+	fmt.Println(move.GetResult().GetFullPath())
 }
 
 func getCase1() interface{} {

@@ -7,6 +7,7 @@ import (
 
 	xtremecore "github.com/globalxtreme/go-core/v2"
 	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
+	gxstorage "github.com/globalxtreme/go-storage/v2"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 	"github.com/spf13/cobra"
@@ -39,6 +40,9 @@ var rootCmd = &cobra.Command{
 
 		logCleanup := xtremepkg.InitLogRPC()
 		defer logCleanup()
+
+		storageCleanup := gxstorage.InitPublicStorageRPC()
+		defer storageCleanup()
 
 		newCors := cors.New(config.CorsOptions)
 
