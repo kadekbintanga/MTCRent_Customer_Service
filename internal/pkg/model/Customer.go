@@ -13,7 +13,11 @@ type Customer struct {
 	Address         string                          `gorm:"column:address;type:varchar(250);default:null"`
 	StatusId        int                             `gorm:"column:statusId"`
 	BlacklistReason string                          `gorm:"column:blacklistReason;default:null"`
-	IDPhoto         *xtrememodel.MapInterfaceColumn `gorm:"column:IDPhoto;type:json;null"`
+	IdentityPhoto   *xtrememodel.MapInterfaceColumn `gorm:"column:identityPhoto;type:json;null"`
+	CreatedBy       *string                         `gorm:"column:createdBy;varchar(50);null"`
+	CreatedByName   *string                         `gorm:"column:createdByName;varchar(250);null"`
+	UpdatedBy       *string                         `gorm:"column:updatedBy;varchar(50);null"`
+	UpdatedByName   *string                         `gorm:"column:updatedByName;varchar(250);null"`
 }
 
 func (Customer) TableName() string {

@@ -32,7 +32,30 @@ func (parser CustomerParser) First() interface{} {
 		"address":         customer.Address,
 		"status":          constant.CustomerStatus{}.IDAndName(customer.StatusId),
 		"blacklistReason": customer.BlacklistReason,
-		"IDPhoto":         customer.IDPhoto,
+		"identityPhoto":   customer.IdentityPhoto,
+		"createdAt":       customer.CreatedAt,
+		"updatedAt":       customer.UpdatedAt,
+		"createdBy":       customer.CreatedBy,
+		"createdByName":   customer.CreatedByName,
+		"updatedBy":       customer.UpdatedBy,
+		"updatedByName":   customer.UpdatedByName,
+	}
+}
+
+func (parser CustomerParser) FirstGRPC() interface{} {
+	customer := parser.Object
+
+	return map[string]interface{}{
+		"id":              customer.ID,
+		"uuid":            customer.UUID,
+		"name":            customer.Name,
+		"IDNumber":        customer.IDNumber,
+		"SIMNumber":       customer.SIMNumber,
+		"phone":           customer.Phone,
+		"address":         customer.Address,
+		"status":          constant.CustomerStatus{}.IDAndName(customer.StatusId),
+		"blacklistReason": customer.BlacklistReason,
+		"identityPhoto":   customer.IdentityPhoto,
 		"createdAt":       customer.CreatedAt,
 		"updatedAt":       customer.UpdatedAt,
 	}
@@ -51,7 +74,7 @@ func (parser CustomerParser) CreateActivity(action string) interface{} {
 		"address":         customer.Address,
 		"status":          constant.CustomerStatus{}.IDAndName(customer.StatusId),
 		"blacklistReason": customer.BlacklistReason,
-		"IDPhoto":         customer.IDPhoto,
+		"identityPhoto":   customer.IdentityPhoto,
 	}
 }
 
@@ -64,10 +87,11 @@ func (parser CustomerParser) DeleteActivity(action string) interface{} {
 }
 
 func (parser CustomerParser) GeneralActivity(action string) interface{} {
-	if action == constant.ACTION_STATUS {
+	if action == constant.ACTIVITY_CUSTOMER_UPDATE_STATUS {
 		customer := parser.Object
 
 		return map[string]interface{}{
+			"id":              customer.ID,
 			"status":          constant.CustomerStatus{}.IDAndName(customer.StatusId),
 			"blacklistReason": customer.BlacklistReason,
 		}

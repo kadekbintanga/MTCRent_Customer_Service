@@ -27,7 +27,7 @@ func (srv *CustomerServer) FirstByUUID(ctx context.Context, in *customer.FirstCu
 		customer := repo.FirstByForm(form.CustomerFilterForm{UUID: in.Uuid})
 
 		parser := parser.CustomerParser{Object: customer}
-		return srv.success(parser.First())
+		return srv.success(parser.FirstGRPC())
 
 	})
 

@@ -48,9 +48,9 @@ func (class *RabbitMQConsumerGlobalCommand) Handle() {
 			Queue:    constant.RABBITMQ_QUEUE_SERVICE_DOMAIN_FEATURE_ACTION, // TODO: Hanya contoh. nanti langsung hapus saja
 			Consumer: &rabbitmq.TestingRabbitMQConsumer{},
 		},
-		{
-			Exchange: constant.RABBITMQ_EXCHANGE_RENTAL_CUSTOMER_STATUS_UPDATE,
-			Consumer: &rabbitmq.RentalCustomerStatusUpdateConsumer{},
-		},
+		// {
+		// 	Exchange: constant.RABBITMQ_EXCHANGE_RENTAL_CUSTOMER_STATUS_UPDATE,
+		// 	Consumer: &rabbitmq.RentalCustomerStatusUpdateConsumer{},
+		// },
 	})
 }

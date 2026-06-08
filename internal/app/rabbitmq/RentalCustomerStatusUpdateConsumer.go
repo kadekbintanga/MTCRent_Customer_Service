@@ -1,10 +1,9 @@
 package rabbitmq
 
 import (
-	"errors"
+	"fmt"
 	"sync"
 
-	xtrememodel "github.com/globalxtreme/go-core/v2/model"
 	xtremerabbitmq "github.com/globalxtreme/go-core/v2/rabbitmq"
 
 	"service/internal/customer/service"
@@ -17,23 +16,20 @@ type RentalCustomerStatusUpdateConsumer struct {
 	mutex sync.Mutex
 }
 
-func (consume *RentalCustomerStatusUpdateConsumer) Consume(message xtrememodel.RabbitMQMessage) (interface{}, error, []byte) {
+func (consume *RentalCustomerStatusUpdateConsumer) Consume(payload interface{}) (interface{}, error, []byte) {
 	consume.mutex.Lock()
 	defer consume.mutex.Unlock()
 
 	return core.RabbitMQErrorHandler(func() (interface{}, error) {
-		dataRaw, ok := message.Payload["data"]
+		data, ok := payload.(map[string]interface{})
 		if !ok {
-			return nil, errors.New("Payload does not contain data")
+			return nil, fmt.Errorf("invalid payload type: %T", payload)
 		}
-
-		data, ok := dataRaw.(map[string]interface{})
-
 		form := form2.CustomerStatusForm{
-			StatusId:        data["statusId"].(int),
+			StatusId:        int(data["statusId"].(float64)),
 			BlacklistReason: data["blacklistReason"].(string),
 		}
-		form.Validate()
+		// form.Validate()
 
 		srv := service.NewCustomerService()
 		srv.UpdateStatus(data["uuid"].(string), form)
@@ -41,3 +37,33 @@ func (consume *RentalCustomerStatusUpdateConsumer) Consume(message xtrememodel.R
 		return nil, nil
 	})
 }
+
+func (consume *RentalCustomerStatusUpdateConsumer) Response(payload interface{}, data ...interface{}) interface{} {
+	return nil
+
+}
+
+// func (consume *RentalCustomerStatusUpdateConsumer) Consume(message xtrememodel.RabbitMQMessage) (interface{}, error, []byte) {
+// 	consume.mutex.Lock()
+// 	defer consume.mutex.Unlock()
+
+// 	return core.RabbitMQErrorHandler(func() (interface{}, error) {
+// 		dataRaw, ok := message.Payload["data"]
+// 		if !ok {
+// 			return nil, errors.New("Payload does not contain data")
+// 		}
+
+// 		data, ok := dataRaw.(map[string]interface{})
+
+// 		form := form2.CustomerStatusForm{
+// 			StatusId:        data["statusId"].(int),
+// 			BlacklistReason: data["blacklistReason"].(string),
+// 		}
+// 		form.Validate()
+
+// 		srv := service.NewCustomerService()
+// 		srv.UpdateStatus(data["uuid"].(string), form)
+
+// 		return nil, nil
+// 	})
+// }

@@ -33,3 +33,7 @@ func ErrXtremeFileUpload(internalMsg string) {
 func ErrXtremeFileDelete(internalMsg string) {
 	xtremeres.Error(http.StatusInternalServerError, "Cannot delete file", internalMsg, false, nil)
 }
+
+func ErrXtremeInvalidRequest(internalMsg string) {
+	xtremeres.Error(http.StatusBadRequest, "Invalid data request", internalMsg, false, nil)
+}

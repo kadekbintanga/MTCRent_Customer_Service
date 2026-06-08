@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	xtrememodel "github.com/globalxtreme/go-core/v2/model"
+	"github.com/globalxtreme/go-identifier/data"
 	"gorm.io/gorm"
 
 	"service/internal/pkg/config"
@@ -19,32 +20,38 @@ import (
 
 type CustomerRepository interface {
 	core.TransactionInterface
+	core.EmployeeIdentifierInterface
 	core.FirstRepository[form.CustomerFilterForm, model.Customer]
 	core.FindRepository[form.CustomerFilterForm, model.Customer]
 	core.PaginateRepository[form.CustomerFilterForm, model.Customer]
 
-	Create(form form.CustomerForm, file *xtrememodel.MapInterfaceColumn) model.Customer
-	Update(customer model.Customer, form form.CustomerForm, file *xtrememodel.MapInterfaceColumn) model.Customer
+	Create(form form.CustomerForm, identityPhoto *map[string]interface{}) model.Customer
+	Update(customer model.Customer, form form.CustomerForm, file *map[string]interface{}) model.Customer
 	UpdateStatus(customer model.Customer, form form.CustomerStatusForm) model.Customer
 	Delete(customer model.Customer)
-	CountIDandSIMNumber(form form.CustomerFilterForm) int64
+	CountDuplicateIDorSIMNumber(form form.CustomerFilterForm) int64
 }
 
 func NewCustomerRepository(args ...*gorm.DB) CustomerRepository {
 	repository := customerRepository{}
 	if len(args) > 0 {
-		repository.Transaction = args[0]
+		repository.tx = args[0]
 	}
 
 	return &repository
 }
 
 type customerRepository struct {
-	Transaction *gorm.DB
+	tx       *gorm.DB
+	employee data.EmployeeIdentifierData
 }
 
 func (repo *customerRepository) SetTransaction(tx *gorm.DB) {
-	repo.Transaction = tx
+	repo.tx = tx
+}
+
+func (repo *customerRepository) SetEmployeeIdentifier(emplyee data.EmployeeIdentifierData) {
+	repo.employee = emplyee
 }
 
 func (repo *customerRepository) FirstByForm(form form.CustomerFilterForm, args ...func(query *gorm.DB) *gorm.DB) model.Customer {
@@ -89,7 +96,7 @@ func (repo *customerRepository) PaginateByForm(form form.CustomerFilterForm) ([]
 	return customers, pagination
 }
 
-func (repo *customerRepository) Create(form form.CustomerForm, file *xtrememodel.MapInterfaceColumn) model.Customer {
+func (repo *customerRepository) Create(form form.CustomerForm, identityPhoto *map[string]interface{}) model.Customer {
 	customer := model.Customer{
 		Name:      form.Name,
 		IDNumber:  form.IDNumber,
@@ -99,11 +106,23 @@ func (repo *customerRepository) Create(form form.CustomerForm, file *xtrememodel
 		StatusId:  constant.CUSTOMER_STATUS_ACTIVE_ID,
 	}
 
-	if file != nil {
-		customer.IDPhoto = file
+	if identityPhoto != nil {
+		customer.IdentityPhoto = (*xtrememodel.MapInterfaceColumn)(identityPhoto)
 	}
 
-	err := repo.Transaction.Create(&customer).Error
+	if repo.employee.ID != "" {
+		customer.CreatedBy = &repo.employee.ID
+		customer.CreatedByName = &repo.employee.FullName
+		customer.UpdatedBy = &repo.employee.ID
+		customer.UpdatedByName = &repo.employee.FullName
+	} else {
+		customer.CreatedBy = &form.CreatedByUUID
+		customer.CreatedByName = &form.CreatedByName
+		customer.UpdatedBy = &form.CreatedByUUID
+		customer.UpdatedByName = &form.CreatedByName
+	}
+
+	err := repo.tx.Create(&customer).Error
 	if err != nil {
 		error2.ErrXtremeCustomerSave(err.Error())
 	}
@@ -111,7 +130,7 @@ func (repo *customerRepository) Create(form form.CustomerForm, file *xtrememodel
 	return customer
 }
 
-func (repo *customerRepository) Update(customer model.Customer, form form.CustomerForm, file *xtrememodel.MapInterfaceColumn) model.Customer {
+func (repo *customerRepository) Update(customer model.Customer, form form.CustomerForm, identityPhoto *map[string]interface{}) model.Customer {
 	customer.Name = form.Name
 	customer.IDNumber = form.IDNumber
 	customer.SIMNumber = form.SIMNumber
@@ -120,11 +139,19 @@ func (repo *customerRepository) Update(customer model.Customer, form form.Custom
 	customer.StatusId = form.StatusId
 	customer.BlacklistReason = form.BlacklistReason
 
-	if file != nil {
-		customer.IDPhoto = file
+	if identityPhoto != nil {
+		customer.IdentityPhoto = (*xtrememodel.MapInterfaceColumn)(identityPhoto)
 	}
 
-	err := repo.Transaction.Updates(&customer).Error
+	if repo.employee.ID != "" {
+		customer.UpdatedBy = &repo.employee.ID
+		customer.UpdatedByName = &repo.employee.FullName
+	} else {
+		customer.UpdatedBy = &form.CreatedByUUID
+		customer.UpdatedByName = &form.CreatedByName
+	}
+
+	err := repo.tx.Updates(&customer).Error
 	if err != nil {
 		error2.ErrXtremeCustomerUpdate(err.Error())
 	}
@@ -132,7 +159,18 @@ func (repo *customerRepository) Update(customer model.Customer, form form.Custom
 }
 
 func (repo *customerRepository) UpdateStatus(customer model.Customer, form form.CustomerStatusForm) model.Customer {
-	err := repo.Transaction.Model(&customer).Update("status", form.StatusId).Error
+	customer.StatusId = form.StatusId
+	customer.BlacklistReason = form.BlacklistReason
+
+	if repo.employee.ID != "" {
+		customer.UpdatedBy = &repo.employee.ID
+		customer.UpdatedByName = &repo.employee.FullName
+	} else {
+		customer.UpdatedBy = &form.CreatedByUUID
+		customer.UpdatedByName = &form.CreatedByName
+	}
+
+	err := repo.tx.Updates(&customer).Error
 	if err != nil {
 		error2.ErrXtremeCustomerUpdate(err.Error())
 	}
@@ -141,16 +179,24 @@ func (repo *customerRepository) UpdateStatus(customer model.Customer, form form.
 }
 
 func (repo *customerRepository) Delete(customer model.Customer) {
-	err := repo.Transaction.Delete(&customer).Error
+	err := repo.tx.Delete(&customer).Error
 	if err != nil {
 		error2.ErrXtremeCustomerDelete(err.Error())
 	}
 }
 
-func (repo *customerRepository) CountIDandSIMNumber(form form.CustomerFilterForm) int64 {
+func (repo *customerRepository) CountDuplicateIDorSIMNumber(form form.CustomerFilterForm) int64 {
 	var count int64
 
-	err := config.PgSQL.Model(&model.Customer{}).Where(`customers."IDNumber" = ? OR customers."SIMNumber" = ?`, form.IDNumber, form.SIMNumber).Count(&count).Error
+	query := config.PgSQL.Model(&model.Customer{}).
+		Where(`customers."IDNumber" = ? OR customers."SIMNumber" = ?`, form.IDNumber, form.SIMNumber)
+
+	if form.ID != 0 {
+		query = query.Where("id <> ?", form.ID)
+	}
+	query = query.Count(&count)
+
+	err := query.Error
 	if err != nil {
 		error2.ErrXtremeCustomerGet(err.Error())
 	}
@@ -170,6 +216,8 @@ func (repo *customerRepository) prepareAndFilter(form form.CustomerFilterForm) *
 
 	if form.UUID != "" {
 		query = query.Where("customers.uuid = ?", form.UUID)
+	} else {
+		query = query.Where("customers.id = ?", form.ID)
 	}
 
 	if form.IDNumber != "" {
