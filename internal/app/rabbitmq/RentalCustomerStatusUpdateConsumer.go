@@ -2,6 +2,7 @@ package rabbitmq
 
 import (
 	"fmt"
+	data2 "github.com/globalxtreme/go-identifier/data"
 	"sync"
 
 	xtremerabbitmq "github.com/globalxtreme/go-core/v2/rabbitmq"
@@ -21,18 +22,13 @@ func (consume *RentalCustomerStatusUpdateConsumer) Consume(payload interface{}) 
 	defer consume.mutex.Unlock()
 
 	return core.RabbitMQErrorHandler(func() (interface{}, error) {
-		data, ok := payload.(map[string]interface{})
-		if !ok {
-			return nil, fmt.Errorf("invalid payload type: %T", payload)
-		}
-		form := form2.CustomerStatusForm{
-			StatusId:        int(data["statusId"].(float64)),
-			BlacklistReason: data["blacklistReason"].(string),
-		}
+		form := form2.CustomerStatusForm{}
+		form.AsyncWorkflowParse(payload)
 		// form.Validate()
 
 		srv := service.NewCustomerService()
-		srv.UpdateStatus(data["uuid"].(string), form)
+		srv.SetEmployeeIdentifier(data2.EmployeeIdentifierData{ID: form.CreatedByUUID, FullName: form.CreatedByName})
+		srv.UpdateStatus(form.uu, form)
 
 		return nil, nil
 	})

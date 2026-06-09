@@ -115,11 +115,6 @@ func (repo *customerRepository) Create(form form.CustomerForm, identityPhoto *ma
 		customer.CreatedByName = &repo.employee.FullName
 		customer.UpdatedBy = &repo.employee.ID
 		customer.UpdatedByName = &repo.employee.FullName
-	} else {
-		customer.CreatedBy = &form.CreatedByUUID
-		customer.CreatedByName = &form.CreatedByName
-		customer.UpdatedBy = &form.CreatedByUUID
-		customer.UpdatedByName = &form.CreatedByName
 	}
 
 	err := repo.tx.Create(&customer).Error
@@ -189,14 +184,13 @@ func (repo *customerRepository) CountDuplicateIDorSIMNumber(form form.CustomerFi
 	var count int64
 
 	query := config.PgSQL.Model(&model.Customer{}).
-		Where(`customers."IDNumber" = ? OR customers."SIMNumber" = ?`, form.IDNumber, form.SIMNumber)
+		Where(`"IDNumber" = ? OR "SIMNumber" = ?`, form.IDNumber, form.SIMNumber)
 
 	if form.ID != 0 {
-		query = query.Where("id <> ?", form.ID)
+		query = query.Where("id != ?", form.ID)
 	}
-	query = query.Count(&count)
 
-	err := query.Error
+	err := query.Count(&count).Error
 	if err != nil {
 		error2.ErrXtremeCustomerGet(err.Error())
 	}

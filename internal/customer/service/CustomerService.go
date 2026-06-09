@@ -88,15 +88,13 @@ func (srv *customerService) Update(uuid string, form form2.CustomerForm) model.C
 	if identityPhoto != nil && customer.IdentityPhoto != nil {
 		if file, ok := (*customer.IdentityPhoto)["file"].(string); ok {
 			fmt.Println(file)
-			srv.saga.DeleteStoragePaths = append(
-				srv.saga.DeleteStoragePaths,
-				file,
-			)
+			srv.saga.DeleteStoragePaths = append(srv.saga.DeleteStoragePaths, file)
 		}
 	}
 
 	config.PgSQL.Transaction(func(tx *gorm.DB) error {
 		srv.repository.SetTransaction(tx)
+
 		useActivity := activity.UseActivity{Employee: srv.employee}.SetReference(&customer).SetParser(&parser).SetOldProperty(constant.ACTION_UPDATE)
 
 		customer = srv.repository.Update(customer, form, &identityPhoto)
@@ -104,6 +102,7 @@ func (srv *customerService) Update(uuid string, form form2.CustomerForm) model.C
 		parser.Object = customer
 		useActivity.SetReference(&customer).SetParser(&parser).SetNewProperty(constant.ACTION_UPDATE).
 			Save(fmt.Sprintf("Update Customer: %s [%d]", customer.Name, customer.ID))
+
 		return nil
 	})
 
@@ -118,6 +117,7 @@ func (srv *customerService) UpdateStatus(uuid string, form form2.CustomerStatusF
 
 	config.PgSQL.Transaction(func(tx *gorm.DB) error {
 		srv.repository.SetTransaction(tx)
+
 		useActivity := activity.UseActivity{Employee: srv.employee}.SetReference(&customer).SetParser(&parser).SetOldProperty(constant.ACTION_UPDATE, constant.ACTIVITY_CUSTOMER_UPDATE_STATUS)
 
 		customer = srv.repository.UpdateStatus(customer, form)
@@ -125,6 +125,7 @@ func (srv *customerService) UpdateStatus(uuid string, form form2.CustomerStatusF
 		parser.Object = customer
 		useActivity.SetReference(&customer).SetParser(&parser).SetNewProperty(constant.ACTION_UPDATE, constant.ACTIVITY_CUSTOMER_UPDATE_STATUS).
 			Save(fmt.Sprintf("Update Customer status: %s [%d]", customer.Name, customer.ID))
+
 		return nil
 	})
 	return customer
@@ -133,6 +134,7 @@ func (srv *customerService) UpdateStatus(uuid string, form form2.CustomerStatusF
 func (srv *customerService) Delete(uuid string) {
 	srv.saga = saga.StorageSaga{}
 	defer srv.saga.Close()
+
 	customer, _ := srv.prepare(&uuid, nil)
 	if file, ok := (*customer.IdentityPhoto)["file"].(string); ok {
 		srv.saga.DeleteStoragePaths = append(srv.saga.DeleteStoragePaths, file)
@@ -140,10 +142,12 @@ func (srv *customerService) Delete(uuid string) {
 
 	config.PgSQL.Transaction(func(tx *gorm.DB) error {
 		srv.repository.SetTransaction(tx)
+
 		srv.repository.Delete(customer)
 
 		activity.UseActivity{Employee: srv.employee, Action: constant.ACTION_DELETE}.SetReference(customer).
 			Save(fmt.Sprintf("Delete customer %s [%d]", customer.Name, customer.ID))
+
 		return nil
 	})
 }
@@ -161,7 +165,7 @@ func (srv *customerService) prepare(uuid *string, form *form2.CustomerForm) (mod
 
 	if form != nil {
 		if form.Phone != "" {
-			core.AdjustmentPhone(form.Phone)
+			form.Phone = core.AdjustmentPhone(form.Phone)
 		}
 	}
 	return customer, *form
@@ -177,7 +181,6 @@ func (srv *customerService) ValidateData(customer *model.Customer, form form2.Cu
 	if countDuplicateIDandSIM > 0 {
 		error2.ErrXtremeInvalidRequest("Your ID or SIM Number has been registered")
 	}
-
 }
 
 func (srv *customerService) uploadIdentityPhoto(form form2.CustomerForm) map[string]interface{} {
@@ -186,6 +189,7 @@ func (srv *customerService) uploadIdentityPhoto(form form2.CustomerForm) map[str
 		if err == http.ErrMissingFile {
 			return nil
 		}
+
 		error2.ErrXtremeFileUpload(err.Error())
 	}
 
@@ -201,7 +205,6 @@ func (srv *customerService) uploadIdentityPhoto(form form2.CustomerForm) map[str
 		CreatedBy:     srv.employee.ID,
 		CreatedByName: srv.employee.FullName,
 	})
-
 	if err != nil {
 		error2.ErrXtremeFileUpload(err.Error())
 	}
