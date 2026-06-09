@@ -32,6 +32,7 @@ func (consume *RentalCustomerStatusUpdateConsumer) Consume(payload interface{}) 
 		// form.Validate()
 
 		srv := service.NewCustomerService()
+		
 		srv.UpdateStatus(data["uuid"].(string), form)
 
 		return nil, nil

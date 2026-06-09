@@ -87,7 +87,6 @@ func (srv *customerService) Update(uuid string, form form2.CustomerForm) model.C
 	identityPhoto := srv.uploadIdentityPhoto(form)
 	if identityPhoto != nil && customer.IdentityPhoto != nil {
 		if file, ok := (*customer.IdentityPhoto)["file"].(string); ok {
-			fmt.Println(file)
 			srv.saga.DeleteStoragePaths = append(
 				srv.saga.DeleteStoragePaths,
 				file,
@@ -161,7 +160,7 @@ func (srv *customerService) prepare(uuid *string, form *form2.CustomerForm) (mod
 
 	if form != nil {
 		if form.Phone != "" {
-			core.AdjustmentPhone(form.Phone)
+			form.Phone = core.AdjustmentPhone(form.Phone)
 		}
 	}
 	return customer, *form
