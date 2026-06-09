@@ -26,8 +26,6 @@ type CustomerForm struct {
 	StatusId        int                `form:"statusId" validate:"required"`
 	BlacklistReason string             `form:"blacklistReason"`
 	IdentityPhoto   *CustomerPhotoForm `form:"identityPhoto"`
-	CreatedByUUID   string             `form:"createdByUUID"`
-	CreatedByName   string             `form:"createdByName"`
 }
 
 func (rule *CustomerForm) Validate() {

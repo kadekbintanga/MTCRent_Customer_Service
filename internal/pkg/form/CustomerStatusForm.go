@@ -1,7 +1,6 @@
 package form
 
 import (
-	"fmt"
 	"net/http"
 
 	xtrememdw "github.com/globalxtreme/go-core/v2/middleware"
@@ -14,7 +13,7 @@ import (
 type CustomerStatusForm struct {
 	StatusId        int    `json:"statusId" validate:"required"`
 	BlacklistReason string `json:"blacklistReason"`
-	CreatedByUUID   string `form:"createdByUUID"`
+	CreatedBy       string `form:"createdByUUID"`
 	CreatedByName   string `form:"createdByName"`
 }
 
@@ -22,11 +21,9 @@ func (rule *CustomerStatusForm) Validate() {
 	va := xtrememdw.Validator{}
 	_, status := constant.CustomerStatus{}.OptionIDNames()[rule.StatusId]
 	if !status {
-		fmt.Println("INI 1 ====================================================")
 		error2.ErrXtremeCustomerUpdate("Invalid status")
 	} else {
 		if rule.StatusId == constant.CUSTOMER_STATUS_BLACKLISTED_ID && rule.BlacklistReason == "" {
-			fmt.Println("INI 1 ====================================================")
 			error2.ErrXtremeCustomerUpdate("Blacklist Reason is required")
 		}
 	}

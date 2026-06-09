@@ -55,8 +55,8 @@ func (srv *customerService) Create(form form2.CustomerForm) model.Customer {
 	srv.saga = saga.StorageSaga{}
 	defer srv.saga.Close()
 
-	customer, form := srv.prepare(nil, &form)
-	srv.ValidateData(nil, form)
+	customer := srv.prepare(nil, &form)
+	srv.validateData(nil, form)
 
 	uploadIdetityFhoto := srv.uploadIdentityPhoto(form)
 
@@ -79,23 +79,21 @@ func (srv *customerService) Update(uuid string, form form2.CustomerForm) model.C
 	srv.saga = saga.StorageSaga{}
 	defer srv.saga.Close()
 
-	customer, form := srv.prepare(&uuid, &form)
-	srv.ValidateData(&customer, form)
+	customer := srv.prepare(&uuid, &form)
+	srv.validateData(&customer, form)
 
 	parser := parser.CustomerParser{Object: customer}
 
 	identityPhoto := srv.uploadIdentityPhoto(form)
 	if identityPhoto != nil && customer.IdentityPhoto != nil {
 		if file, ok := (*customer.IdentityPhoto)["file"].(string); ok {
-			srv.saga.DeleteStoragePaths = append(
-				srv.saga.DeleteStoragePaths,
-				file,
-			)
+			srv.saga.DeleteStoragePaths = append(srv.saga.DeleteStoragePaths, file)
 		}
 	}
 
 	config.PgSQL.Transaction(func(tx *gorm.DB) error {
 		srv.repository.SetTransaction(tx)
+
 		useActivity := activity.UseActivity{Employee: srv.employee}.SetReference(&customer).SetParser(&parser).SetOldProperty(constant.ACTION_UPDATE)
 
 		customer = srv.repository.Update(customer, form, &identityPhoto)
@@ -103,6 +101,7 @@ func (srv *customerService) Update(uuid string, form form2.CustomerForm) model.C
 		parser.Object = customer
 		useActivity.SetReference(&customer).SetParser(&parser).SetNewProperty(constant.ACTION_UPDATE).
 			Save(fmt.Sprintf("Update Customer: %s [%d]", customer.Name, customer.ID))
+
 		return nil
 	})
 
@@ -111,19 +110,21 @@ func (srv *customerService) Update(uuid string, form form2.CustomerForm) model.C
 
 func (srv *customerService) UpdateStatus(uuid string, form form2.CustomerStatusForm) model.Customer {
 	srv.repository = repository.NewCustomerRepository()
-	customer, _ := srv.prepare(&uuid, nil)
+	customer := srv.prepare(&uuid, nil)
 
 	parser := parser.CustomerParser{Object: customer}
 
 	config.PgSQL.Transaction(func(tx *gorm.DB) error {
 		srv.repository.SetTransaction(tx)
-		useActivity := activity.UseActivity{Employee: srv.employee}.SetReference(&customer).SetParser(&parser).SetOldProperty(constant.ACTION_UPDATE, constant.ACTIVITY_CUSTOMER_UPDATE_STATUS)
+
+		useActivity := activity.UseActivity{Employee: srv.employee}.SetReference(&customer).SetParser(&parser).SetOldProperty(constant.ACTION_UPDATE, constant.ACTIVITY_CUSTOMER_STATUS)
 
 		customer = srv.repository.UpdateStatus(customer, form)
 
 		parser.Object = customer
-		useActivity.SetReference(&customer).SetParser(&parser).SetNewProperty(constant.ACTION_UPDATE, constant.ACTIVITY_CUSTOMER_UPDATE_STATUS).
+		useActivity.SetReference(&customer).SetParser(&parser).SetNewProperty(constant.ACTION_UPDATE, constant.ACTIVITY_CUSTOMER_STATUS).
 			Save(fmt.Sprintf("Update Customer status: %s [%d]", customer.Name, customer.ID))
+
 		return nil
 	})
 	return customer
@@ -132,7 +133,7 @@ func (srv *customerService) UpdateStatus(uuid string, form form2.CustomerStatusF
 func (srv *customerService) Delete(uuid string) {
 	srv.saga = saga.StorageSaga{}
 	defer srv.saga.Close()
-	customer, _ := srv.prepare(&uuid, nil)
+	customer := srv.prepare(&uuid, nil)
 	if file, ok := (*customer.IdentityPhoto)["file"].(string); ok {
 		srv.saga.DeleteStoragePaths = append(srv.saga.DeleteStoragePaths, file)
 	}
@@ -149,7 +150,7 @@ func (srv *customerService) Delete(uuid string) {
 
 /** --- UNEXPORTED FUNCTIONS --- */
 
-func (srv *customerService) prepare(uuid *string, form *form2.CustomerForm) (model.Customer, form2.CustomerForm) {
+func (srv *customerService) prepare(uuid *string, form *form2.CustomerForm) model.Customer {
 	srv.repository = repository.NewCustomerRepository()
 	srv.repository.SetEmployeeIdentifier(srv.employee)
 
@@ -163,20 +164,16 @@ func (srv *customerService) prepare(uuid *string, form *form2.CustomerForm) (mod
 			form.Phone = core.AdjustmentPhone(form.Phone)
 		}
 	}
-	return customer, *form
+	return customer
 }
 
-func (srv *customerService) ValidateData(customer *model.Customer, form form2.CustomerForm) {
+func (srv *customerService) validateData(customer *model.Customer, form form2.CustomerForm) {
 	var customerId uint
 	if customer != nil {
 		customerId = customer.ID
 	}
 
-	countDuplicateIDandSIM := srv.repository.CountDuplicateIDorSIMNumber(form2.CustomerFilterForm{IDNumber: form.IDNumber, SIMNumber: form.SIMNumber, ID: customerId})
-	if countDuplicateIDandSIM > 0 {
-		error2.ErrXtremeInvalidRequest("Your ID or SIM Number has been registered")
-	}
-
+	srv.repository.CheckDuplicateIDorSIMNumber(form2.CustomerFilterForm{IDNumber: form.IDNumber, SIMNumber: form.SIMNumber, ID: customerId})
 }
 
 func (srv *customerService) uploadIdentityPhoto(form form2.CustomerForm) map[string]interface{} {

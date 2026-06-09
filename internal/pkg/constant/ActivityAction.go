@@ -4,10 +4,9 @@ const ACTION_CREATE = "create"
 const ACTION_UPDATE = "update"
 const ACTION_DELETE = "delete"
 const ACTION_GENERAL = "general"
-const ACTION_STATUS = "status"
 
 /** --- SUB FEATURE --- */
-const ACTIVITY_CUSTOMER_UPDATE_STATUS = "customer_update_status"
+const ACTIVITY_CUSTOMER_STATUS = "customer_status"
 
 type ActivityAction struct{}
 

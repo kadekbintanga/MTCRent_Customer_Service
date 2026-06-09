@@ -87,7 +87,7 @@ func (parser CustomerParser) DeleteActivity(action string) interface{} {
 }
 
 func (parser CustomerParser) GeneralActivity(action string) interface{} {
-	if action == constant.ACTIVITY_CUSTOMER_UPDATE_STATUS {
+	if action == constant.ACTIVITY_CUSTOMER_STATUS {
 		customer := parser.Object
 
 		return map[string]interface{}{

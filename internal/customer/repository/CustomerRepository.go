@@ -29,7 +29,7 @@ type CustomerRepository interface {
 	Update(customer model.Customer, form form.CustomerForm, file *map[string]interface{}) model.Customer
 	UpdateStatus(customer model.Customer, form form.CustomerStatusForm) model.Customer
 	Delete(customer model.Customer)
-	CountDuplicateIDorSIMNumber(form form.CustomerFilterForm) int64
+	CheckDuplicateIDorSIMNumber(form form.CustomerFilterForm)
 }
 
 func NewCustomerRepository(args ...*gorm.DB) CustomerRepository {
@@ -115,11 +115,6 @@ func (repo *customerRepository) Create(form form.CustomerForm, identityPhoto *ma
 		customer.CreatedByName = &repo.employee.FullName
 		customer.UpdatedBy = &repo.employee.ID
 		customer.UpdatedByName = &repo.employee.FullName
-	} else {
-		customer.CreatedBy = &form.CreatedByUUID
-		customer.CreatedByName = &form.CreatedByName
-		customer.UpdatedBy = &form.CreatedByUUID
-		customer.UpdatedByName = &form.CreatedByName
 	}
 
 	err := repo.tx.Create(&customer).Error
@@ -146,9 +141,6 @@ func (repo *customerRepository) Update(customer model.Customer, form form.Custom
 	if repo.employee.ID != "" {
 		customer.UpdatedBy = &repo.employee.ID
 		customer.UpdatedByName = &repo.employee.FullName
-	} else {
-		customer.UpdatedBy = &form.CreatedByUUID
-		customer.UpdatedByName = &form.CreatedByName
 	}
 
 	err := repo.tx.Updates(&customer).Error
@@ -166,7 +158,7 @@ func (repo *customerRepository) UpdateStatus(customer model.Customer, form form.
 		customer.UpdatedBy = &repo.employee.ID
 		customer.UpdatedByName = &repo.employee.FullName
 	} else {
-		customer.UpdatedBy = &form.CreatedByUUID
+		customer.UpdatedBy = &form.CreatedBy
 		customer.UpdatedByName = &form.CreatedByName
 	}
 
@@ -185,23 +177,25 @@ func (repo *customerRepository) Delete(customer model.Customer) {
 	}
 }
 
-func (repo *customerRepository) CountDuplicateIDorSIMNumber(form form.CustomerFilterForm) int64 {
+func (repo *customerRepository) CheckDuplicateIDorSIMNumber(form form.CustomerFilterForm) {
 	var count int64
 
 	query := config.PgSQL.Model(&model.Customer{}).
 		Where(`customers."IDNumber" = ? OR customers."SIMNumber" = ?`, form.IDNumber, form.SIMNumber)
 
 	if form.ID != 0 {
-		query = query.Where("id <> ?", form.ID)
+		query = query.Where("id != ?", form.ID)
 	}
-	query = query.Count(&count)
 
-	err := query.Error
+	err := query.Count(&count).Error
 	if err != nil {
 		error2.ErrXtremeCustomerGet(err.Error())
 	}
+	if count > 0 {
+		error2.ErrXtremeInvalidRequest("Your ID or SIM Number has been registered")
+	}
 
-	return count
+	return
 
 }
 
@@ -211,26 +205,24 @@ func (repo *customerRepository) prepareAndFilter(form form.CustomerFilterForm) *
 	query := config.PgSQL
 
 	if form.ID > 0 {
-		query = query.Where("customers.id = ?", form.ID)
+		query = query.Where("id = ?", form.ID)
 	}
 
 	if form.UUID != "" {
-		query = query.Where("customers.uuid = ?", form.UUID)
-	} else {
-		query = query.Where("customers.id = ?", form.ID)
+		query = query.Where("uuid = ?", form.UUID)
 	}
 
 	if form.IDNumber != "" {
-		query = query.Where(`customers."IDNumber" = ?`, form.IDNumber)
+		query = query.Where("IDNumber = ?", form.IDNumber)
 	}
 
 	if form.SIMNumber != "" {
-		query = query.Where(`customers."SIMNumber" = ?`, form.SIMNumber)
+		query = query.Where("SIMNumber = ?", form.SIMNumber)
 	}
 
 	if search := form.Search; len(search) > 3 {
 		searchVal := "%" + search + "%"
-		query = query.Where(`customers."name" ILIKE ?`, searchVal)
+		query = query.Where("name ILIKE ?", searchVal)
 	}
 
 	if len(form.Orders) > 0 {
