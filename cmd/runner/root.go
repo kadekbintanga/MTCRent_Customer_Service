@@ -22,6 +22,7 @@ var rootCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		xtremepkg.InitDevMode()
 		xtremepkg.InitHost()
+		xtremepkg.InitRedisAsyncWorkflowPool()
 
 		config.InitTZ()
 		config.InitCors()
@@ -37,6 +38,12 @@ var rootCmd = &cobra.Command{
 
 		// rabbitMQClose := config.InitRabbitMQ()
 		// defer rabbitMQClose()
+
+		rabbitMQClose := config.InitRabbitMQ()
+		defer rabbitMQClose()
+
+		dialRabbitMQConnClose := config.InitRabbitMQConnection()
+		defer dialRabbitMQConnClose()
 
 		logCleanup := xtremepkg.InitLogRPC()
 		defer logCleanup()

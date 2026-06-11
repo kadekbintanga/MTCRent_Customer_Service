@@ -3,7 +3,6 @@ package rabbitmq
 import (
 	"service/internal/app/rabbitmq"
 	"service/internal/pkg/config"
-	"service/internal/pkg/constant"
 
 	xtremepkg "github.com/globalxtreme/go-core/v2/pkg"
 	xtremerabbitmq "github.com/globalxtreme/go-core/v2/rabbitmq"
@@ -45,10 +44,6 @@ func (class *RabbitMQConsumerAsyncWorkflowCommand) Handle() {
 		{
 			Queue:    "service.customer.convert.async-workflow-1", // TODO: Hanya contoh. nanti langsung hapus saja
 			Consumer: &rabbitmq.TestingAsyncWorkflowExecutor{},
-		},
-		{
-			Queue:    constant.RABBITMQ_EXCHANGE_RENTAL_CUSTOMER_STATUS_UPDATE,
-			Consumer: &rabbitmq.RentalCustomerStatusUpdateConsumer{},
 		},
 	})
 }

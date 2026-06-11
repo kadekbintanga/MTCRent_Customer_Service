@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"net/http"
 
+	xtremerabbitmq "github.com/globalxtreme/go-core/v2/rabbitmq"
 	"github.com/globalxtreme/go-identifier/data"
 	gxstorage "github.com/globalxtreme/go-storage/v2"
 	"gorm.io/gorm"
+	"gorm.io/gorm/utils"
 
 	"service/internal/customer/repository"
 	"service/internal/pkg/activity"
@@ -105,6 +107,7 @@ func (srv *customerService) Update(uuid string, form form2.CustomerForm) model.C
 		return nil
 	})
 
+	srv.sendUpdateCustomer(customer, false)
 	return customer
 }
 
@@ -128,6 +131,7 @@ func (srv *customerService) UpdateStatus(uuid string, form form2.CustomerStatusF
 
 		return nil
 	})
+	srv.sendUpdateCustomer(customer, false)
 	return customer, oldCustomer
 }
 
@@ -135,8 +139,11 @@ func (srv *customerService) Delete(uuid string) {
 	srv.saga = saga.StorageSaga{}
 	defer srv.saga.Close()
 	customer := srv.prepare(&uuid, nil)
-	if file, ok := (*customer.IdentityPhoto)["file"].(string); ok {
-		srv.saga.DeleteStoragePaths = append(srv.saga.DeleteStoragePaths, file)
+
+	if customer.IdentityPhoto != nil {
+		if file, ok := (*customer.IdentityPhoto)["file"].(string); ok {
+			srv.saga.DeleteStoragePaths = append(srv.saga.DeleteStoragePaths, file)
+		}
 	}
 
 	config.PgSQL.Transaction(func(tx *gorm.DB) error {
@@ -147,6 +154,7 @@ func (srv *customerService) Delete(uuid string) {
 			Save(fmt.Sprintf("Delete customer %s [%d]", customer.Name, customer.ID))
 		return nil
 	})
+	srv.sendUpdateCustomer(customer, true)
 }
 
 /** --- UNEXPORTED FUNCTIONS --- */
@@ -213,4 +221,39 @@ func (srv *customerService) uploadIdentityPhoto(form form2.CustomerForm) map[str
 	srv.saga.StoragePaths = append(srv.saga.StoragePaths, fullPath)
 
 	return attachment
+}
+
+func (srv *customerService) sendUpdateCustomer(customer model.Customer, isDeleted bool) {
+	async := xtremerabbitmq.GXAsyncWorkflow{
+		Action:        constant.ASYNC_WORKFLOW_ACTION_CUSTOMER_UPDATE,
+		Description:   fmt.Sprintf("Update customer for id : %d", customer.ID),
+		ReferenceId:   utils.ToString(customer.ID),
+		ReferenceType: customer.TableName(),
+		Strict:        false,
+	}
+
+	async.OnStep(xtremerabbitmq.GXAsyncWorkflowStepOpt{
+		Service:     constant.ASYNC_WORKFLOW_SERVICE_RENTAL,
+		Queue:       constant.ASYNC_WORKFLOW_RENTAL_CUSTOMER_UPDATE,
+		Description: "Update customer in service customer",
+		Payload: map[string]interface{}{
+			"id":        customer.ID,
+			"uuid":      customer.UUID,
+			"name":      customer.Name,
+			"IDNumber":  customer.IDNumber,
+			"SIMNumber": customer.SIMNumber,
+			"phone":     customer.Phone,
+			"statusId":  customer.StatusId,
+			"deleted":   isDeleted,
+		},
+	})
+
+	err := core.ErrorAsyncHandler(func() error {
+		async.Push()
+		return nil
+	})
+
+	if err != nil {
+		error2.ErrXtremeAsyncWorkflowPush(err.Error())
+	}
 }

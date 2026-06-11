@@ -164,3 +164,27 @@ func GRPCErrorHandler(fn func() (*customer.CTResponse, error)) (res *customer.CT
 		return nil, err
 	}
 }
+
+func ErrorAsyncHandler(fn func() error) (err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Fprintf(os.Stderr, "panic: %v\n", r)
+			xtremepkg.LogError(r, false)
+
+			switch v := r.(type) {
+			case string:
+				err = fmt.Errorf(v)
+				fmt.Print("Error 1")
+			case error:
+				err = v
+				fmt.Print("Error 2")
+			default:
+				err = fmt.Errorf("unknown panic: %v", v)
+				fmt.Print("Error 3")
+			}
+
+		}
+	}()
+
+	return fn()
+}
