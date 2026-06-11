@@ -26,6 +26,9 @@ func testingRouter(router *mux.Router) {
 }
 
 func customerRouter(router *mux.Router) {
+	var staticHandler handler.CustomerStaticHandler
+	router.HandleFunc("/components/statics/customer-statuses", staticHandler.CustomerStatus).Methods("GET")
+
 	var customerHandler handler.CustomerHandler
 	router.HandleFunc("", customerHandler.Get).Methods("GET")
 	router.HandleFunc("", customerHandler.Create).Methods("POST")
