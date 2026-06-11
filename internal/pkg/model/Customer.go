@@ -12,7 +12,7 @@ type Customer struct {
 	Phone           string                          `gorm:"column:phone;type:varchar(30);not null"`
 	Address         string                          `gorm:"column:address;type:varchar(250);default:null"`
 	StatusId        int                             `gorm:"column:statusId"`
-	BlacklistReason string                          `gorm:"column:blacklistReason;default:null"`
+	BlacklistReason *string                         `gorm:"column:blacklistReason;default:null"`
 	IdentityPhoto   *xtrememodel.MapInterfaceColumn `gorm:"column:identityPhoto;type:json;null"`
 	CreatedBy       *string                         `gorm:"column:createdBy;varchar(50);null"`
 	CreatedByName   *string                         `gorm:"column:createdByName;varchar(250);null"`

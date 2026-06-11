@@ -132,7 +132,7 @@ func (repo *customerRepository) Update(customer model.Customer, form form.Custom
 	customer.Phone = form.Phone
 	customer.Address = form.Address
 	customer.StatusId = form.StatusId
-	customer.BlacklistReason = form.BlacklistReason
+	customer.BlacklistReason = &form.BlacklistReason
 
 	if identityPhoto != nil {
 		customer.IdentityPhoto = (*xtrememodel.MapInterfaceColumn)(identityPhoto)
@@ -152,14 +152,11 @@ func (repo *customerRepository) Update(customer model.Customer, form form.Custom
 
 func (repo *customerRepository) UpdateStatus(customer model.Customer, form form.CustomerStatusForm) model.Customer {
 	customer.StatusId = form.StatusId
-	customer.BlacklistReason = form.BlacklistReason
+	customer.BlacklistReason = &form.BlacklistReason
 
 	if repo.employee.ID != "" {
 		customer.UpdatedBy = &repo.employee.ID
 		customer.UpdatedByName = &repo.employee.FullName
-	} else {
-		customer.UpdatedBy = &form.CreatedBy
-		customer.UpdatedByName = &form.CreatedByName
 	}
 
 	err := repo.tx.Updates(&customer).Error
@@ -171,6 +168,11 @@ func (repo *customerRepository) UpdateStatus(customer model.Customer, form form.
 }
 
 func (repo *customerRepository) Delete(customer model.Customer) {
+	if repo.employee.ID != "" {
+		customer.UpdatedBy = &repo.employee.ID
+		customer.UpdatedByName = &repo.employee.FullName
+	}
+
 	err := repo.tx.Delete(&customer).Error
 	if err != nil {
 		error2.ErrXtremeCustomerDelete(err.Error())

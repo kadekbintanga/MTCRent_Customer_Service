@@ -4,9 +4,11 @@ import (
 	"context"
 	"encoding/json"
 
+	"github.com/globalxtreme/go-identifier/data"
 	"google.golang.org/grpc"
 
 	"service/internal/customer/repository"
+	"service/internal/customer/service"
 	"service/internal/pkg/core"
 	"service/internal/pkg/form"
 	"service/internal/pkg/grpc/customer"
@@ -15,6 +17,8 @@ import (
 
 type CustomerServer struct {
 	customer.UnimplementedCustomerServiceServer
+
+	rollbackData map[string]interface{}
 }
 
 func (srv *CustomerServer) Register(serverRPC *grpc.Server) {
@@ -32,6 +36,27 @@ func (srv *CustomerServer) FirstByUUID(ctx context.Context, in *customer.FirstCu
 	})
 
 	return res, err
+}
+
+func (srv *CustomerServer) UpdateStatus(ctx context.Context, in *customer.CustomerUpdateStatusRequest) (*customer.CTResponse, error) {
+	res, err := core.GRPCErrorHandler(func() (*customer.CTResponse, error) {
+		service := service.NewCustomerService()
+		service.SetEmployeeIdentifier(data.EmployeeIdentifierData{ID: in.CreatedBy, FullName: in.CreatedByName})
+		_, rollbackCustomer := service.UpdateStatus(in.Uuid, form.CustomerStatusForm{
+			StatusId:        int(in.StatusId),
+			BlacklistReason: in.BlacklistReason,
+		})
+
+		srv.rollbackData = map[string]interface{}{
+			"uuid":            rollbackCustomer.UUID,
+			"statusId":        rollbackCustomer.StatusId,
+			"blacklistReason": rollbackCustomer.BlacklistReason,
+		}
+
+		return srv.success(srv.rollbackData)
+	})
+	return res, err
+
 }
 
 /** --- UNEXPORTED FUNCTIONS --- */

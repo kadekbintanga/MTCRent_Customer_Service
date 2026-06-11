@@ -13,8 +13,6 @@ import (
 type CustomerStatusForm struct {
 	StatusId        int    `json:"statusId" validate:"required"`
 	BlacklistReason string `json:"blacklistReason"`
-	CreatedBy       string `form:"createdByUUID"`
-	CreatedByName   string `form:"createdByName"`
 }
 
 func (rule *CustomerStatusForm) Validate() {

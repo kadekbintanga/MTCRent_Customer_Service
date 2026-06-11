@@ -27,7 +27,7 @@ type CustomerService interface {
 
 	Create(form form2.CustomerForm) model.Customer
 	Update(uuid string, form form2.CustomerForm) model.Customer
-	UpdateStatus(uuid string, form form2.CustomerStatusForm) model.Customer
+	UpdateStatus(uuid string, form form2.CustomerStatusForm) (model.Customer, model.Customer)
 	Delete(uuid string)
 }
 
@@ -108,11 +108,12 @@ func (srv *customerService) Update(uuid string, form form2.CustomerForm) model.C
 	return customer
 }
 
-func (srv *customerService) UpdateStatus(uuid string, form form2.CustomerStatusForm) model.Customer {
+func (srv *customerService) UpdateStatus(uuid string, form form2.CustomerStatusForm) (model.Customer, model.Customer) {
 	srv.repository = repository.NewCustomerRepository()
 	customer := srv.prepare(&uuid, nil)
 
 	parser := parser.CustomerParser{Object: customer}
+	oldCustomer := customer
 
 	config.PgSQL.Transaction(func(tx *gorm.DB) error {
 		srv.repository.SetTransaction(tx)
@@ -127,7 +128,7 @@ func (srv *customerService) UpdateStatus(uuid string, form form2.CustomerStatusF
 
 		return nil
 	})
-	return customer
+	return customer, oldCustomer
 }
 
 func (srv *customerService) Delete(uuid string) {
